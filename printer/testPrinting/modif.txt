@@ -1,0 +1,17 @@
+val getInstanciatedKind : [< any_id] obj -> ([< any_id] as 'a) kind -> 'a obj
+
+
+(* getInstanciatedKind : any_id obj -> any_id as 'a kind -> 'a obj *)
+let getInstanciatedKind mainComponent subKind =
+    let isMainComponent = to_bool (get mainComponent "_onyo_isRootComponent") in
+    match isMainComponent with 
+      false -> raise Bad_component
+    | true -> let subKind_name = 
+		try 
+		  match (List.assoc "name" subKind.prop_list) with
+		  | String s -> s
+		  | _ -> assert false
+		with Not_found -> raise Bad_component
+	      in 
+	      let hash = get mainComponent "$" in
+	      get hash subKind_name

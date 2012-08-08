@@ -1,0 +1,115 @@
+Stratégie d'envoi de messages pour la communication inter-composants.
+
+message = events
+
+En général, les events bubble du fils au père.
+
+Plutôt que les fils appelent des fonctions du père, ils envoient leurs events au père pour qu'il les gère (ou non).
+
+----
+Envoi d'events
+
+un composant déclare les évenements qu'il envoie par un block "events"
+events : {
+       onStateChanged:""
+}
+
+Pour chaque event enregistré, une fonction auxiliaire "do<Eventname>(inEvent)"
+est créée que le composant peut appeler pour envoyer l'evenement.
+
+La fonction d'enyo générique "bubble(inEventName <, inEvent, inSender>)" 
+est utilisée pour créer ce comportement.
+
+----
+Handlers d'events
+
+Un handler est une fonction assigné pour rattraper les signaux que les
+descendants ont envoyés.
+
+myEventHandler : function(inSender, inEvent){
+	       //peut renvoyer true pour indiquer que l'évenement à été
+	       //traiter et que la propagation doit s'arrêter
+	       }
+
+Si la fonction ne renvoie pas true, il continue de remonter l'arbre.
+
+Notons que la signification de la valeur de retour est différente de la 
+convention classique du DOM (historiquement, la valeur de retour devrait 
+déterminer si le comportement par défaut apparait) 
+Si besoin est, on peut controler l'action par défaut du DOM en utilisant
+"inEvent.preventDefault()"
+
+"inEvent.stopPropagation()" n'arrêtera pas la propagation des events en ENYO.
+(return true, plutôt)
+
+Puisque les events se propagent jusqu'à la fin, un sender peut différer 
+de l'origine de l'évenement, on utilise alors inEvent.originator.
+
+
+-------
+Attachement d'handlers aux events
+
+2 façon de procéder:
+  1°) Rattacher un handler name sur un objet d'un composant :
+      components: [
+         {name: "thing", ontap: "thingTap"}
+	 ],
+	 thingTap: function(inSender, inEvent) {
+	 // do stuff
+	 }
+
+   2°) Utiliser un "handlers block" :
+       handlers: {
+       		 ontap:"anythingTap"
+		 },
+	anythingTap: function(inSender, inEvent){
+		     //faire quelque chose
+		     }
+
+Notons que si les deux techniques sont employés en même temps, l'évenement 
+sera traité par les deux handlers définis.
+
+-------
+Signaux
+
+Il peut arriver que deux composants reliés mais distants doivent communiquer 
+sans avoir à passer par un parent commun. Pour ces cas-ci, on peut utiliser
+"enyo.Signals" qui diffuse et s'inscrit à des messages globaux sans passer
+par l'arbre de composant normal.
+
+Pour "broadcaster" un signal : "enyo.Signals.send(inEventName, inEvent);"
+
+Pour écouter un signal, un composant doit inclure une instance de "Signals"
+dans ses composants et spécifier un handler d'évenement pour le signal
+en question.
+
+enyo.kind({
+    name:"MyKind",
+    components: [
+        {kind: "Signals", onSDKReady: "handleSDKReady"}
+    ],
+    handleSDKReady: function() {
+        // Do stuff
+    }
+})
+
+
+Alors que les signaux sont transmis par un appel comme : 
+enyo.Signals.send("onSDKReady");
+
+------
+Evenements DOM
+
+Dans ENYO, les évenements du DOM sont autorisés à bubble jusqu'au "document"
+où ils sont traités par le "enyo.dispatcher".
+Le dispatcher réalise où ces évenements doivent être envoyés.
+
+
+
+Par convention, les évenements du DOM restent en minuscules, tandis que les
+évenements personnalisés prennent des majuscules au début de chaque mot suivant le premier.
+
+--------------------------
+NOTES PERSOS
+
+L'objet s'enregistrant à un event doit se faire un niveau plus bas que la fonction.

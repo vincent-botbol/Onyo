@@ -1,0 +1,441 @@
+\documentclass[11pt,a4paper]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[frenchb]{babel}
+\usepackage[T1]{fontenc}
+
+\usepackage[hidelinks]{hyperref}
+\usepackage{tikz}
+\usetikzlibrary{arrows,positioning} 
+\tikzset{
+    %Define standard arrow tip
+    >=stealth',
+    %Define style for boxes
+    punkt/.style={
+           rectangle,
+           rounded corners,
+           draw=black, very thick,
+           text width=6.5em,
+           minimum height=2em,
+           text centered
+    },
+    punkt2/.style={
+      rectangle,
+      draw=black, very thick,
+      text width=6.5em,
+      minimum height=2em,
+      text centered
+    },
+    % Define arrow style
+    pil/.style={
+           ->,
+           thick,
+           shorten <=2pt,
+           shorten >=2pt,}
+}
+
+\usepackage{listings}
+\usepackage{color}
+\definecolor{lightgray}{rgb}{.9,.9,.9}
+\definecolor{darkgray}{rgb}{.4,.4,.4}
+\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+
+\lstdefinelanguage{JavaScript}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+\lstset{
+   language=JavaScript,
+%   backgroundcolor=\color{lightgray},
+   extendedchars=true,
+   basicstyle=\footnotesize\ttfamily,
+   showstringspaces=false,
+   showspaces=false,
+   numbers=left,
+   numberstyle=\footnotesize,
+   numbersep=9pt,
+   tabsize=2,
+   breaklines=true,
+   showtabs=false,
+   captionpos=b
+}
+
+\title{Rapport de stage\\Programmation Enyo en OCaml}
+\author{Vincent Botbol}
+\date\today
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+%%%%%%%%%%%%%%%%%%
+%   CHAPITRE 1   %
+%%%%%%%%%%%%%%%%%%
+\chapter{Documentation Enyo}
+\section{Présentation}
+Enyo est un framework Javascript orienté-objet. Il privilégie un style de développement basé
+sur une encapsulation arborescente de composants.\medskip
+
+Dans sa première version, Enyo fut employé pour le développement d'application des 
+tablettes HP TouchPad fonctionnant sous webOS. Après un succès mitigé,
+HP décida de transformer webOS en projet \emph{open source} devenant ainsi : Open WebOS.\medskip
+
+Enyo passe ainsi en version 2.0. Profitant de sa conception en Javascript, 
+l'engouement actuel de ce dernier permet aux développeurs de déployer leurs 
+applications sur les plateformes le supportant, c'est-à-dire, tout appareil se voulant
+grand public (Android, iOS, WindowsPhone, etc.)\medskip
+
+%à revoir
+On peut attribuer à Enyo des avantages tels que sa prise en main aisée grâce au style 
+de programmation proche d'une vision du DOM et le poids relativement faible de sa bibliothèque.
+%%%%
+
+\clearpage
+
+\section{Débuter en Enyo}
+
+Il est important de distinguer deux phases dans le développement d'une application 
+Enyo.
+\begin{itemize}
+\item La première, dite de création, consiste à définir les composants, leurs positions dans 
+la hiérarchie de l'application ainsi que le modèle. 
+\item La seconde est celle du déploiement. Permettant à la bibliothèque Enyo de 
+générer, à partir du squelette décrit par la phase de création, l'objet destiné
+à être instancier puis afficher.
+\end{itemize}\medskip
+
+La définition des composants de l'application consiste, vulgairement, à déclarer 
+des objets Javascript possédant des propriétés qui auront un sens au moment d'étendre
+l'application.\smallskip
+
+Par exemple, définissons un simple morceau de texte contenant la chaine ``Bonjour monde!'':
+\begin{lstlisting}
+  var monApplication = {kind: "Control",
+                        name: "MonApp",
+                        content: "Bonjour monde!"}
+\end{lstlisting}
+
+Ici, nous avons simplement créé un objet Javascript muni de propriétés suffisantes 
+pour renseigner Enyo sur le type d'objet à créer.\\
+Explicitons ces propriétés :
+\begin{itemize}
+\item \emph{kind} définit le type d'objet Enyo que nous souhaitons créer.\smallskip
+\item \emph{name} nomme l'objet que nous sommes en train de créer. C'est par la
+valeur de cette propriété que nous pourrons accéder à un composant ou encore l'instancier.
+\footnote{Il est important de noter que si placée dans un composant en racine de l'application,
+la propriété \emph{name} déterminera le nom de la classe générée. Autrement, le nom d'un sous-composant
+servira de clé à une table d'association définie sur le composant racine de l'application 
+servant à récupérer les divers sous-composants
+}\smallskip
+\item \emph{content} attribut un texte au composant. Ceci n'a de sens que parce que l'on manipule
+un objet Enyo de type ``Control'' ou un de ses descendants qui possède donc cette propriété.\smallskip
+\end{itemize}\medskip
+
+Désormais défini, il faut passer le composant à la méthode \emph{kind} d'Enyo pour finaliser l'application
+et la rendre instanciable.
+
+\begin{lstlisting}
+  enyo.kind(monApplication);
+\end{lstlisting}
+
+A la suite de cet appel, on pourra constater qu'une nouvelle classe \mbox{\emph{MonApp}} est présente 
+dans l'environnement. Il ne reste donc plus qu'à l'instancier pour pouvoir ensuite l'afficher.
+
+\clearpage
+
+\begin{lstlisting}
+  var app = new MonApp();
+  app.renderInto(document.body);
+\end{lstlisting}
+
+En s'intéressant de plus près à l'objet ``app'', on peut constater qu'il
+possède un nombre important de méthodes et de propriétés que nous n'avons 
+pas forcément définies à la création, telle que la méthode \emph{renderInto}
+que nous venons d'utiliser.
+
+Ces méthodes ont été ajoutées par induction lors de la construction de 
+l'application par la méthode \emph{enyo.kind}.
+
+Si le champ \emph{kind} spécifie un ``Control'', il est donc nécessaire à Enyo de
+lui rajouter toutes les propriétés et méthodes que possède un Control Enyo qui
+n'ont pas été définies par l'utilisateur.
+
+\section{Ajout de sous-composants}
+Enyo suivant une logique d'arborescence de composants. Lorsque l'on crée 
+son application, il est nécessaire de pouvoir lui ajouter des sous-composants. 
+On réalise cela en définissant la propriété \emph{components} avec en valeur le tableau 
+des composants que nous souhaitons.
+
+Imaginons ici que l'on souhaite créer une application consistant d'un champ de saisie 
+et d'un bouton de validation:
+\begin{lstlisting}
+ enyo.kind({kind:"Control",
+            name:"MonApp",
+            components: [
+                         {kind:"Input"},
+                         {kind:"Button", content:"ok"}
+                        ]
+           });
+\end{lstlisting}
+
+La fonction kind va récursivement créer tous les sous-composants de la hiérarchie 
+ainsi que leur méthodes associées.
+
+Comme précédemment, pour l'afficher, on instancie la nouvelle classe ainsi générée 
+et on lui applique une méthode d'affichage : 
+
+\begin{lstlisting}
+  var app = new MonCadre();
+  app.renderInto(document.body);
+\end{lstlisting}
+
+Si l'on observe le code html après ces appels, on s'aperçoit qu'enyo a injecté dans 
+le DOM une balise html de type <div> dans laquelle sera placée, respectivement, 
+deux balises : un <input type="text" ..> et un <button>.
+
+\vbox{Notons que nous n'avons pas défini la propriété \emph{name} des sous-composants. 
+Rappelons que le nom d'un composant sert uniquement à l'accession de celui-ci par les 
+autres composants de la hiérarchie ou encore pour son instanciation. Cependant, lors du kind, 
+seule la racine de l'arbre sera étendue à l'environnement.}
+
+Il faut aussi noter que si la propriété name n'est pas définie, Enyo s'en charge en lui donnant 
+un label géneré (``input0'' et ``button0'' ici). Il n'est évidemment pas recommandé 
+d'utiliser ces derniers pour y accéder.
+
+\section{\'Evénements}
+
+Reprenons l'exemple précédent et supposons désormais que l'on souhaite, lorsque l'on clique sur le bouton, afficher un message d'alerte.
+
+\begin{lstlisting}
+enyo.kind({kind:"Control",
+           name:"MonCadre",
+           components: [
+             {kind:"Input", value:""},
+             {kind:"Button", content:"ok",
+              handlers:{ontap:"monCallback"},
+              monCallback:function(sender, event){
+                alert("ok");
+                return true;
+              }
+             }
+           ]
+       	  });
+\end{lstlisting}
+
+Au bouton, nous avons rajouter une propriété \emph{handlers}. 
+Cet objet sert à définir tous les événements que l'objet va traiter. 
+Cela peut-être des événements du dom (onkeyup, onload, ...) comme des événements 
+spécifiques à la plateforme sur laquelle l'application est déployée 
+(l'inclinaison d'une tablette par exemple). Ici, nous utilisons l'événement "ontap", alias d'"onclick".\\
+
+A chaque propriété-évenement est attaché une chaine contenant le nom de la fonction a appeler.
+
+Nous définissons donc la fonction click qui prend en premier argument l'emetteur de 
+l'événement et l'événement envoyé contenant ses propriétés.
+
+La valeur de retour de cette fonction spécifie si l'évenement doit s'arrêter ou 
+remonter (``bubble'') aux composants parents. On retourne vrai pour l'empêcher de 
+remonter et faux pour le laisser ``bullé'' sur ses ancêtres.
+
+On notera qu'en général, les fonctions de traitement ne pas censées devoir ``buller'' 
+sont définies à la racine de l'arbre qui possède un accès à tous ses sous-composants 
+grâce à sa table de hash ``\$''.
+
+Il existe quelques spécificités pour la manipulation d'évenements :
+\begin{itemize}
+\item Si la fonction de traitement n'est pas trouvée, l'événement est remonté dans l'arbre de 
+  composants jusqu'à trouver une fonction dont le nom correspond.
+\item Il n'est nécessaire de déclarer le bloc \emph{handlers} que lorsque la fonction de traitement
+  se situe dans le même objet que celui-ci. Par exemple, cette définition est parfaitement valable :
+  \begin{lstlisting}
+    enyo.kind({kind:"Control", 
+               components:[{kind:"Bouton", 
+                            ontap:"traiteClique"}
+                          ],
+               traiteClique:function(sender, event){
+                 alert("Click recu"); return true
+               }
+    });
+  \end{lstlisting}
+\item Il est possible de propager un événement manuellement en utilisant la fonction 
+  \emph{send(nomEvenement, evenement)} de l'objet \emph{enyo.Signals}. 
+  Cet événement est remis à tous les objets de type \emph{kind:"Signals"}. Il suffit alors
+  à l'objet-récepteur de posséder un sous-composant de ce type et d'implémenter la fonction de 
+  traitement lié au handler du sous-composant. (voir exemple)
+\end{itemize}
+%XXXXXXXXXXXXXXXXX
+%insérer des exemples de prog. events chelou
+%XXXXXXXXXXXXXXXXX
+
+\section{Propriétés published}
+Les propriétés placées dans l'objet "published" du composant sont en général utilisées pour
+la logique de l'application. Certains "published" sont déjà présents dans les objets Enyo. 
+Par exemple, la propriété "content" de l'objet "Control" est elle-même publiée.
+
+Enyo traite ces propriétés comme étant des variables publiques et génère automatiquement : 
+getter, setter ainsi qu'une méthode valueChanged appelée à chaque appel du set avec une nouvelle valeur.
+\\\medskip
+
+En résumé, un composant déclaré ainsi : 
+\begin{lstlisting}
+  {kind:"app", published:{maVariable:0}}
+\end{lstlisting}
+est équivalent à :
+\begin{lstlisting}
+  {kind:"app", maVariable:0, 
+    getMaVariable:function(){..}, 
+    setMaVariable:function(){..}, 
+    maVariableChanged:function(){}}
+\end{lstlisting}
+
+%XXXXXXXXXXXXXXXXX
+%insérer des exemples
+%XXXXXXXXXXXXXXXXX
+
+Cependant il reste possible d'initialiser les valeurs de propriétés 
+déjà publiées hors de l'objet \emph{published} de la même façon dont nous procédions 
+avec le champ \emph{content} jusqu'à présent. Cela aura uniquement pour effet de  masquer la première 
+initialisation que le constructeur Enyo aura effectué.
+
+Note : la propriété \emph{monObjet.published.maVariable} ne sert qu'à indiquer au 
+constructeur d'objet Enyo qu'il doit générer la variable et sa barrière d'abstraction. 
+Des effets de bords sur cette variable après instanciation n'auront aucun effet. 
+
+\section{Copie, partage et réutilisation de composants}
+
+Il est possible de réutiliser des composants déjà créés. Il faut cependant faire attention à ne pas
+lui attribuer de nom. Dans le cas échéant, le constructeur considèrera que l'objet existe déjà et 
+tous les traitements visant une des occurences de ce nom seront appliqués au premier objet défini.
+
+\begin{lstlisting}
+var unBouton = {kind:"Button", name:"bouton1", 
+                handlers:{ontap:"clique"}, 
+                content:"un bouton",
+                clique:function(){
+                  this.setContent("Reception du click")
+                }
+};
+
+enyo.kind({name:"App", components:[unBouton,unBouton]});
+\end{lstlisting}
+
+Dans cet exemple, au moment de l'instanciation un message d'avertissement concernant une collision de nom 
+est émis mais les deux boutons s'afficheront correctement. Cependant, on constate bien que les clicks 
+émis sur l'un ou l'autre des boutons n'auront pour effet de changer que le premier des deux boutons.\\\medskip
+
+Typiquement, si l'on souhaite réutiliser un composant déjà implémenté,
+il est recommandé de procéder ainsi :
+
+\begin{lstlisting}
+enyo.kind({kind:"Button", name:"MonBouton", 
+           handlers:{ontap:"clique"}, 
+           content:"un bouton",
+           clique:function(){
+             this.setContent("Reception du click")
+           }
+});
+
+enyo.kind({name:"App", 
+           components:[
+             {kind:"MonBouton", name:"bouton1"},
+             {kind:"MonBouton", name:"bouton2"}]
+});
+\end{lstlisting}
+
+Une nouvelle classe \emph{MonBouton} est alors étendu à l'environnement qui pourra être
+``Kindé'' comme un objet Enyo standard dans une définition de composant.
+
+%%%%%%%%%%%%%%%%%%
+%   CHAPITRE 2   %
+%%%%%%%%%%%%%%%%%%
+
+\chapter{Composants Enyo}
+%Peut-être faire le lien balise html/objets ici
+\section{Hiérarchie des objets}
+\section{Bibliothèques additionnelles}
+\subsection{Onyx}
+\subsection{Canvas}
+\subsection{Layout}
+
+%%%%%%%%%%%%%%%%%%
+%   CHAPITRE 3   %
+%%%%%%%%%%%%%%%%%%
+
+%ici, distinguer les deux phases
+\chapter{Interfaçage d'Enyo en OCaml}
+
+Pour une adaptation en OCaml d'Enyo, il est nécessaire d'établir une communication
+entre les deux langages. Cela présente une première difficulté étant donné le peu
+de points communs existants. Nous pouvons néanmoins résoudre le problème en
+utilisant  Js\_of\_ocaml, un compileur de byte-code OCaml vers Javascript développé par 
+l'équipe d'Ocsigen. Nous obtenons ainsi un moyen fiable d'assurer une traduction, 
+de déclarer des objets Javascript ou encore d'attacher des méthodes à ces derniers, le tout
+en restant dans le monde OCaml. La transposition assurée, nous pouvons nous concentrer sur 
+la modélisation d'Enyo.
+
+Le point critique de l'interfaçage se situe dans l'utilisation des traits 
+dynamiques de Javascript, par exemple, utiliser la méthode \emph{setContent(value)} sur un
+\emph{kind:"Control"} qui ne possèdera cette méthode qu'après instanciation est
+rédibitoire pour une transcription directe en OCaml.\medskip
+
+Après considérations, j'ai choisi de m'arrêter sur un modèle reposant sur une différenciation
+d'un objet en construction de celui d'un objet instancié. On représente ainsi un objet \emph{Enyo}
+en OCaml grâce aux propriétés le définissant.
+
+\medskip
+\begin{tikzpicture}[node distance=7cm, auto,]
+  \node[punkt] (kind) {Objet en création};
+  \node[punkt2,right=of kind] (jsobj) {Objet Javascript}
+  edge[pil, <-] node[auto]  {Instanciation en objet Enyo} (kind.east);
+\end{tikzpicture}
+\medskip
+
+L'extension de l'objet en cours de création avec propriétés et méthodes personnalisées est 
+abandonné. Cet aspect d'Enyo est nécessaire pour la partie logique de l'application, ce dont 
+nous pouvons nous abstraire puisque nous souhaitons un modèle de calcul reposant sur 
+un programme OCaml classique.
+A partir de là, les objets de l'interface de programmation (API) d'Enyo et leurs méthodes 
+sont suffisants si l'on considère utiliser Enyo comme une interface graphique multi-plateforme
+pour OCaml. Il est toutefois nécessaire de prendre en compte les évenements.
+
+Dans une première partie (\ref{repobj}), nous présenterons la structure choisie.
+
+Ensuite, la définition des propriétés et leur implémentation (\ref{gestprop})
+
+Dans un troisième temps, ... (\ref{gestevent})
+
+\section{Représentation des objets}\label{repobj}
+
+
+
+%expliquer choix variants (partage de nom aisé, etc)
+\section{Gestion des propriétés}\label{gestprop}
+\section{Gestion des évenements}\label{gestevent}
+
+%%%%%%%%%%%%%%%%%%
+%   CHAPITRE 4   %
+%%%%%%%%%%%%%%%%%%
+
+\chapter{Langage de Description d'Interface (IDL)}
+
+%%%%%%%%%%%%%%%%%%
+%   CHAPITRE 5   %
+%%%%%%%%%%%%%%%%%%
+
+\chapter{Applications diverses}
+
+%\mainmatter %corps
+
+%\backmatter %fin
+
+\end{document}

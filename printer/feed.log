@@ -1,0 +1,7 @@
+Problème de nommage de fonctions avec des occurences de nom de méthodes et de props dans deux objets de hiérarchie différentes
+
+
+Suppression des propChanged :
+
+Pas véritablement utile et trop d'incompatibilité avec des propriétés non-published. Peut-être à remettre plus tard. Pour l'instant, on dégage.
+

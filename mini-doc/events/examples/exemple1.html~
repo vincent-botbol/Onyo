@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>exemple1</title>
+    <script src="../../enyo-2.0b5/enyo.js"></script>
+    <script>enyo.depends("$lib/layout");</script>
+    <script src="exemple1.js"></script>
+  </head>
+  <body>
+    <script>
+      new App().renderInto(document.body);
+    </script>
+  </body>
+</html>

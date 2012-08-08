@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Enyo mini-doc</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="enyo-2.0b5/enyo.js"></script>
+  </head>
+  <body style="margin:0 15% 0 15%">
+    <div>
+      <p style="text-align:left">
+	<h1>Fonctionnement</h1>
+      <p>
+	Le construction d'une application Enyo se déroule en deux temps. Une première phase de création consistant à définir les composants de l'application et une deuxième de déploiement permettant à la bibliothèque Enyo de définir dans l'environnement une classe dérivant du composant précédemment défini que l'on pourra finalement instanciée.
+      </p>
+      <p>Pour construire son application, il faut définir les composants. Pour se faire, il faut préparer un objet Javascript possédant des propriétés spécifiques à Enyo et aux objets visés.
+	<br/>
+	Imaginons une application consistant d'un simple bouton.
+	<br/>
+      </p>
+      La définition de l'objet Javascript correspondant ressemblera à ceci:
+      <pre>
+	var monApplication = {kind: "Button",
+                              name: "MonBouton",
+                              content: "Clickez-moi"}
+      </pre>
+      
+      Analysons les propriétés:
+      <ul>
+	<li>"kind" définit le type de l'objet que l'on souhaite manipuler. Ici, un bouton.</li>
+	<br/>
+	<li>"name" a une double importance. Il spécifie à la fois le nom de la classe qui sera
+	  par la suite générée dans l'environnement mais permet aussi d'accéder aux différents élements
+	  de l'arbre de composant grâce à une table de hash nommée "$". 
+	  (exemple d'utilisation :  
+	  <pre>
+	    maFonction:function(){ this.$.MonBouton.setContent("Mon Bouton") })
+	  </pre>
+	</li>
+	<br/>
+	<li>"content" est la propriété hérité de l'objet Enyo "Control" définissant le texte du composant.</li>
+      </ul>
+      <p>
+	Ce composant désormais défini, il faut maintenant le passer à la bibliothèque d'Enyo afin de déployer l'application.
+	Pour se faire, on invoque la méthode kind de l'objet enyo :
+      </p>
+      <pre>enyo.kind(monApplication)</pre>
+      <p>      
+	A la suite de cet appel, on pourra constater qu'une nouvelle classe "MonBouton" est définie dans l'environnement.
+	Après instanciation, l'appel à cet objet doit être destiné à l'affichage. En effet, cette objet n'a pas vocation à être manipulé
+	et toute la logique de l'application doit être définie lors de la phase de création des composants.
+      </p>
+      <pre>
+	var app = new MonBouton();
+	app.renderInto(document.body);
+      </pre>
+      
+      <p style="background-color:lightgray">
+	Résultat
+	<div id="exemple1"></div>
+      </p>
+      
+      <p>    
+	Si l'on s'intéresse de plus près à l'objet "app", on peut constater qu'il possède un nombre important de méthodes
+	et de propriétés que nous n'avons pas forcément définies à la création.<br />
+	Ces méthodes ont été ajoutées par induction lors du traitement du composant par la fonction kind. <br/>
+	Par exemple: le champ kind spécifie un bouton, il lui faut donc rajouter toutes les propriétés et méthodes que possède 
+	un bouton Enyo.    
+      </p>    
+      
+      <h1>Ajout de sous-composants</h1>
+      <p>
+      <p>
+	Enyo suit une logique arborescente de composants. Lorsque l'on crée son application, il est nécessaire de pouvoir
+	lui ajouter des sous-composants. On réalise cela en définissant la propriété "components" avec un tableau de
+	composants.
+      </p>
+      <p>
+	Imaginons ici que l'on souhaite faire un cadre contenant : un champ de saisie et un bouton de validation
+      </p>
+      <pre>
+      enyo.kind({kind:"Control",
+                 name:"MonCadre",
+                 components: [
+                              {kind:"Input"},
+                              {kind:"Button", content:"ok"}
+                             ]
+                });
+      </pre>
+      La fonction kind va récursivement créer tous les sous-composants de la hiérarchie ainsi que leur méthodes associées.
+      </br>
+      Comme précédemment, pour l'afficher, on instancie la nouvelle classe ainsi générée et on lui applique une méthode 
+      d'affichage :
+      <br/>
+      <pre>
+	var app = new MonCadre();
+	app.renderInto(document.body);
+      </pre>
+      <p style="background-color:lightgray">
+	Résultat
+	<div id="exemple2"></div>
+      </p>
+      <p>
+	Si l'on observe le code html après ces appels, on s'aperçoit qu'enyo a créé une balise html de type 'div' dans laquelle
+	sera placée, respectivement, deux balises : un 'input type="text"'  et un 'button'.<br />
+	Note: La plupart des composants Enyo peuvent être considérés comme une balise Html
+      </p>
+      <p>
+	Notons que nous n'avons pas défini la propriété "name" des sous-composants. Rappelons que le nom d'un composant
+	sert uniquement à l'accession de celui-ci par les autres composants de la hiérarchie ou encore pour son instanciation.
+	Cependant, lors du kind, seule la racine de l'arbre sera étendue à l'environnement.<br />
+	Il faut aussi noter que si la propriété name n'est pas définie, Enyo s'en charge en lui donnant un label géneré 
+	("input0" et "button0" ici). Il n'est évidemment pas recommandé d'utiliser ces noms pour y accéder.
+      </p>
+      <h1>Evénements</h1>
+      <p>
+	Reprenons l'exemple précédent et supposons désormais que l'on souhaite, lorsque l'on clique sur le bouton, afficher 
+	un message d'alerte.
+      </p>
+      <pre>
+	enyo.kind({kind:"Control",
+         	   name:"MonCadre",
+        	   components: [
+        			{kind:"Input", value:""},
+        			{kind:"Button", content:"ok",
+         			 handlers:{ontap:"click"},
+        			 click:function(sender, event){
+                                   alert("ok");
+	        		   return true;
+         			 }
+         			}
+         	   	       ]
+        	  });
+      </pre>
+      <p style="background-color:lightgray">
+	Résultat
+	<div id="exemple3"></div>
+      </p>
+      <p>
+	Au bouton, nous avons rajouter une propriété "handlers". Cet objet sert à définir tous les événements que l'objet
+	va traiter. Cela peut-être des événements du dom (onkeyup, onload, ...) comme des événements spécifiques à la plateforme
+	sur laquelle l'application est déployée (l'inclinaison d'une tablette par exemple).<br />
+	Ici, nous utilisons l'événement "ontap", alias d'"onclick".
+      </p>
+      <p>
+	A chaque propriété-évenement est attaché une chaine contenant le nom de la fonction a appeler.
+      </p>
+      <p>
+	Nous définissons donc la fonction click qui prend en premier argument l'emetteur de l'événement et l'événement envoyé contenant
+	ses propriétés.
+      </p>
+      <p>
+	La valeur de retour de cette fonction spécifie si l'évenement doit s'arrêter ou remonter ("bubble") aux composants parents.
+	On retourne vrai pour l'empêcher de remonter et faux pour le laisser "bullé" sur ses ancêtres.
+      </p>
+      <p>
+	On notera qu'en général, les fonctions de traitement ne pas censées devoir "buller" sont définies à la racine de l'arbre
+	qui possède un accès à tous les sous-composants grâce à sa table de hash ($) 
+      </p>
+      <h1>Propriétés "published"</h1>
+      <p>
+	Les propriétés placées dans l'objet "published" du composant sont en général utilisées pour la logique de l'application.
+	Certains "published" sont déjà présent dans les objets Enyo. Par exemple, la propriété "content" de l'objet "Control" est
+	elle-même publiée.<br/>
+	
+	Enyo traite ces propriétés comme étant des variables publiques et génère automatiquement : getter, setter ainsi qu'une méthode
+	valueChanged appelée à chaque appel du set avec une nouvelle valeur.<br/>
+	Néanmoins, pour des raisons de facilité, il est possible de définir les valeurs des propriétés déjà publiées hors de l'objet
+	"published" de la même façon dont nous procédions avec le champ "content" jusqu'à présent.
+      </p>
+      <p>
+	En résumé, un composant déclaré ainsi :
+	<pre>{kind:"app", published:{maVariable:0}}</pre>
+	est équivalent à :
+	<pre>{kind:"app", maVariable:0, getMaVariable:function(){..}, setMaVariable:function(){..}, maVariableChanged:function(){}}</pre>
+      </p>
+      <p>
+	Exemple :<br/>
+	Une petite extension à l'exemple précédent qui ajoute un champ publié nommé "monTexte" qui à chaque clic sur le bouton
+	récupère la valeur du champ et la stocke dans la variable par un set, et on défini également la méthode monTexteChanged qui
+	est automatiquement déclenchée à chaque appel du modificateur <u>avec une valeur différente</u> de la précédente.
+      </p>
+      <pre>
+	enyo.kind({kind:"Control",
+         	   name:"App",
+		   published:{
+		       monTexte:""
+		   },
+        	   components: [
+        	       {kind:"Input", name:"monChamp", value:""},
+        	       {kind:"Button", content:"ok",
+			name:"monBouton",
+         		handlers:{ontap:"tapBouton"},
+			tapBouton:function(sender, event){return false} //permet de "buller" sur le père
+         	       }
+         	   ],
+		   handlers:{ontap:"tapControl"},
+		   tapControl:function(sender, event){
+		       if (sender == this.$.monBouton){
+			   this.setMonTexte(this.$.monChamp.getValue()); //modifie monTexte à l'aide de la méthode set automatiquement définie
+		       }
+		       return true;
+		   },
+		   monTexteChanged:function(oldValue){
+		       alert("monTexte : "+oldValue+" -> "+this.getMonTexte());
+		   }
+        	  });
+      </pre>
+      <p style="background-color:lightgray">
+	Résultat
+	<div id="exemple4"></div>
+      </p>
+      <p>
+	Note : la propriété this.published.maVariable ne sert qu'à indiquer au constructeur d'objet Enyo qu'il doit générer la variable 
+	et sa barrière d'abstraction. Des effets de bords sur cette variable après instanciation n'auront aucun effet.
+      </p>
+      
+      <h1>Problèmes principaux de l'interfaçage</h1>
+      <p>
+	Le soucis majeur se posant est la différenciation entre l'étape de création
+	et celle de l'instanciation.
+	<br />
+	Enyo se base fortement sur le dynamisme de Javascript en permettant au développeur
+	d'appeler des fonctions qui ne sont pas encore définies lors la phase de construction.
+	<br />	
+	Exemple :
+	<pre>{kind:"Checkbox", uneFonction:function(){ this.setChecked(true) } }</pre>
+      </p>      
+      <p>	
+	En OCaml, ce genre de pratique n'est pas souhaitable, dès lors, il est nécessaire
+	de créer une véritable frontière entre un objet en cours de création et un objet
+	dit finalisé possédant toutes les méthodes de l'objet décrit dans l'API Enyo.
+      </p>
+      <p>
+	Pour ce faire, il faut donc une représentation de l'objet Javascript en cours de création
+	par l'utilisateur et le résultat de l'instanciation de ce dernier.<br />
+	La représentation pouvant être assimilée au <pre>{kind:"Control", name:"App"}</pre>
+	Et l'instanciation à un <pre>enyo.kind(representation); var instance = new App();</pre>
+      </p>
+      <p>
+	Un autre problème lié au dynamisme est l'extension d'objet par la déclaration de
+	variables et de méthodes personnalisées au sein d'un objet en cours de création.
+      </p>
+      <p>
+	Pour ce problème, on peut considérer l'API de base suffisante et donc que 
+	l'extension d'un objet Enyo n'est pas nécessaire puisque les parties calcul et logique
+	de l'application seront réalisées par le programme écrit en OCaml.<br />
+	Seule la définition de propriétés graphiques et évenementielles importent si nous 
+	considérons Enyo comme une interface graphique pour OCaml. Ces dernières pouvant
+	facilement être incorporées à la construction de la représentation, le modèle doit 
+	pouvoir être suffisant.
+      </p>
+      <p>
+	Cependant, même en partant de cette idée, on se heurte à quelques soucis de typage.
+	Par exemple, il peut-être difficile de typer le composant émettant l'évenement
+	contenu en argument de la fonction de traitement. (function(emetteur, event){..})
+      </p>
+      <p>
+	Une des solutions à envisager pourrait être d'incorporer une propriété dans chaque 
+	objet Javascript créé nous permettant ainsi de déterminer son type en consultant ce champ.
+      </p>
+      <p>
+	-A continuer
+      </p>
+      
+      <h2>Quelques exemples...</h2>
+      <p>
+	Applications en pur Javascript contenus dans la doc Enyo:
+	<ul>
+	  <li><a href="exemples/javascript/flickr/index.html">Flickr</a>: application utilisant l'Ui "Onyx" d'Enyo</li>
+	  <li><a href="exemples/javascript/piratepig/index.html">PiratePig</a>: jeu utilisant la bibliothèque de canvas d'Enyo</li>
+	</ul>
+      </p>
+      <p>
+	Applications en OCaml utilisant Enyo au travers de js_of_ocaml :
+	<ul>
+	  <li><a href="exemples/ocaml/convertisseur/index.html">Convertisseur</a>: magnifique application de conversion °C/°K/°F 
+	    et de traitement d'évenements (5 clicks pour changer la couleur)</li>
+	  <li>Plus à venir...</li>
+	</ul>
+      </p>
+      <p>
+	Les sources sont disponibles dans le dossier <a href="exemples">exemples</a>
+      </p>
+            
+      </div>
+      <script>
+	enyo.kind({kind: "Button",
+	name: "MonBouton",
+	content: "Clickez-moi"});
+	new MonBouton().renderInto(document.getElementById("exemple1"))
+      </script>
+      <script>
+	enyo.create({kind:"Control",
+	name:"MonCadre",
+      components: [
+      {kind:"Input"},
+      {kind:"Button", content:"ok"}
+      ]
+      }).renderInto(document.getElementById("exemple2"))
+    </script>
+    <script>
+      	enyo.create({kind:"Control",
+         	   name:"MonCadre2",
+        	   components: [
+        			{kind:"Input", name:"champTexte", value:""},
+        			{kind:"Button", content:"ok",
+         			 handlers:{ontap:"click"},
+        			 click:function(sender, event){
+         			   alert("ok");
+	        		   return true;
+         			 }
+         			}
+         	   	       ]
+        	  }).renderInto(document.getElementById("exemple3"))
+    </script>
+    <script>
+	enyo.kind({kind:"Control",
+         	   name:"App",
+		   published:{
+		       monTexte:""
+		   },
+        	   components: [
+        	       {kind:"Input", name:"monChamp", value:""},
+        	       {kind:"Button", content:"ok",
+			name:"monBouton",
+         		handlers:{ontap:"tap"},
+			tap:function(){return false}
+         	       }
+         	   ],
+		   handlers:{ontap:"tap"},
+		   tap:function(sender, event){
+		       if (sender == this.$.monBouton){
+                     	   this.setMonTexte(this.$.monChamp.getValue());
+		       }
+		       return true;
+		   },
+	           monTexteChanged:function(oldValue){
+		       alert("monTexte : "+oldValue+" -> "+this.getMonTexte());
+		   }
+        	  });
+	 new App().renderInto(document.getElementById("exemple4"));
+    </script>
+  </body>
+</html>
