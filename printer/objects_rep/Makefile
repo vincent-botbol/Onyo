@@ -21,7 +21,9 @@ enyo_tree_objects
 OBJS=$(addsuffix .cmo, $(TARGETS))
 LIBTARGET=libobj.cma
 
-all: $(OBJS)
+all: $(LIBTARGET)
+
+$(LIBTARGET):$(OBJS)
 	ocamlc -a $^ -o $(LIBTARGET)
 
 %.cmo:%.ml

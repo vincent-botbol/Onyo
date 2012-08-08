@@ -5,7 +5,10 @@ LIB=libobj.cma
 OBJS=$(addsuffix .cmo, $(TARGETS))
 EXE=printer
 
-all: $(EXE)
+all: objects_rep/$(LIB) $(EXE) 
+
+objects_rep/$(LIB):
+	$(MAKE) -C objects_rep
 
 $(EXE): $(OBJS)
 	$(COMP) -o $@ $(INCLUDE) $(LIB) $^
@@ -15,3 +18,4 @@ $(EXE): $(OBJS)
 
 clean:
 	rm -f *~ *.cm[io] test
+	$(MAKE) -C objects_rep clean
