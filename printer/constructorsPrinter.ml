@@ -135,13 +135,13 @@ let generate_constructor_let obj_name attributes handlers =
 
 let generate_variables_setup obj_name =
   "let "^constructor_init_list_label^"= ref [(\"kind\", String \""^obj_name^"\")]\n"^
-    "and "^constructor_propertyChanged_list_label^"= ref []\n"^
+    (*"and "^constructor_propertyChanged_list_label^"= ref []\n"^*)
     "and "^constructor_handler_list_label^"= ref [] in"
 
 let generate_result obj_name =
   "{id=\""^(String.uppercase obj_name)^"\"; components=components;"^
     constructor_init_list_label^"=(!"^constructor_init_list_label^");"^
-    constructor_propertyChanged_list_label^"=(!"^constructor_propertyChanged_list_label^");"^
+    (*constructor_propertyChanged_list_label^"=(!"^constructor_propertyChanged_list_label^");"^*)
     constructor_handler_list_label^"=(!"^constructor_handler_list_label^")}"
 
 (*

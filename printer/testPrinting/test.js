@@ -310,8 +310,8 @@ function caml_register_named_value(nm,v) {
   caml_named_values[nm] = v; return 0;
 }
 (function()
-   {function _aT_(_c__,_c$_)
-     {return _c__.length==1?_c__(_c$_):caml_call_gen(_c__,[_c$_]);}
+   {function _aT_(_c7_,_c8_)
+     {return _c7_.length==1?_c7_(_c8_):caml_call_gen(_c7_,[_c8_]);}
     var
      _a_=[0,new MlString("Invalid_argument")],
      _b_=[0,new MlString("Not_found")];
@@ -386,7 +386,7 @@ function caml_register_named_value(nm,v) {
      _o_=new MlString("ontap"),
      _n_=new MlString("ONYX.TOOLBAR"),
      _m_=new MlString("name"),
-     _l_=[0,new MlString("lib_enyo.ml"),504,10],
+     _l_=[0,new MlString("lib_enyo.ml"),483,12],
      _k_=new MlString("_default_app_name"),
      _j_=new MlString("_default_app_name"),
      _i_=[0,new MlString("B1")],
@@ -470,81 +470,81 @@ function caml_register_named_value(nm,v) {
          return caml_js_from_array(_aQ_(_aV_(coerce_prop_bd_,param_bc_[1])));
         case 7:return param_bc_[1];
         default:return param_bc_[1];}}
-    function _bG_
+    function _bF_
      (_opt__be_,
       disabled_bi_,
-      active_bk_,
-      tag_bl_,
-      classes_bm_,
-      style_bn_,
-      content_bo_,
-      showing_bp_,
-      allowHtml_bq_,
-      src_br_,
-      canGenerate_bs_,
-      fit_bt_,
-      isContainer_bu_,
-      container_bv_,
-      parent_bw_,
-      controlParentName_bx_,
-      layoutKind_by_,
-      name_bz_,
-      id_bA_,
-      owner_bB_,
-      ontap_bC_,
-      param_bD_)
+      active_bj_,
+      tag_bk_,
+      classes_bl_,
+      style_bm_,
+      content_bn_,
+      showing_bo_,
+      allowHtml_bp_,
+      src_bq_,
+      canGenerate_br_,
+      fit_bs_,
+      isContainer_bt_,
+      container_bu_,
+      parent_bv_,
+      controlParentName_bw_,
+      layoutKind_bx_,
+      name_by_,
+      id_bz_,
+      owner_bA_,
+      ontap_bB_,
+      param_bC_)
      {var
        components_bf_=_opt__be_?_opt__be_[1]:0,
        prop_list_bg_=[0,_aa_],
-       handler_list_bh_=[0,0],
-       _bj_=0;
+       handler_list_bh_=[0,0];
       if(disabled_bi_)
        prop_list_bg_[1]=[0,[0,_$_,[5,disabled_bi_[1]]],prop_list_bg_[1]];
-      if(active_bk_)
-       prop_list_bg_[1]=[0,[0,___,[5,active_bk_[1]]],prop_list_bg_[1]];
-      if(tag_bl_)prop_list_bg_[1]=[0,[0,_Z_,[1,tag_bl_[1]]],prop_list_bg_[1]];
-      if(classes_bm_)
-       prop_list_bg_[1]=[0,[0,_Y_,[1,classes_bm_[1]]],prop_list_bg_[1]];
-      if(style_bn_)
-       prop_list_bg_[1]=[0,[0,_X_,[1,style_bn_[1]]],prop_list_bg_[1]];
-      if(content_bo_)
-       prop_list_bg_[1]=[0,[0,_W_,[1,content_bo_[1]]],prop_list_bg_[1]];
-      if(showing_bp_)
-       prop_list_bg_[1]=[0,[0,_V_,[5,showing_bp_[1]]],prop_list_bg_[1]];
-      if(allowHtml_bq_)
-       prop_list_bg_[1]=[0,[0,_U_,[5,allowHtml_bq_[1]]],prop_list_bg_[1]];
-      if(src_br_)prop_list_bg_[1]=[0,[0,_T_,[1,src_br_[1]]],prop_list_bg_[1]];
-      if(canGenerate_bs_)
-       prop_list_bg_[1]=[0,[0,_S_,[5,canGenerate_bs_[1]]],prop_list_bg_[1]];
-      if(fit_bt_)prop_list_bg_[1]=[0,[0,_R_,[5,fit_bt_[1]]],prop_list_bg_[1]];
-      if(isContainer_bu_)
-       prop_list_bg_[1]=[0,[0,_Q_,[5,isContainer_bu_[1]]],prop_list_bg_[1]];
-      if(container_bv_)
-       prop_list_bg_[1]=[0,[0,_P_,[7,container_bv_[1]]],prop_list_bg_[1]];
-      if(parent_bw_)
-       prop_list_bg_[1]=[0,[0,_O_,[7,parent_bw_[1]]],prop_list_bg_[1]];
-      if(controlParentName_bx_)
+      if(active_bj_)
+       prop_list_bg_[1]=[0,[0,___,[5,active_bj_[1]]],prop_list_bg_[1]];
+      if(tag_bk_)prop_list_bg_[1]=[0,[0,_Z_,[1,tag_bk_[1]]],prop_list_bg_[1]];
+      if(classes_bl_)
+       prop_list_bg_[1]=[0,[0,_Y_,[1,classes_bl_[1]]],prop_list_bg_[1]];
+      if(style_bm_)
+       prop_list_bg_[1]=[0,[0,_X_,[1,style_bm_[1]]],prop_list_bg_[1]];
+      if(content_bn_)
+       prop_list_bg_[1]=[0,[0,_W_,[1,content_bn_[1]]],prop_list_bg_[1]];
+      if(showing_bo_)
+       prop_list_bg_[1]=[0,[0,_V_,[5,showing_bo_[1]]],prop_list_bg_[1]];
+      if(allowHtml_bp_)
+       prop_list_bg_[1]=[0,[0,_U_,[5,allowHtml_bp_[1]]],prop_list_bg_[1]];
+      if(src_bq_)prop_list_bg_[1]=[0,[0,_T_,[1,src_bq_[1]]],prop_list_bg_[1]];
+      if(canGenerate_br_)
+       prop_list_bg_[1]=[0,[0,_S_,[5,canGenerate_br_[1]]],prop_list_bg_[1]];
+      if(fit_bs_)prop_list_bg_[1]=[0,[0,_R_,[5,fit_bs_[1]]],prop_list_bg_[1]];
+      if(isContainer_bt_)
+       prop_list_bg_[1]=[0,[0,_Q_,[5,isContainer_bt_[1]]],prop_list_bg_[1]];
+      if(container_bu_)
+       prop_list_bg_[1]=[0,[0,_P_,[7,container_bu_[1]]],prop_list_bg_[1]];
+      if(parent_bv_)
+       prop_list_bg_[1]=[0,[0,_O_,[7,parent_bv_[1]]],prop_list_bg_[1]];
+      if(controlParentName_bw_)
        prop_list_bg_[1]=
-       [0,[0,_N_,[1,controlParentName_bx_[1]]],prop_list_bg_[1]];
-      if(layoutKind_by_)
-       prop_list_bg_[1]=[0,[0,_M_,[1,layoutKind_by_[1]]],prop_list_bg_[1]];
-      if(name_bz_)
-       prop_list_bg_[1]=[0,[0,_L_,[1,name_bz_[1]]],prop_list_bg_[1]];
-      if(id_bA_)prop_list_bg_[1]=[0,[0,_K_,[1,id_bA_[1]]],prop_list_bg_[1]];
-      if(owner_bB_)
-       prop_list_bg_[1]=[0,[0,_J_,[7,owner_bB_[1]]],prop_list_bg_[1]];
-      if(ontap_bC_)
-       handler_list_bh_[1]=[0,[0,_I_,ontap_bC_[1]],handler_list_bh_[1]];
-      return [0,_H_,components_bf_,_bj_,handler_list_bh_[1],prop_list_bg_[1]];}
-    function _bH_(this_bF_,chaine1_bE_)
-     {this_bF_.setContent(chaine1_bE_.toString());return 0;}
-    function f_bL_(this_bI_,sender_bJ_,event_bK_)
-     {_bH_(this_bI_,new MlWrappedString(this_bI_.getName()));
-      console.log(this_bI_);
+       [0,[0,_N_,[1,controlParentName_bw_[1]]],prop_list_bg_[1]];
+      if(layoutKind_bx_)
+       prop_list_bg_[1]=[0,[0,_M_,[1,layoutKind_bx_[1]]],prop_list_bg_[1]];
+      if(name_by_)
+       prop_list_bg_[1]=[0,[0,_L_,[1,name_by_[1]]],prop_list_bg_[1]];
+      if(id_bz_)prop_list_bg_[1]=[0,[0,_K_,[1,id_bz_[1]]],prop_list_bg_[1]];
+      if(owner_bA_)
+       prop_list_bg_[1]=[0,[0,_J_,[7,owner_bA_[1]]],prop_list_bg_[1]];
+      if(ontap_bB_)
+       handler_list_bh_[1]=[0,[0,_I_,ontap_bB_[1]],handler_list_bh_[1]];
+      return [0,_H_,components_bf_,handler_list_bh_[1],prop_list_bg_[1]];}
+    function _bG_(this_bE_,chaine1_bD_)
+     {this_bE_.setContent(chaine1_bD_.toString());return 0;}
+    function f_bK_(this_bH_,sender_bI_,event_bJ_)
+     {_bG_(this_bH_,new MlWrappedString(this_bH_.getName()));
+      console.log(this_bH_);
       return 1;}
     var
-     b1_bM_=_bG_(0,0,0,0,0,0,_h_,0,0,0,0,0,0,0,0,0,0,_i_,0,0,[0,f_bL_],0),
-     b2_bN_=_bG_(0,0,0,0,0,0,_f_,0,0,0,0,0,0,0,0,0,0,_g_,0,0,[0,f_bL_],0),
+     b1_bL_=_bF_(0,0,0,0,0,0,_h_,0,0,0,0,0,0,0,0,0,0,_i_,0,0,[0,f_bK_],0),
+     b2_bM_=_bF_(0,0,0,0,0,0,_f_,0,0,0,0,0,0,0,0,0,0,_g_,0,0,[0,f_bK_],0),
+     _bN_=0,
      _bO_=0,
      _bP_=0,
      _bQ_=0,
@@ -562,31 +562,31 @@ function caml_register_named_value(nm,v) {
      _b2_=0,
      _b3_=0,
      _b4_=0,
-     _b5_=0,
-     _b6_=[0,b1_bM_,[0,b2_bN_,[0,b1_bM_,[0,b2_bN_,0]]]],
-     components_b7_=[0,_b6_]?_b6_:0,
-     prop_list_b8_=[0,_G_],
-     handler_list_b9_=[0,0],
-     _b__=0;
-    if(_b5_)prop_list_b8_[1]=[0,[0,_F_,[1,_b5_[1]]],prop_list_b8_[1]];
-    if(_b4_)prop_list_b8_[1]=[0,[0,_E_,[1,_b4_[1]]],prop_list_b8_[1]];
-    if(_b3_)prop_list_b8_[1]=[0,[0,_D_,[1,_b3_[1]]],prop_list_b8_[1]];
-    if(_b2_)prop_list_b8_[1]=[0,[0,_C_,[1,_b2_[1]]],prop_list_b8_[1]];
-    if(_b1_)prop_list_b8_[1]=[0,[0,_B_,[5,_b1_[1]]],prop_list_b8_[1]];
-    if(_b0_)prop_list_b8_[1]=[0,[0,_A_,[5,_b0_[1]]],prop_list_b8_[1]];
-    if(_bZ_)prop_list_b8_[1]=[0,[0,_z_,[1,_bZ_[1]]],prop_list_b8_[1]];
-    if(_bY_)prop_list_b8_[1]=[0,[0,_y_,[5,_bY_[1]]],prop_list_b8_[1]];
-    if(_bX_)prop_list_b8_[1]=[0,[0,_x_,[5,_bX_[1]]],prop_list_b8_[1]];
-    if(_bW_)prop_list_b8_[1]=[0,[0,_w_,[5,_bW_[1]]],prop_list_b8_[1]];
-    if(_bV_)prop_list_b8_[1]=[0,[0,_v_,[7,_bV_[1]]],prop_list_b8_[1]];
-    if(_bU_)prop_list_b8_[1]=[0,[0,_u_,[7,_bU_[1]]],prop_list_b8_[1]];
-    if(_bT_)prop_list_b8_[1]=[0,[0,_t_,[1,_bT_[1]]],prop_list_b8_[1]];
-    if(_bS_)prop_list_b8_[1]=[0,[0,_s_,[1,_bS_[1]]],prop_list_b8_[1]];
-    if(_bR_)prop_list_b8_[1]=[0,[0,_r_,[1,_bR_[1]]],prop_list_b8_[1]];
-    if(_bQ_)prop_list_b8_[1]=[0,[0,_q_,[1,_bQ_[1]]],prop_list_b8_[1]];
-    if(_bP_)prop_list_b8_[1]=[0,[0,_p_,[7,_bP_[1]]],prop_list_b8_[1]];
-    if(_bO_)handler_list_b9_[1]=[0,[0,_o_,_bO_[1]],handler_list_b9_[1]];
+     _b5_=[0,b1_bL_,[0,b2_bM_,[0,b1_bL_,[0,b2_bM_,0]]]],
+     components_b6_=[0,_b5_]?_b5_:0,
+     prop_list_b7_=[0,_G_],
+     handler_list_b8_=[0,0];
+    if(_b4_)prop_list_b7_[1]=[0,[0,_F_,[1,_b4_[1]]],prop_list_b7_[1]];
+    if(_b3_)prop_list_b7_[1]=[0,[0,_E_,[1,_b3_[1]]],prop_list_b7_[1]];
+    if(_b2_)prop_list_b7_[1]=[0,[0,_D_,[1,_b2_[1]]],prop_list_b7_[1]];
+    if(_b1_)prop_list_b7_[1]=[0,[0,_C_,[1,_b1_[1]]],prop_list_b7_[1]];
+    if(_b0_)prop_list_b7_[1]=[0,[0,_B_,[5,_b0_[1]]],prop_list_b7_[1]];
+    if(_bZ_)prop_list_b7_[1]=[0,[0,_A_,[5,_bZ_[1]]],prop_list_b7_[1]];
+    if(_bY_)prop_list_b7_[1]=[0,[0,_z_,[1,_bY_[1]]],prop_list_b7_[1]];
+    if(_bX_)prop_list_b7_[1]=[0,[0,_y_,[5,_bX_[1]]],prop_list_b7_[1]];
+    if(_bW_)prop_list_b7_[1]=[0,[0,_x_,[5,_bW_[1]]],prop_list_b7_[1]];
+    if(_bV_)prop_list_b7_[1]=[0,[0,_w_,[5,_bV_[1]]],prop_list_b7_[1]];
+    if(_bU_)prop_list_b7_[1]=[0,[0,_v_,[7,_bU_[1]]],prop_list_b7_[1]];
+    if(_bT_)prop_list_b7_[1]=[0,[0,_u_,[7,_bT_[1]]],prop_list_b7_[1]];
+    if(_bS_)prop_list_b7_[1]=[0,[0,_t_,[1,_bS_[1]]],prop_list_b7_[1]];
+    if(_bR_)prop_list_b7_[1]=[0,[0,_s_,[1,_bR_[1]]],prop_list_b7_[1]];
+    if(_bQ_)prop_list_b7_[1]=[0,[0,_r_,[1,_bQ_[1]]],prop_list_b7_[1]];
+    if(_bP_)prop_list_b7_[1]=[0,[0,_q_,[1,_bP_[1]]],prop_list_b7_[1]];
+    if(_bO_)prop_list_b7_[1]=[0,[0,_p_,[7,_bO_[1]]],prop_list_b7_[1]];
+    if(_bN_)handler_list_b8_[1]=[0,[0,_o_,_bN_[1]],handler_list_b8_[1]];
     var
+     _b9_=0,
+     _b__=0,
      _b$_=0,
      _ca_=0,
      _cb_=0,
@@ -603,111 +603,104 @@ function caml_register_named_value(nm,v) {
      _cm_=0,
      _cn_=0,
      _co_=0,
-     _cp_=0,
-     _cq_=0,
-     _cr_=
-      [0,[0,_n_,components_b7_,_b__,handler_list_b9_[1],prop_list_b8_[1]],0],
-     components_cs_=[0,_cr_]?_cr_:0,
-     prop_list_ct_=[0,_au_],
-     handler_list_cu_=[0,0],
-     _cv_=0;
-    if(_cq_)prop_list_ct_[1]=[0,[0,_at_,[1,_cq_[1]]],prop_list_ct_[1]];
-    if(_cp_)prop_list_ct_[1]=[0,[0,_as_,[1,_cp_[1]]],prop_list_ct_[1]];
-    if(_co_)prop_list_ct_[1]=[0,[0,_ar_,[1,_co_[1]]],prop_list_ct_[1]];
-    if(_cn_)prop_list_ct_[1]=[0,[0,_aq_,[1,_cn_[1]]],prop_list_ct_[1]];
-    if(_cm_)prop_list_ct_[1]=[0,[0,_ap_,[5,_cm_[1]]],prop_list_ct_[1]];
-    if(_cl_)prop_list_ct_[1]=[0,[0,_ao_,[5,_cl_[1]]],prop_list_ct_[1]];
-    if(_ck_)prop_list_ct_[1]=[0,[0,_an_,[1,_ck_[1]]],prop_list_ct_[1]];
-    if(_cj_)prop_list_ct_[1]=[0,[0,_am_,[5,_cj_[1]]],prop_list_ct_[1]];
-    if(_ci_)prop_list_ct_[1]=[0,[0,_al_,[5,_ci_[1]]],prop_list_ct_[1]];
-    if(_ch_)prop_list_ct_[1]=[0,[0,_ak_,[5,_ch_[1]]],prop_list_ct_[1]];
-    if(_cg_)prop_list_ct_[1]=[0,[0,_aj_,[7,_cg_[1]]],prop_list_ct_[1]];
-    if(_cf_)prop_list_ct_[1]=[0,[0,_ai_,[7,_cf_[1]]],prop_list_ct_[1]];
-    if(_ce_)prop_list_ct_[1]=[0,[0,_ah_,[1,_ce_[1]]],prop_list_ct_[1]];
-    if(_cd_)prop_list_ct_[1]=[0,[0,_ag_,[1,_cd_[1]]],prop_list_ct_[1]];
-    if(_cc_)prop_list_ct_[1]=[0,[0,_af_,[1,_cc_[1]]],prop_list_ct_[1]];
-    if(_cb_)prop_list_ct_[1]=[0,[0,_ae_,[1,_cb_[1]]],prop_list_ct_[1]];
-    if(_ca_)prop_list_ct_[1]=[0,[0,_ad_,[7,_ca_[1]]],prop_list_ct_[1]];
-    if(_b$_)handler_list_cu_[1]=[0,[0,_ac_,_b$_[1]],handler_list_cu_[1]];
-    var
-     _cw_=
-      [0,_ab_,components_cs_,_cv_,handler_list_cu_[1],prop_list_ct_[1]];
-    function build_component_tree_cC_(kind_cy_)
-     {var js_obj_cx_=new Object(),_cB_=kind_cy_[5];
+     _cp_=[0,[0,_n_,components_b6_,handler_list_b8_[1],prop_list_b7_[1]],0],
+     components_cq_=[0,_cp_]?_cp_:0,
+     prop_list_cr_=[0,_au_],
+     handler_list_cs_=[0,0];
+    if(_co_)prop_list_cr_[1]=[0,[0,_at_,[1,_co_[1]]],prop_list_cr_[1]];
+    if(_cn_)prop_list_cr_[1]=[0,[0,_as_,[1,_cn_[1]]],prop_list_cr_[1]];
+    if(_cm_)prop_list_cr_[1]=[0,[0,_ar_,[1,_cm_[1]]],prop_list_cr_[1]];
+    if(_cl_)prop_list_cr_[1]=[0,[0,_aq_,[1,_cl_[1]]],prop_list_cr_[1]];
+    if(_ck_)prop_list_cr_[1]=[0,[0,_ap_,[5,_ck_[1]]],prop_list_cr_[1]];
+    if(_cj_)prop_list_cr_[1]=[0,[0,_ao_,[5,_cj_[1]]],prop_list_cr_[1]];
+    if(_ci_)prop_list_cr_[1]=[0,[0,_an_,[1,_ci_[1]]],prop_list_cr_[1]];
+    if(_ch_)prop_list_cr_[1]=[0,[0,_am_,[5,_ch_[1]]],prop_list_cr_[1]];
+    if(_cg_)prop_list_cr_[1]=[0,[0,_al_,[5,_cg_[1]]],prop_list_cr_[1]];
+    if(_cf_)prop_list_cr_[1]=[0,[0,_ak_,[5,_cf_[1]]],prop_list_cr_[1]];
+    if(_ce_)prop_list_cr_[1]=[0,[0,_aj_,[7,_ce_[1]]],prop_list_cr_[1]];
+    if(_cd_)prop_list_cr_[1]=[0,[0,_ai_,[7,_cd_[1]]],prop_list_cr_[1]];
+    if(_cc_)prop_list_cr_[1]=[0,[0,_ah_,[1,_cc_[1]]],prop_list_cr_[1]];
+    if(_cb_)prop_list_cr_[1]=[0,[0,_ag_,[1,_cb_[1]]],prop_list_cr_[1]];
+    if(_ca_)prop_list_cr_[1]=[0,[0,_af_,[1,_ca_[1]]],prop_list_cr_[1]];
+    if(_b$_)prop_list_cr_[1]=[0,[0,_ae_,[1,_b$_[1]]],prop_list_cr_[1]];
+    if(_b__)prop_list_cr_[1]=[0,[0,_ad_,[7,_b__[1]]],prop_list_cr_[1]];
+    if(_b9_)handler_list_cs_[1]=[0,[0,_ac_,_b9_[1]],handler_list_cs_[1]];
+    var _ct_=[0,_ab_,components_cq_,handler_list_cs_[1],prop_list_cr_[1]];
+    function build_component_tree_cz_(kind_cv_)
+     {var js_obj_cu_=new Object(),_cy_=kind_cv_[4];
       _a6_
-       (function(param_cz_)
-         {var x_cA_=param_cz_[1];
-          return js_obj_cx_[x_cA_]=coerce_prop_bd_(param_cz_[2]);},
-        _cB_);
-      if(0!==kind_cy_[2])
-       js_obj_cx_.components=
-       caml_js_from_array(_aQ_(_aV_(build_component_tree_cC_,kind_cy_[2])));
-      if(0!==kind_cy_[4])
+       (function(param_cw_)
+         {var x_cx_=param_cw_[1];
+          return js_obj_cu_[x_cx_]=coerce_prop_bd_(param_cw_[2]);},
+        _cy_);
+      if(0!==kind_cv_[2])
+       js_obj_cu_.components=
+       caml_js_from_array(_aQ_(_aV_(build_component_tree_cz_,kind_cv_[2])));
+      if(0!==kind_cv_[3])
        {var
-         _cE_=kind_cy_[4],
-         handlers_name_cF_=
-          _aV_(function(param_cD_){return param_cD_[1];},_cE_),
-         handlers_name_func_cM_=
+         _cB_=kind_cv_[3],
+         handlers_name_cC_=
+          _aV_(function(param_cA_){return param_cA_[1];},_cB_),
+         handlers_name_func_cJ_=
           _aV_
-           (function(x_cG_)
-             {var _cH_=x_cG_.getLen()-2|0,_cI_=2;
-              if(0<=_cI_&&0<=_cH_&&!((x_cG_.getLen()-_cH_|0)<_cI_))
-               {var r_cK_=caml_create_string(_cH_);
-                caml_blit_string(x_cG_,_cI_,r_cK_,0,_cH_);
-                var _cL_=r_cK_,_cJ_=1;}
+           (function(x_cD_)
+             {var _cE_=x_cD_.getLen()-2|0,_cF_=2;
+              if(0<=_cF_&&0<=_cE_&&!((x_cD_.getLen()-_cE_|0)<_cF_))
+               {var r_cH_=caml_create_string(_cE_);
+                caml_blit_string(x_cD_,_cF_,r_cH_,0,_cE_);
+                var _cI_=r_cH_,_cG_=1;}
               else
-               var _cJ_=0;
-              if(!_cJ_)var _cL_=_d_(_av_);
-              return _cL_;},
-            handlers_name_cF_),
-         _cO_=kind_cy_[4],
-         handlers_func_cQ_=
-          _aV_(function(param_cN_){return param_cN_[2];},_cO_),
-         handler_obj_cP_=new Object(),
-         _cS_=_a3_(handlers_name_cF_,handlers_name_func_cM_);
+               var _cG_=0;
+              if(!_cG_)var _cI_=_d_(_av_);
+              return _cI_;},
+            handlers_name_cC_),
+         _cL_=kind_cv_[3],
+         handlers_func_cN_=
+          _aV_(function(param_cK_){return param_cK_[2];},_cL_),
+         handler_obj_cM_=new Object(),
+         _cP_=_a3_(handlers_name_cC_,handlers_name_func_cJ_);
         _a6_
-         (function(param_cR_)
-           {return handler_obj_cP_[param_cR_[1]]=param_cR_[2].toString();},
-          _cS_);
-        js_obj_cx_.handlers=handler_obj_cP_;
-        var _cU_=_a3_(handlers_name_func_cM_,handlers_func_cQ_);
+         (function(param_cO_)
+           {return handler_obj_cM_[param_cO_[1]]=param_cO_[2].toString();},
+          _cP_);
+        js_obj_cu_.handlers=handler_obj_cM_;
+        var _cR_=_a3_(handlers_name_func_cJ_,handlers_func_cN_);
         _a6_
-         (function(param_cT_)
-           {return js_obj_cx_[param_cT_[1]]=
-                   caml_js_wrap_meth_callback(param_cT_[2]);},
-          _cU_);}
-      js_obj_cx_._onyo_id=kind_cy_[1].toString();
-      return js_obj_cx_;}
-    var js_obj_cV_=build_component_tree_cC_(_cw_);
+         (function(param_cQ_)
+           {return js_obj_cu_[param_cQ_[1]]=
+                   caml_js_wrap_meth_callback(param_cQ_[2]);},
+          _cR_);}
+      js_obj_cu_._onyo_id=kind_cv_[1].toString();
+      return js_obj_cu_;}
+    var js_obj_cS_=build_component_tree_cz_(_ct_);
     try
-     {var param_cW_=_cw_[5];
+     {var param_cT_=_ct_[4];
       for(;;)
-       {if(!param_cW_)throw [0,_b_];
-        var match_cX_=param_cW_[1],b_cY_=match_cX_[2],l_cZ_=param_cW_[2];
-        if(0!==caml_compare(match_cX_[1],_m_)){var param_cW_=l_cZ_;continue;}
-        if(1!==b_cY_[0])throw [0,_ay_,_l_];
-        var s_c0_=b_cY_[1],name_c1_=s_c0_;
+       {if(!param_cT_)throw [0,_b_];
+        var match_cU_=param_cT_[1],b_cV_=match_cU_[2],l_cW_=param_cT_[2];
+        if(0!==caml_compare(match_cU_[1],_m_)){var param_cT_=l_cW_;continue;}
+        if(1!==b_cV_[0])throw [0,_ay_,_l_];
+        var s_cX_=b_cV_[1],name_cY_=s_cX_;
         break;}}
-    catch(_c2_)
-     {if(_c2_[1]!==_b_)throw _c2_;
-      js_obj_cV_.name=_k_.toString();
-      var name_c1_=_j_;}
-    js_obj_cV_._onyo_isRootComponent=!!1;
-    enyo.kind(js_obj_cV_);
-    var enyo_js_object_c3_=new (caml_js_var(name_c1_))();
-    function _c5_(param_c4_)
-     {enyo_js_object_c3_.renderInto(document.body);return _false_a__;}
+    catch(_cZ_)
+     {if(_cZ_[1]!==_b_)throw _cZ_;
+      js_obj_cS_.name=_k_.toString();
+      var name_cY_=_j_;}
+    enyo.kind(js_obj_cS_);
+    var enyo_js_object_c0_=new (caml_js_var(name_cY_))();
+    function _c2_(param_c1_)
+     {enyo_js_object_c0_.renderInto(document.body);return _false_a__;}
     window_bb_.onload=
     caml_js_wrap_callback
-     (function(e_c6_)
-       {if(e_c6_)
-         {var res_c7_=_c5_(e_c6_);
-          if(!(res_c7_|0))e_c6_.preventDefault();
-          return res_c7_;}
-        var _c8_=event,res_c9_=_c5_(_c8_);
-        _c8_.returnValue=res_c9_;
-        return res_c9_;});
-    _bH_(enyo_js_object_c3_,_e_);
+     (function(e_c3_)
+       {if(e_c3_)
+         {var res_c4_=_c2_(e_c3_);
+          if(!(res_c4_|0))e_c3_.preventDefault();
+          return res_c4_;}
+        var _c5_=event,res_c6_=_c2_(_c5_);
+        _c5_.returnValue=res_c6_;
+        return res_c6_;});
+    _bG_(enyo_js_object_c0_,_e_);
     do_at_exit_aD_(0);
     return;}
   ());

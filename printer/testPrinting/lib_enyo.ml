@@ -5,7 +5,7 @@ module Enyo : sig
   type js_value
   type handler
   type value_changed
-  type +'a kind
+  type +'a kind 
   type +'a obj
   
   val instanciate : ([< any_id] as 'a) kind -> 'a obj
@@ -1229,6 +1229,7 @@ end = struct
   let getName this () =
     let value = meth_call this "getName" [||] in
     to_string value
+
   let setName this chaine1 =
     let _ = meth_call this "setName" [|inject (string chaine1)|] in
     ()

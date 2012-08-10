@@ -9,7 +9,7 @@ let generate_module_sig_types list_obj_name list_event_name =
   ^"type "^label_type_dom_node^"\n"
   ^"type "^label_type_js_value^"\n"
   ^"type "^label_type_handler^"\n"
-  ^"type "^label_type_changed^"\n"
+  (*^"type "^label_type_changed^"\n"*)
   ^"type +'a "^label_type_kind^"\n"
   ^"type +'a "^label_type_js_object^"\n"
 
@@ -19,9 +19,9 @@ let generate_module_struct_types list_obj_name list_event_name =
   ^"type "^label_type_dom_node^" = Dom_html.bodyElement Js.t\n"
   ^"type "^label_type_js_value^" = Int of int | String of string | Char of char | Float of float | Dom_node of dom_node | Bool of bool | Array of "^label_type_js_value^" list | Component of "^label_type_any_id^" "^label_type_js_object^" \n"
   ^"and "^label_type_handler^" = Handler of string * ("^label_type_any_id^" "^label_type_js_object^" -> "^label_type_any_id^" "^label_type_js_object^" -> "^label_type_any_event^" "^label_type_js_object^" -> bool)\n"
-  ^"and "^label_type_changed^" = Changed of string * ("^label_type_any_id^" "^label_type_js_object^" -> "^label_type_js_value^" -> unit)\n"
+  (*^"and "^label_type_changed^" = Changed of string * ("^label_type_any_id^" "^label_type_js_object^" -> "^label_type_js_value^" -> unit)\n"*)
   ^"and +'a "^label_type_kind^" = {id:string; components: "^label_type_any_id^" "^label_type_kind^" list;"
-  ^constructor_propertyChanged_list_label^":"^label_type_changed^" list; "
+  (*^constructor_propertyChanged_list_label^":"^label_type_changed^" list; "*)
   ^constructor_handler_list_label^":"^label_type_handler^" list; "^constructor_init_list_label^" : (string * "^label_type_js_value^") list }\n"
   ^"and +'a "^label_type_js_object^" = "^label_type_js_of_ocaml_object^"\n"
   ^"exception Bad_kind\n"
