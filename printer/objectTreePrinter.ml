@@ -25,7 +25,7 @@ let expand_objects_tree tree =
       and attr_list = obj_attributes@attr_list
       and handlers_list = obj_handlers@handlers_list in
       Node(
-	Type(obj_name, meth_list, attr_list, handlers_list),	  
+	Type(obj_name, meth_list, attr_list, handlers_list),
 	(List.map (expand_rec meth_list attr_list handlers_list) forest))
   in
   expand_rec [] [] [] tree
@@ -114,12 +114,12 @@ let build_dep = function Node(root, forest) as tree ->
 
 let rec get_all_ids = function Node(root, forest) ->
   match root with
-      Type (name, obj_methods, obj_attributes, obj_handlers)
-    | Type_gen (_, name, obj_methods, obj_attributes, obj_handlers) ->
-      List.fold_left (fun acc x -> x@acc) 
-	[(variant_label_object name)]
-	(List.map get_all_ids forest)
-
+    Type (name, obj_methods, obj_attributes, obj_handlers)
+  | Type_gen (_, name, obj_methods, obj_attributes, obj_handlers) ->
+    List.fold_left (fun acc x -> x@acc) 
+      [(variant_label_object name)]
+      (List.map get_all_ids forest)
+      
 (* Todo : let get_all_ids = function Node(root,_) -> root.dependances*)
 
 (*    

@@ -1,6 +1,6 @@
 open Struct_types
 
-let _control = Type_gen ( Uicomponent._uiComponent,
+let _control = Type_gen ( UiComponent._uiComponent,
 			  "Control",
 			  [
 			    Method ("addClass", [String; Unit]);

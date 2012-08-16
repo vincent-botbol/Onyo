@@ -1,6 +1,6 @@
 open Struct_types
 
-let _button = Type_gen (Tool_decorator._tool_decorator,
+let _button = Type_gen (ToolDecorator._toolDecorator,
 			"Button",
 			[],
 			[Attribute("disabled", Bool, true)],

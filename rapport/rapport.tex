@@ -1,12 +1,14 @@
 \documentclass[11pt,a4paper]{report}
 
+%\parskip = \baselineskip
+
 \usepackage[utf8]{inputenc}
 \usepackage[frenchb]{babel}
 \usepackage[T1]{fontenc}
 
 \usepackage[hidelinks]{hyperref}
 \usepackage{tikz}
-\usetikzlibrary{arrows,positioning} 
+\usetikzlibrary{arrows,positioning,trees} 
 \tikzset{
     %Define standard arrow tip
     >=stealth',
@@ -95,37 +97,77 @@
 
 \chapter{Introduction}
 
+En quelques années, les appareils mobiles se sont peu à peu imposés sur le marché technologique.
+Grâce à leurs interfaces graphiques simplifiées et leurs fonctionnalités, ces outils ont sû se 
+rendre indispensable auprès du grand-public.
+Aujourd'hui, environ un tiers de la population possède un smartphone ou une tablette.
+
+La variété de ces appareils est telle que la tâche est parfois agaçante pour les développpeurs 
+d'exporter leurs applications sur d'autres systèmes utilisant des langages différents.
+La nécessité d'une unification s'est donc imposé. Pour se faire, le choix des constructeurs quant à
+la technique s'est dirigé vers les nouvelles technologies web :
+HTML5 et JavaScript. Populaire et en constante évolution, ces deux solutions apportent un grand nombre
+de possibilités mais possèdent néanmoins leurs désavantages.
+
+Le but de ce stage est de permettre au programmeur de développer des applications portables de manière sûre
+en passant pour cela par le langage OCaml garant d'une solidité à travers la puissance de son typage statique
+tout en gardant le confort de programmation qu'on lui connait.
+Pour se faire, on s'est intéressé à la bibliothèque JavaScript ``Enyo'' (\ref{chap:enyo}) 
+en interfaçant celle-ci afin de satisfaire notre objectif.
+
+La traduction d'OCaml vers JavaScript a déjà été mise-en-oeuvre dans plusieurs travaux : O'Browser
+et Js\_of\_ocaml. Fournissant des bases intéressantes pour ce projet, il a été pratique d'en faire usage
+pour s'abstraire du problème d'inter-opérabilité entre les deux langages.
+
+La divergence entre JavaScript et OCaml est importante. Cela peut beaucoup jouer lors d'un tel 
+interfaçage. Il est alors important de bien étudier la bibliothèque afin de déterminer le niveau
+d'utilisation des traits intrusifs.
+En répondant cette question, il faut pouvoir déterminer le type de modèle et sa représentation
+s'adaptant le mieux.
+Les objets Enyo étant nombreux, il peut être important de se donner les moyens de les représenter 
+de façon efficace. Se munir d'un IDL peut-il être un atout pour réaliser ceci?
+
+Premièrement, nous étudierons Enyo pour nous permettre d'obtenir les informations nécessaires 
+pour établir une approche.
+
+Ensuite, nous tenterons de fournir un modèle en détaillant les raisons de ce choix et les problèmes
+qui en ressortent.
+
+Enfin, nous présenterons un IDL permettant de modéliser les objets Enyo.
+
 %%%%%%%%%%%%%%%%%%
 %   CHAPITRE 1   %
 %%%%%%%%%%%%%%%%%%
-\chapter{Documentation Enyo}
-\section{Présentation}
-Enyo est un framework Javascript orienté-objet. Il privilégie un style de développement basé
+\chapter{Présentation Enyo}\label{chap:enyo}
+\section{Introduction}
+Enyo\cite{enyo} est un framework Javascript orienté-objet. Il privilégie un style de développement basé
 sur une encapsulation arborescente de composants.\medskip
 
 Dans sa première version, Enyo fut employé pour le développement d'application des 
 tablettes HP TouchPad fonctionnant sous webOS. Après un succès mitigé,
 HP décida de transformer webOS en projet \emph{open source} devenant ainsi : Open WebOS.\medskip
 
-Enyo passe ainsi en version 2.0. Profitant de sa conception en Javascript, 
-l'engouement actuel de ce dernier permet aux développeurs de déployer leurs 
-applications sur les plateformes le supportant, c'est-à-dire, tout appareil se voulant
-grand public (Android, iOS, WindowsPhone, etc.)\medskip
+Enyo passe alors en version 2.0. Sa conception en Javascript profite de  
+l'engouement actuel de ce langage et permet aux développeurs de déployer leurs 
+applications sur les plateformes le supportant, ce qui aujourd'hui signifie au moins 
+la plupart des appareils grand public (Android, iOS, WindowsPhone, etc.)\medskip
 
-%à revoir
 On peut attribuer à Enyo des avantages tels que sa prise en main aisée grâce au style 
-de programmation proche d'une vision du DOM et le poids relativement faible de sa bibliothèque.
-%%%%
+de programmation proche d'une vision du DOM, le poids relativement faible de sa bibliothèque
+et sa possibilité d'extension relativement aisée.
 
 \clearpage
 
+%%%%%%%%%
+Reprise de lecture : ici
+%%%%%%%%%
 \section{Débuter en Enyo}
 
 Il est important de distinguer deux phases dans le développement d'une application 
 Enyo.
 \begin{itemize}
 \item La première, dite de création, consiste à définir les composants, leurs positions dans 
-la hiérarchie de l'application ainsi que le modèle. 
+la hiérarchie de l'application ainsi que le modèle de calcul. 
 \item La seconde est celle du déploiement. Permettant à la bibliothèque Enyo de 
 générer, à partir du squelette décrit par la phase de création, l'objet destiné
 à être instancier puis afficher.
@@ -372,23 +414,114 @@ enyo.kind({name:"App",
 Une nouvelle classe \emph{MonBouton} est alors étendu à l'environnement qui pourra être
 ``Kindé'' comme un objet Enyo standard dans une définition de composant.
 
-%%%%%%%%%%%%%%%%%%
-%   CHAPITRE 2   %
-%%%%%%%%%%%%%%%%%%
-
-\chapter{Composants Enyo}
-%Peut-être faire le lien balise html/objets ici
 \section{Hiérarchie des objets}
+
+On peut considérer la plupart objets Enyo dans la hiérarchie comme des noeuds HTML,
+en effet, lorsque l'on construit son application, la forme arborescente de l'arbre se traduit
+particulièrement bien sous une forme HTML. Ainsi, un \emph{Button} Enyo est lui-même transformé
+en un noeud ``<button>'' à l'instanciation. Il est donc aisé de se représenter le rendu final 
+d'une application.
+
+Voici un aperçu de l'arbre des composants d'Enyo :\medskip
+
+\begin{tikzpicture}
+  [grow=right, level 1/.style={sibling distance=3em},
+    level 2/.style={sibling distance=3em}, level distance=2.5cm]
+
+\node (object) {Object}
+  child {node (compo) {Component}
+    child {node (uicompo) {UIComponent}
+      child {node (control) {Control}
+        child {node (etc) {...}}
+        child {node (input) {Input}
+          child {node (textarea) {TextArea}}
+          child {node (checkbox) {Checkbox}}
+        }
+        child {node (Popup) {Popup}}
+        child {node (option) {Option}}
+        child {node (image) {Image}}
+      }
+    }
+    child {node (animator) {Animator}}
+  }
+  child {node (async) {Async}
+    child {node (ajax) {Ajax}
+    }
+  };
+\end{tikzpicture}
+
+L'arbre complet peut-être trouvé en annexe (\ref{hier-complet}).
+
+La plupart des objets héritent de la classe \emph{Control}. En effet, c'est à partir de celle-ci
+que l'on obtient des fonctions d'affichage et la génération d'un noeud html.
+Les objets parents de \emph{Control}, tel que \emph{Component} ou \emph{Object} ne servent
+qu'à établir une logique dans le code (création de temporisateurs, propagation d'événements, etc.).
+On peut donc tout à fait se passer de ceux-ci lors de l'utilisation en OCaml\footnote{La logique de
+l'application étant gérée par le programme OCaml}.
+
 \section{Bibliothèques additionnelles}
+
+Enyo possède un ensemble de bibliothèques supplémentaire apportant du contenu à l'API de base.
+On peut par exemple utiliser la bibliothèque Onyx pour fournir une interface graphique 
+supérieure ou encore Layout pour organiser ses composants de la manière souhaitée.
+
+Ces objets viennent généralement se greffer à la hiérarchie existante. Par exemple,
+``Onyx.Input'' hérite de ``Control''.
+
+Pour pouvoir utiliser cette extension, il est nécessaire de l'indiquer à l'application.
+Il faut faire appel à \emph{enyo.depends} sur la liste des bibliothèques à lier.
+Par exemple, si l'on souhaite utiliser des objets d'``Onyx'' et de ``Layout'', il faut procéder ainsi :
+
+\begin{JavaScript}
+  enyo.depends{ "$lib/Onyx", "$lib/Layout"}
+\end{JavaScript}
+
+Il est bien sûr requis de fournir le dossier contenant ces extensions au même niveau que le dossier
+``enyo''. Voici une arborescence classique d'une application Enyo :
+
+\begin{tikzpicture}
+  [level 1/.style={sibling distance=3cm},
+    level 2/.style={sibling distance=1.5cm}]
+  \node {application}
+    child { node {enyo}
+      child{ node {enyo.js}}
+    }		
+    child { node {lib}
+      child{node {Onyx}}
+      child{node {Layout}}
+      child{node {...}}
+    }
+    child { node {index.html}}
+    child { node {dependances.js}}
+    child { node {source}
+      child { node {App.js}}
+      child { node {App.css}}
+    };
+\end{tikzpicture}
+
 \subsection{Onyx}
+
+La bibliothèque Onyx enrichit l'application en apportant un ensemble de style prédéfinis pour 
+des objets de bases. L'objectif étant d'obtenir une interface graphique correcte sans avoir
+à passer du temps sur le style de l'application.
+
 \subsection{Canvas}
+
+Cette extension gère la partie HTML5 d'Enyo. Elle définit des objets pour simplifier le code JavaScript
+et ainsi s'abstraire légèrement de la couche basse d'HTML5.
+
+Cependant, cette bibliothèque a ses limites et l'intérêt décroit à mesure que l'application se complexifie.
+
 \subsection{Layout}
+
+Permet d'organiser les composants de l'application avec flexibilité.
+L'usage de cette bibliothèque n'est malheureusement pas très intuitive, elle nécessite 
+exemples et lecture de la documentation présente sur le site d'Enyo.
 
 %%%%%%%%%%%%%%%%%%
 %   CHAPITRE 3   %
 %%%%%%%%%%%%%%%%%%
 
-%ici, distinguer les deux phases
 \chapter{Interfaçage d'Enyo en OCaml}\label{chap:model}
 
 Pour une adaptation en OCaml d'Enyo, il est nécessaire d'établir une communication
@@ -870,7 +1003,7 @@ C'est le rôle de la fonction \emph{as\_a}:
   val as_a : ([< any_id] as 'a) -> [< any_id] obj -> 'a obj
 \end{OCaml}
 
-Si l'objet n'est pas de l'``id'' spécifié, une exception est levé.
+Si l'objet n'est pas de l'``id'' spécifié, une exception est levée.
 
 Avec ceci, nous pouvons agir sur l'emetteur :
 \begin{OCaml}
@@ -959,7 +1092,7 @@ avec d'autre langage.
 En premier lieu, il convient de présenter les structures choisis pour abriter les objets.
 Puis, j'expliquerai brièvement la génération du code et les problèmes rencontrés.
 
-\section{Représentation des objets}
+\section{Interface des objets}
 
 Un objet Enyo présente 3 grandes parties distinctes :
 \begin{itemize}
@@ -1055,33 +1188,128 @@ La difficulté de cette étape a été le parcours de l'arbre pour résoudre les
 Une simple récursion sur l'arbre permet l'obtention d'un résultat satisfaisant.
 
 Plus tard, j'ai constaté qu'un cas spécial ne permettait pas un parcours aussi banal :
-lorsque deux objets définissent des méthodes ou proprieté de même noms sur des branches différentes
+lorsque deux objets définissent des méthodes ou proprietés de même noms sur des branches différentes
 de l'arbre, il y a collision de noms et il est impossible de factoriser simplement les dépendances
 \footnote{J'omets le fait que deux méthodes de même nom peuvent être de types différents, 
 ce qu'il faudrait traiter si le cas était présent}.
 
 Afin de résoudre ceci, je réalise des parcours préalables en remplissant des tables de hachage contenant
-en clé le nom de méthodes et de proprietés avec en valeur la liste des dépendances. 
-Puis j'applique la récursion, en consultant la table de hachage pour résoudre les incohérences.
+en clé le nom de méthodes et de proprietés avec en valeur leurs listes des dépendances.
+J'applique ensuite la récursion, en consultant la table de hachage pour résoudre les incohérences.
 
 Note : On aurait également pu ``tagger'' les différentes incohérences au moment de la représentation de l'objet
-en spécifiant que cette méthode ou propriété est partagée avec un autre objet.\medskip
+en spécifiant que cette méthode ou propriété est partagée avec un autre objet. Plusieurs solutions sont
+possibles...\medskip
 
-Mon arbre de résolutions de dépendances construit, il ne reste plus qu'à appliquer la mise-en-forme
-du module pour pouvoir imprimer le code OCaml.
-
+L'arbre de résolutions de dépendances construit, il ne reste plus qu'à réaliser les impressions
+pour pouvoir générer le module OCaml prêt à l'emploi.
 
 %%%%%%%%%%%%%%%%%%
 %   CHAPITRE 5   %
 %%%%%%%%%%%%%%%%%%
 
-\chapter{Applications}
-\section{Déploiements}
 
 \chapter{Conclusion}
 
+%Le peu de similitude entre JavaScript et OCaml peut présenter une des difficultés majeure dans cet interfaçage.
+%Il est alors important de se demander à quel ordre l'utilisation de traits intrusifs est faite dans 
+%l'implémentation d'applications Enyo.
+%Tout en étudiant cette question, il faut pouvoir réflechir à quel type de représentation de modèle
+%ce style s'adapte-t-il le mieux.
+%Les objets Enyo étant nombreux, il peut-être important de se donner les moyens de les représenter 
+%de façon efficace. La définition d'un IDL peut-elle être un atout pour réaliser ceci?
+%
+%Premièrement, nous étudierons Enyo pour nous permettre d'obtenir les informations nécessaires à 
+%la réflexion d'une approche.
+%Ensuite, nous tenterons de fournir un modèle en détaillant les raisons de ce choix et les problèmes
+%qui en ressortent.
+%Enfin, nous présenterons un IDL permettant de modéliser les objets Enyo.
+
+A travers ce projet, nous avons pu établir un certain nombre de choses.
+Tout d'abord, nous avons pu établir que le style de programmation d'Enyo nous offrait
+un nombre important de possibilités. Il a fallu étudier ce style, son fonctionnement et 
+en abstraire les concepts afin de définir un modèle intéressant et cohérent.
+
+La scission de la représentation et de l'instanciation de l'objet Enyo sur lequel j'ai basé mon modèle
+répondent à l'objectif de sûreté que nous nous étions fixé tout en assurant un degré important
+de liberté vis-à-vis de l'API d'Enyo.
+
+Enfin, la définition d'un IDL a permis une génération fiable de l'implémentation finale mais aussi de 
+permettre de tenir à jour l'API Enyo de manière assez aisée en cas de besoin.
+
+Cependant, le rendu final subit quelques défauts : 
+\begin{itemize}
+\item L'utilisation de variants, bien que permettant 
+  une bonne modélisation, peut être perçue comme trop complexe pour une prise en main rapide. Cela fournit
+  également des messages d'erreurs trop aggressifs. 
+  Cette dernière remarque s'applique aussi pour l'utilisation des paramètres optionnels lors de la
+  construction des objets.
+\item L'accession aux différents composants instanciés lors de la définition du traitement 
+  des événements n'est pas satisfaisante et gagnerait à être améliorée.
+\item L'IDL ne traite pas certains cas particuliers et reste relativement primaire.    
+\end{itemize}\medskip
+
+Pour permettre une continuation du projet, il peut-être intéressant de reprendre les problèmes
+énoncés avec, par exemple, les différentes approches énoncées dans les différentes sections. Pour résumer :
+\begin{itemize}
+\item Réfléchir à une représentation différentes que les variants, quitte à rendre le
+  module plus lourd, par une approche objet ou type simple.
+\item Pouvoir accéder aux instanciations Enyo par le l'équivalent ``kind'' de l'objet, en s'assurant
+  de son existence.
+  \begin{OCaml}
+    let bouton_obj = getObj button_kind (* 'a kind -> 'a obj *)
+    setContent bouton_obj ``Nouvelle valeur''
+  \end{OCaml}
+\item Tout d'abord, il serait bien de compléter la hiérarchie que le manque de temps ne m'a pas permis de terminer.
+  Ensuite, pouvoir fournir des possibilités d'extension à l'IDL en permettant des définitions internes 
+  de composants. Par exemple, être capable  de créer un nouvel objet ``ChampValidation'' possédant 
+  deux composants ``Input'' et ``Button'' ainsi qu'une fonction de validation.
+\item Il faudrait réfléchir à une représentation des noeuds du DOM. Est-ce que l'on souhaite passer 
+  par ``js\_of\_ocaml'', fournir une chaine le représentant, ou encore définir quelques noeuds principaux
+  et brider leur utilisation?
+\end{itemize}\medskip
+
+Sur le plan personnel, ce stage m'a été, je pense, très profitable ; j'ai pu consolider mes bases en OCaml
+ainsi que mon engouement pour ce langage. Je le dois en grande partie à l'équipe extrêmement capable et dynamique
+dont j'ai eu la chance d'être entouré pendant ces deux mois. 
+De plus, cette expérience enrichissante au sein d'un laboratoire m'a sérieusement fait réfléchir à 
+une éventuelle formation en recherche.
+Je ressors de ce stage, enrichi et porté par une vision affinée de l'informatique ainsi que d'une 
+conviction renforcée sur mes préoccupations d'études futures.
+
 \chapter{Annexes}
 
-\chapter{Bibliographie}
+\section{Hiérarchie complète Enyo}\label{hier-complet}
+
+\lstinputlisting[basicstyle=\tt]{arborescence.txt}
+
+\section{Déploiement d'applications}
+
+Le déploiement d'applications sur les différentes plateformes nécessite quelques changements mineurs 
+de l'application en fonction de la cible visée.
+
+Tout d'abord, Enyo fournit un ``bootplate'' décrivant l'organisation standard d'une application.
+Ce dossier contient un script ``deploy'' permettant de préparer l'application au 
+déploiement ainsi que l'analyse du programme et la suppression des fichiers inutilisés.
+
+A partir de là, pour un déploiement sur tablette HP, par exemple, il est nécessaire d'obtenir les outils
+développeur de la tablette permettant de ``packagé'' l'application.
+Pour un déploiement sur téléphone (``android'', ``iOs'', etc.), il est nécessaire de télécharger
+``PhoneGap'' \href{http://www.phonegap.com/developer}{[lien]} qui propose ce genre de ``packaging''.
+Il est toutefois nécessaire de fournir un noeud \emph{meta} dans le document Html principal de l'application
+selon la plateforme.
+Les détails sont accessibles à cette adresse : \\
+\url{https://github.com/enyojs/enyo/wiki/Platform-Specific-Deployment}
+
+\section{Exemples de programme}
+
+Les exemples d'applications se situent dans le dossier ``exemples'' à la racine du projet.
+
+On pourra y trouver quelques applications JavaScript ainsi que des jeux utilisant la bibliothèque inspiré des exemples contenu sur le cédérom 
+du manuel ``DAOC''\cite{DAOC}.
+
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{biblio}
 
 \end{document}

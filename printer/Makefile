@@ -17,5 +17,5 @@ $(EXE): $(OBJS)
 	$(COMP) -c $(INCLUDE) $(LIB) $<
 
 clean:
-	rm -f *~ *.cm[io] test
+	rm -f *~ *.cm[io]
 	$(MAKE) -C objects_rep clean
