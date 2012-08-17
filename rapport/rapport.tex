@@ -93,7 +93,6 @@
 
 \begin{document}
 \maketitle
-\tableofcontents
 
 \chapter{Introduction}
 
@@ -148,32 +147,35 @@ tablettes HP TouchPad fonctionnant sous webOS. Après un succès mitigé,
 HP décida de transformer webOS en projet \emph{open source} devenant ainsi : Open WebOS.\medskip
 
 Enyo passe alors en version 2.0. Sa conception en Javascript profite de  
-l'engouement actuel de ce langage et permet aux développeurs de déployer leurs 
-applications sur les plateformes le supportant, ce qui aujourd'hui signifie au moins 
+l'engouement actuel pour ce langage et permet aux développeurs de déployer leurs 
+applications sur les plateformes le supportant, ce qui aujourd'hui désigne 
 la plupart des appareils grand public (Android, iOS, WindowsPhone, etc.)\medskip
 
 On peut attribuer à Enyo des avantages tels que sa prise en main aisée grâce au style 
-de programmation proche d'une vision du DOM, le poids relativement faible de sa bibliothèque
-et sa possibilité d'extension relativement aisée.
+de programmation proche d'une vision du DOM\footnote{Document Object Model}, le poids relativement 
+faible de sa bibliothèque et sa possibilité d'extension relativement aisée.
 
 \clearpage
 
-%%%%%%%%%
-Reprise de lecture : ici
-%%%%%%%%%
 \section{Débuter en Enyo}
 
-Il est important de distinguer deux phases dans le développement d'une application 
+Il est important de distinguer trois phases dans le développement d'une application 
 Enyo.
 \begin{itemize}
-\item La première, dite de création, consiste à définir les composants, leurs positions dans 
-la hiérarchie de l'application ainsi que le modèle de calcul. 
-\item La seconde est celle du déploiement. Permettant à la bibliothèque Enyo de 
-générer, à partir du squelette décrit par la phase de création, l'objet destiné
-à être instancier puis afficher.
+\item La première, dite de déclaration, consiste à définir les composants, leurs positions dans 
+la hiérarchie de l'application ainsi que le modèle de calcul.
+\item La seconde est celle de la génération. Permettant à la bibliothèque Enyo de 
+``compléter'' le squelette décrit par la phase de déclaration, l'objet destiné
+à être instancié.
+\item Enfin, nous avons la phase d'instanciation où le résultat de la génération
+est à même d'être créé puis utlisable, par exemple, en l'affichant.
 \end{itemize}\medskip
 
-La définition des composants de l'application consiste, vulgairement, à déclarer 
+On observe ainsi de fortes similitudes avec un langage de description d'interface.
+Il faut commencer par \emph{décrire} l'objet, ensuite le \emph{générer} 
+pour enfin l'\emph{utiliser}.
+
+La définition des composants de l'application consiste à déclarer 
 des objets Javascript possédant des propriétés qui auront un sens au moment d'étendre
 l'application.\smallskip
 
@@ -184,8 +186,10 @@ Par exemple, définissons un simple morceau de texte contenant la chaine ``Bonjo
                         content: "Bonjour monde!"}
 \end{JavaScript}
 
-Ici, nous avons simplement créé un objet Javascript muni de propriétés suffisantes 
-pour renseigner Enyo sur le type d'objet à créer.\\
+Ici, nous avons simplement déclaré un objet Javascript\footnote{%
+Pour simplifier les déclarations d'objets, nous utilisons la 
+notation Json de JavaScript.}
+muni de propriétés suffisantes pour renseigner Enyo sur le type d'objet à créer.\\
 Explicitons ces propriétés :
 \begin{itemize}
 \item \emph{kind} définit le type d'objet Enyo que nous souhaitons créer.\smallskip
@@ -196,21 +200,20 @@ la propriété \emph{name} déterminera le nom de la classe générée. Autremen
 servira de clé à une table d'association définie sur le composant racine de l'application 
 servant à récupérer les divers sous-composants
 }\smallskip
-\item \emph{content} attribut un texte au composant. Ceci n'a de sens que parce que l'on manipule
-un objet Enyo de type ``Control'' ou un de ses descendants qui possède donc cette propriété.\smallskip
+\item \emph{content} attribut un texte au composant. Cette propriété concerne les objets Enyo de type 
+``Control'' ou un de ses descendants héritant de celle-ci.\smallskip
 \end{itemize}\medskip
 
-Désormais défini, il faut passer le composant à la méthode \emph{kind} d'Enyo pour finaliser l'application
-et la rendre instanciable.
+Désormais défini, il faut passer le composant à la méthode \emph{kind} d'Enyo pour générer la nouvelle
+classe de l'application.
 
 \begin{JavaScript}
   enyo.kind(monApplication);
 \end{JavaScript}
 
-A la suite de cet appel, on pourra constater qu'une nouvelle classe \mbox{\emph{MonApp}} est présente 
-dans l'environnement. Il ne reste donc plus qu'à l'instancier pour pouvoir ensuite l'afficher.
-
-\clearpage
+A la suite de cet appel, on pourra constater qu'une nouvelle classe \mbox{\emph{MonApp}} 
+a été ajouté à l'environnement global de JavaScript. Il ne reste donc plus qu'à l'instancier 
+pour pouvoir ensuite l'afficher.
 
 \begin{JavaScript}
   var app = new MonApp();
@@ -219,10 +222,10 @@ dans l'environnement. Il ne reste donc plus qu'à l'instancier pour pouvoir ensu
 
 En s'intéressant de plus près à l'objet ``app'', on peut constater qu'il
 possède un nombre important de méthodes et de propriétés que nous n'avons 
-pas forcément définies à la création, telle que la méthode \emph{renderInto}
+pas définies à la description, telle que la méthode \emph{renderInto}
 que nous venons d'utiliser.
 
-Ces méthodes ont été ajoutées par induction lors de la construction de 
+Ces méthodes ont été ajoutées par induction lors de la génération de 
 l'application par la méthode \emph{enyo.kind}.
 
 Si le champ \emph{kind} spécifie un ``Control'', il est donc nécessaire à Enyo de
@@ -250,7 +253,7 @@ et d'un bouton de validation:
 La fonction kind va récursivement créer tous les sous-composants de la hiérarchie 
 ainsi que leur méthodes associées.
 
-Comme précédemment, pour l'afficher, on instancie la nouvelle classe ainsi générée 
+Comme précédemment, pour l'afficher, on instancie la nouvelle classe générée 
 et on lui applique une méthode d'affichage : 
 
 \begin{JavaScript}
@@ -262,10 +265,10 @@ Si l'on observe le code html après ces appels, on s'aperçoit qu'enyo a inject�
 le DOM une balise html de type <div> dans laquelle sera placée, respectivement, 
 deux balises : un <input type="text" ..> et un <button>.
 
-\vbox{Notons que nous n'avons pas défini la propriété \emph{name} des sous-composants. 
+Notons que nous n'avons pas défini la propriété \emph{name} des sous-composants. 
 Rappelons que le nom d'un composant sert uniquement à l'accession de celui-ci par les 
-autres composants de la hiérarchie ou encore pour son instanciation. Cependant, lors du kind, 
-seule la racine de l'arbre sera étendue à l'environnement.}
+autres composants de la hiérarchie ou encore pour son instanciation. Cependant, lors de
+l'appel à \emph{enyo.kind}, seule la racine de l'arbre sera étendu à l'environnement.
 
 Il faut aussi noter que si la propriété name n'est pas définie, Enyo s'en charge en lui donnant 
 un label géneré (``input0'' et ``button0'' ici). Il n'est évidemment pas recommandé 
@@ -291,23 +294,23 @@ enyo.kind({kind:"Control",
        	  });
 \end{JavaScript}
 
-Au bouton, nous avons rajouter une propriété \emph{handlers}. 
+Au bouton, nous avons rajouté une propriété \emph{handlers}. 
 Cet objet sert à définir tous les événements que l'objet va traiter. 
-Cela peut-être des événements du dom (onkeyup, onload, ...) comme des événements 
+Cela peut-être des événements du DOM (onkeyup, onload, ...) comme des événements 
 spécifiques à la plateforme sur laquelle l'application est déployée 
 (l'inclinaison d'une tablette par exemple). Ici, nous utilisons l'événement "ontap", alias d'"onclick".\\
 
-A chaque propriété-événement est attaché une chaine contenant le nom de la fonction à appeler.
+A chaque propriété-événement est attachée une chaine contenant le nom de la fonction à appeler.
 
-Nous définissons donc la fonction click qui prend en premier argument l'emetteur de 
+Nous définissons donc la fonction ``click'' qui prend en premier argument l'émetteur de 
 l'événement et l'événement envoyé contenant ses propriétés.
 
 La valeur de retour de cette fonction spécifie si l'événement doit s'arrêter ou 
 remonter (``bubble'') aux composants parents. On retourne vrai pour l'empêcher de 
-remonter et faux pour le laisser ``bullé'' sur ses ancêtres.
+remonter et faux pour le laisser ``buller'' sur ses ancêtres.
 
-On notera qu'en général, les fonctions de traitement ne pas censées devoir ``buller'' 
-sont définies à la racine de l'arbre qui possède un accès à tous ses sous-composants 
+On notera qu'en général, les fonctions de traitement ne pas censées devoir remonter l'arbre
+sont définies à la racine qui possède un accès à tous ses sous-composants 
 grâce à sa table de hash ``\$''.
 
 Il existe quelques spécificités pour la manipulation d'événements :
@@ -333,7 +336,7 @@ Il existe quelques spécificités pour la manipulation d'événements :
   traitement lié au handler du sous-composant. (voir exemple)
 \end{itemize}
 %XXXXXXXXXXXXXXXXX
-%insérer des exemples de prog. events chelou
+%insérer des exemples de prog
 %XXXXXXXXXXXXXXXXX
 
 \section{Propriétés published}\label{sec:published}
@@ -353,8 +356,8 @@ est équivalent à :
 \begin{JavaScript}
   {kind:"app", maVariable:0, 
     getMaVariable:function(){..}, 
-    setMaVariable:function(){..}, 
-    maVariableChanged:function(){}}
+    setMaVariable:function(nouvelleValeur){..}, 
+    maVariableChanged:function(ancienneValeur){}}
 \end{JavaScript}
 
 %XXXXXXXXXXXXXXXXX
@@ -374,7 +377,7 @@ Des effets de bords sur cette variable après instanciation n'auront aucun effet
 
 Il est possible de réutiliser des composants déjà créés. Il faut cependant faire attention à ne pas
 lui attribuer de nom. Dans le cas échéant, le constructeur considèrera que l'objet existe déjà et 
-tous les traitements visant une des occurences de ce nom seront appliqués au premier objet défini.
+tous les traitements visant une des occurrences de ce nom seront appliqués au premier objet défini.
 
 \begin{JavaScript}
 var unBouton = {kind:"Button", name:"bouton1", 
@@ -406,13 +409,15 @@ enyo.kind({kind:"Button", name:"MonBouton",
 
 enyo.kind({name:"App", 
            components:[
+             // Creation de deux MonBouton
              {kind:"MonBouton", name:"bouton1"},
              {kind:"MonBouton", name:"bouton2"}]
 });
 \end{JavaScript}
 
-Une nouvelle classe \emph{MonBouton} est alors étendu à l'environnement qui pourra être
-``Kindé'' comme un objet Enyo standard dans une définition de composant.
+Dans ce cas-ci, on commence par décrire un nouvel objet bouton avec son fonctionnement
+personnalisé puis en l'étend avec la fonction \emph{enyo.kind} et ainsi pouvoir le
+réutiliser dans une nouvelle description de composant.
 
 \section{Hiérarchie des objets}
 
@@ -454,8 +459,8 @@ L'arbre complet peut-être trouvé en annexe (\ref{hier-complet}).
 
 La plupart des objets héritent de la classe \emph{Control}. En effet, c'est à partir de celle-ci
 que l'on obtient des fonctions d'affichage et la génération d'un noeud html.
-Les objets parents de \emph{Control}, tel que \emph{Component} ou \emph{Object} ne servent
-qu'à établir une logique dans le code (création de temporisateurs, propagation d'événements, etc.).
+Les objets parents de \emph{Control}, tel que \emph{Component} ou \emph{Object} ne servent, en pratique,
+qu'à établir une logique dans le code (création de temporisateurs, calculs de valeurs, etc.).
 On peut donc tout à fait se passer de ceux-ci lors de l'utilisation en OCaml\footnote{La logique de
 l'application étant gérée par le programme OCaml}.
 
@@ -507,22 +512,138 @@ des objets de bases. L'objectif étant d'obtenir une interface graphique correct
 
 \subsection{Canvas}
 
-Cette extension gère la partie HTML5 d'Enyo. Elle définit des objets pour simplifier le code JavaScript
-et ainsi s'abstraire légèrement de la couche basse d'HTML5.
+Cette extension gère la partie canvas d'HTML5 d'Enyo. Elle définit des objets pour simplifier 
+le code JavaScript et ainsi s'abstraire légèrement de la couche basse d'HTML5.
 
 Cependant, cette bibliothèque a ses limites et l'intérêt décroit à mesure que l'application se complexifie.
+Il est parfois inévitable de recourir aux fonctions de bases de manipulation de canvas pour obtenir
+le résultat escompté.
 
 \subsection{Layout}
 
-Permet d'organiser les composants de l'application avec flexibilité.
+Permet de disposer les composants de l'application avec flexibilité.
 L'usage de cette bibliothèque n'est malheureusement pas très intuitive, elle nécessite 
 exemples et lecture de la documentation présente sur le site d'Enyo.
 
 %%%%%%%%%%%%%%%%%%
 %   CHAPITRE 3   %
 %%%%%%%%%%%%%%%%%%
+\chapter{Interfaçage d'Enyo en OCaml : Nouveau plan}\label{chap:model}
 
-\chapter{Interfaçage d'Enyo en OCaml}\label{chap:model}
+\section{Interopérabilité entre JavaScript et OCaml}
+
+Pour une adaptation en OCaml d'Enyo, il est nécessaire d'établir une communication
+entre les deux langages. Cela présente une première difficulté étant donné le peu
+de points communs existants. Deux projets ont été développés sur le sujet : Le premier 
+``OBrowser''\cite{pwt}, implémente une machine virtuelle interprétant le bytecode OCaml
+en JavaScript au runtime. Le second ``Js\_of\_ocaml'', compile le bytecode pour générer
+un fichier Javascript qui pourra être ajouté dans une page web.
+
+Le problème principal des deux projets réside dans la représentation des valeurs
+d'un monde à l'autre. Pour chacun des cas, il a fallu trouver un moyen efficace de
+pouvoir transmettre et interpréter des valeurs tout en assurant le typage.
+Cela est réalisé par l'analyse du bytecode qui en redéfinissant les blocs OCaml
+en valeur JavaScript permettent leur utilisation dans ce monde-ci et inversement pour
+les valeurs JavaScript traduies en blocs. Fournissant une sur-couche d'API JavaScript,
+le programmeur OCaml est ainsi à même d'utiliser des fonctions JavaScript au sein de son
+programme en pouvant s'assurer du typage. L'utilisation de fonctions OCaml en JavaScript
+est également possible.
+
+Le problème de l'interopérabilité avec Enyo suit les mêmes contraintes :
+Le dynamisme de JavaScript empêche une traduction directe. Il est donc intéressant
+d'utiliser l'un de ces outils afin de nous fournir une couche haute pour l'implémentation de
+ces valeurs.
+
+
+\section{Js\_of\_ocaml : Présentation des outils}
+
+Le choix s'est porté sur Js\_of\_ocaml. Celui-ci fournit une représentation assez complète des
+objets JavaScript et une manipulation aisée des champs. Une telle liberté peut cependant être source
+d'erreurs, venant en particulier du fait que nous utilisons certaines fonctions non-typés.
+L'intérêt se limite ainsi à l'interopérabilité et nous nous assurerons du typage lors de la définition
+du modèle.
+
+Nous utiliserons en particulier le module Js.Unsafe qui contient qui contient une couche assez basse
+de l'API ``Js\_of\_ocaml'' pour nous permettre des libertés, en particulier nous 
+nous intéresserons aux fonctions suivantes :
+
+\begin{OCaml}
+(*Type haut permettant de contenir l'ensemble des valeurs JavaScript possibles*)
+type any
+
+(*Fonction d'accession aux variables JavaScript
+  => variable "monobj", renvoie l'objet "monobj" défini dans l'environnement JavaScript*)
+val variable : string -> 'a
+
+//Coercition d'une valeur vers le type haut
+val inject : 'a -> any
+
+(*Fonctions d'accession et de modification de champ des objets JavaScript*)
+val get : 'a -> 'b -> 'c
+val set : 'a -> 'b -> 'c -> unit
+
+(*Appel de fonction JavaScript avec un tableau d'argument
+  => fun_call (variable "alert") [| inject 42 |]
+  = affiche 42*)
+val fun_call : 'a -> any array -> 'b
+
+(*Appel d'une méthode d'un objet JavaScript
+  => let unsafe_str = meth_call unObj "toString" [| |]*)
+val meth_call : 'a -> string -> any array -> 'b
+
+(*Création d'un objet JavaScript*)
+val new_obj : 'a -> any array -> 'b
+\end{OCaml}
+
+Cette liberté a évidemment un prix. Ces fonctions sont très dangereuses et c'est pourquoi il faut 
+faire preuve de beaucoup de précautions à l'utilisation pour éviter les erreurs que pourrait engendrer
+l'interfaçage.
+Notamment lorsque l'on passe des arguments aux appels de méthodes, il est nécessaire des les transcrire
+en valeurs JavaScript et inversements pour récupérer les valeurs retournées.
+
+La traduction de ces valeurs s'opérent grâce aux fonctions de traductions étant elles typées.
+\begin{OCaml}
+  val bool : bool -> bool t
+  val to_bool : bool t -> bool
+  val string : string -> string t
+  val to_string : string t -> string
+  val array : 'a array -> 'a js_array t
+  val to_array : 'a js_array t -> 'a array
+  (*...*)
+\end{OCaml}
+
+Il faut donc s'assurer de la sécurité des appels des fonctions ou méthodes, par exemple,
+pour ne pas générer d'erreurs lors de l'ajout de propriétés dans un objet. Ainsi, 
+si l'on veut ajouter un champ de type string dans un objet JavaScript, il faut
+faire appel à la fonction \emph{string} qui se chargera de l'instanciation d'un objet \emph{String}
+JavaScript et donc de toutes ses méthodes.
+
+\begin{OCaml}
+  set unObj "couleur" (string "rouge")
+\end{OCaml}
+
+
+\section{Typage OCaml d'Enyo}
+\subsection{Typage direct}
+%correspondance des types OCaml pour Enyo
+\subsection{Types fantômes}
+\subsection{Propriété de sous-typage}
+
+\section{Description en OCaml des déclarations d'Enyo}
+\subsection{Modèlisation}
+\subsection{Propriétés}
+%ajout d'options 
+\subsection{\'Evénements}
+
+\section{Génération et Instanciation}
+\subsection{Procédure}
+%\subsection{\'Evénements}
+\subsection{Méthodes}
+\subsection{Introspection des objets}
+
+
+%%%%%
+\chapter{Interfaçage d'Enyo en OCaml}
 
 Pour une adaptation en OCaml d'Enyo, il est nécessaire d'établir une communication
 entre les deux langages. Cela présente une première difficulté étant donné le peu
@@ -530,7 +651,7 @@ de points communs existants. Nous pouvons néanmoins résoudre le problème en
 utilisant  \emph{Js\_of\_ocaml}, un compileur de byte-code OCaml vers Javascript développé par 
 l'équipe d'\emph{Ocsigen}. Nous obtenons ainsi un moyen fiable d'assurer une traduction, 
 de déclarer des objets Javascript ou encore d'attacher des méthodes à ces derniers, le tout
-en restant dans le monde OCaml. La transposition assurée, nous pouvons nous concentrer sur 
+en restant dans le monde OCaml. La translation assurée, nous pouvons nous concentrer sur 
 la modélisation d'Enyo.
 
 Le point critique de l'interfaçage se situe dans l'utilisation des traits 
@@ -540,13 +661,12 @@ rédibitoire pour une transcription directe en OCaml.\medskip
 
 Après considérations, j'ai choisi de m'arrêter sur un modèle reposant sur une différenciation
 d'un objet en construction de celui d'un objet instancié. On représente ainsi un objet \emph{Enyo}
-en OCaml grâce aux propriétés le définissant.
+en OCaml grâce aux propriétés le définissant.\medskip
 
-\medskip
 \begin{tikzpicture}[node distance=7cm, auto,]
-  \node[punkt] (kind) {Objet en création};
+  \node[punkt] (kind) {Description de l'objet};
   \node[punkt2,right=of kind] (jsobj) {Objet Javascript}
-  edge[pil, <-] node[auto]  {Instanciation en objet Enyo} (kind.east);
+  edge[pil, <-] node[auto]  {Génération et Instanciation} (kind.east);
 \end{tikzpicture}
 \medskip
 
@@ -565,7 +685,7 @@ de cette décision.
 
 Ensuite, la définition des propriétés et leur implémentation (\ref{gestprop})
 
-Enfin (\ref{gestevent}), nous nous attarderons sur les événements.
+Enfin, nous nous attarderons sur les événements (\ref{gestevent}).
 
 \section{Représentation des objets}\label{repobj}
 \subsection{Modélisation}
@@ -642,7 +762,7 @@ représentation OCaml d'un objet Enyo.
 \subsection{Création}
 
 Pour cette phase de création, j'ai décidé de m'inspirer du module Tk d'OCaml qui utilise les options
-pour les fonctions prenant un nombre important d'arguments et omissibles.
+pour les fonctions prenant un nombre important d'arguments omissibles.
 
 Plusieurs autres solutions auraient été possible, telle qu'une liste d'association mais dont
 je n'ai pas su trouver de façon élégante pour permettre à l'utilisateur de l'employer aisément.
@@ -672,9 +792,8 @@ donnant à l'utilisation, pour un bouton contenant un simple label, ceci :
 
 Quelques bémols, cependant, à cette manière de procéder :
 \begin{itemize}
-\item Le nombre d'arguments de chaque constructeur évolue au fur et à mesure que l'objet
-soit profondément situé dans l'arbre des composants. Ainsi, une feuille de cet arbre possédant
-une dizaine d'ancêtres possédera un nombre d'arguments important,
+\item Le nombre d'arguments de chaque constructeur augmente au fur et à mesure que l'objet
+soit profondément situé la hiérarchie,
 \item Les messages d'erreurs générés deviennent rapidement indigestes,
 \item Une grande redondance parmi les différents constructeurs.
 \end{itemize}
@@ -719,14 +838,17 @@ ou à être passer en tant que sous-élément dans un autre objet par sa liste d
 Après avoir obtenu notre représentation OCaml, il est nécessaire de le traduire en Javascript.
 C'est le rôle de la fonction \emph{Instanciate}.
 
-Cette dernière parcourt les différentes listes (propriétés, évenements, et composants) et retourne
-un objet Javascript formé selon les spécifications d'Enyo.
+Cette dernière parcourt les différentes listes (propriétés, évenements, et composants) et construit
+un objet Javascript formé selon les spécifications d'Enyo que nous passons à \emph{enyo.kind} et 
+retournant l'instance de celui-ci avec un nom par défaut si non-fourni.
 
 Une application d'\emph{instanciate} sur le ``bouton kind'' définit plus haut (\ref{bouton_kind_ex}) 
-retournera un équivalent en Javascript de :
+équivaut en Javascript alors à :
 
 \begin{JavaScript}
-  {kind:"Button", content:"Valider", _onyo_id:"BUTTON"}
+  enyo.kind({kind:"Button", name:"Default_name", content:"Valider", _onyo_id:"BUTTON"});
+  var obj_enyo = new Default_name();
+  return obj_enyo;
 \end{JavaScript}
 
 La fonction étant relativement indigeste, je détaillerai ici les manipulations éxecutées :
@@ -757,6 +879,7 @@ Voici, une forme épurée de cette fonction :
               (* 2 *)
           );
           (if kind.components != []  then
+              (* 3 *)
               let array_component = Array.of_list (List.map build_component_tree kind.components) in
 	      Js.Unsafe.set js_obj "components" (array array_component));
           Js.Unsafe.set js_obj "_onyo_id" (string (kind.id));
@@ -764,8 +887,8 @@ Voici, une forme épurée de cette fonction :
        kind_it (build_component_tree kind)
 \end{OCaml}
 
-Note : il a été nécessaire d'utiliser un quantificateur universel pour unifier la récursion 
-avec la fonction afin d'assurer le polymorphisme\\\medskip
+%Note : il a été nécessaire d'utiliser un quantificateur universel pour unifier la récursion 
+%avec la fonction afin d'assurer le polymorphisme\\\medskip
 
 Enfin, on passe cet objet à la fonction \emph{enyo.kind} pour récupérer un objet Enyo
 dont les méthodes sont désormais appelables tel que \emph{setContent} si l'objet hérite 
@@ -787,7 +910,7 @@ ensemble de ces type valeurs. Un type somme est suffisant :
 \end{OCaml}
 
 Note: j'ai trouvé préférable de représenter le tableau Javascript sous forme de liste,
-cette dernière étant plus usitée par le programmeur OCaml.\medskip
+le premier étant plus proche de la liste OCaml que du tableau.\medskip
 
 Les propriétés possédés par les objets Enyo sont implémentées en tant que ``Published'' 
 (voir \ref{sec:published}). Ces propriétés possèdent donc des accesseurs (get) et des modificateurs (set) ainsi
@@ -819,7 +942,7 @@ Selon le type de la propriété, on s'assure alors d'effectuer correctement cett
                      this 
                      "getContent" 
                      [||] in (* Appel de la methode sur l'objet Javascript *)
-    to_string value (* converison de la valeur js obtenu en valeur caml *)
+    to_string value (* conversion de la valeur js obtenu en valeur caml *)
 \end{OCaml}
 \clearpage %A vérifier plus tard
 \begin{OCaml}
@@ -835,7 +958,7 @@ Les propriétés Enyo étant pour la plupart initialisées par défaut, je n'ai 
 de gérer les cas de valeur ``null''. Il faudrait, pour certains cas, fournir cette sécurité.\medskip
 
 Une autre difficulté s'est posée concernant les méthodes polymorphiques. Une méthode de type
-\emph{setProperty(name, value} est difficile à representer en OCaml, c'est pourquoi j'ai préferé
+\emph{setProperty(name, value)} est difficile à representer en OCaml, c'est pourquoi j'ai préferé
 laisser ce problème de côté afin de ne pas compliquer le typage.
 
 Quelques propriétés ont ainsi été laissées de côté, comme par exemple celles prenant des
@@ -848,14 +971,16 @@ this.setBounds({left:"100", top:"40", width: "10em", right: "30pt"});
 \end{JavaScript}
 
 Il conviendrait d'étudier chaque cas particulier et de fournir une équivalence sûre quitte à
-réduire les possibilités d'usage.\medskip
+réduire les possibilités d'usage. Par exemple, fournir une fonction à quatre arguments qui
+n'agit sur une seule unité de mesure.\medskip
 
 Enfin, certaines propriétés et arguments de méthodes peuvent changer de type selon leur usage 
 et il n'est pas toujours agréable d'avoir à effectuer une conversion OCaml (ex: \emph{string\_of\_int})
 sur ces appels. Une solution pourrait être de dupliquer ces méthodes, par exemple, en les préfixant 
 par le type. Ainsi, la propriété ``value''  de l'objet Enyo \emph{Slideable} prenant un int, qui par ailleurs 
 effectue une collision de nom avec celle de l'objet \emph{Input} (voir \ref{chap:idl}), pourrait 
-devenir \emph{int\_getInput} s'appliquant à l'objet Slideable et à ses descendants.
+devenir \emph{int\_getInput} s'appliquant à l'objet Slideable et à ses descendants, tandis que \emph{Input}
+posséderait une méthode \emph{string\_getInput}.
 
 \section{Gestion des événements}\label{gestevent}
 \subsection{Fonctionnement}
@@ -907,8 +1032,8 @@ let traitement_bouton this emetteur evenement =
 let mon_bouton = button ~content:"contenu" ~ontap:traitement_bouton ()
 \end{OCaml}
 
-J'ai défini les événements de la même manière que les objets, à ceci près qu'il n'est pas nécessaire 
-d'avoir plusieurs méthodes par événements puisque les événements ne sont pas liés entre eux. Il 
+J'ai défini les événements de la même manière que les objets. Il n'est, en revanche, pas nécessaire 
+de partager les méthodes appliquables sur les  événements puisqu'ils ne sont pas liés entre eux. Il 
 est cependant nécessaire d'affecter à chaque type d'événements des fonctions d'accesseurs pour 
 récupérer les informations contenus.
 
@@ -925,7 +1050,7 @@ stipulés dans la définition IDL W3C, sont définis :
 \medskip
 
 \'A l'instanciation d'un objet pourvu d'un événement, il est nécessaire de passer l'événement traité
-dans un objet contenu dans le champ handler de celui-ci. Ainsi, le \emph{mon\_bouton} définit plus haut,
+dans un objet contenu dans le champ \emph{handlers} de celui-ci. Ainsi, le \emph{mon\_bouton} définit plus haut,
 aura cette forme en Javascript :
 
 \begin{JavaScript}
@@ -943,8 +1068,7 @@ enyo.kind({
     kind:"Control",
     name:"App",
     components:[
-      {
-        kind:"Control",
+      {kind:"Control",
         components:[
           {kind:"Button", content:"Vert",         
             handlers:{ontap:"tap"},
@@ -966,7 +1090,8 @@ enyo.kind({
     handlers:{ontap:"tap"},
     tap:function(emetteur, event){
       //emetteur = sous-control
-      // change le fond si emetteur est b1 ou b2 
+      // change le fond en noir si l'emetteur est b1
+      // ou bien en blanc si b2 
       alert(emetteur);
       return true;
     }
@@ -979,11 +1104,12 @@ Ici, nous voulons, si l'on clique sur l'un des deux boutons, changer la couleur 
 Il faut donc pouvoir tester au niveau racine, quelle a été l'origine des événements.
 Le problème ici provient de la propagation au composant parent par les boutons.
 En effet, l'argument \emph{emetteur} reçu par la racine ne contient pas l'un des deux boutons
-mais le ``Control'' intermédiaire par lequel l'événement a dû passé.
+mais le ``Control'' intermédiaire par lequel l'événement a transité.
 
 En Enyo, un simple : \emph{emetteur.originator} renverrait le bouton ayant généré l'événement,
 et nous permettrait de déterminer la source mais l'implémentation de cette propriété aurait 
-peu de sens dans la représentation actuelle.
+peu de sens dans la représentation actuelle puisqu'il impliquerait la présence d'une propriété
+originator dans tous les objets manipulé, même en dehors d'un événement.
 
 Une solution à ce problème peut être de conserver, dans son application, une valeur référencé 
 contenant l'objet ou l'information nécessaire pour effectuer le traitement souhaité.
@@ -1020,6 +1146,10 @@ Avec ceci, nous pouvons agir sur l'emetteur :
   let mon_control = ~components:[mon_bouton] ~ontap:traitement ()
 \end{OCaml}
 
+Dans cet exemple, le bouton capture l'événement \emph{ontap} mais le délégue
+à son composant racine. Ce dernier essaye de transtyper l'émetteur en bouton
+et le désactive.
+
 Cette solution reste cependant inélégante et assez contraignante pour le développeur.
 
 \subsection{Autre stratégie de propagation}\label{sub:event_amel}
@@ -1046,10 +1176,19 @@ le composant principal. Nous obtenons ainsi le programme reprenant l'exemple pos
     ],
     tap:function(emetteur, event){
       if (this.$.b1 == emetteur){
-        (* couleur verte *)
+        // couleur noire
       } else if (this.$.b2 == emetteur){
-        (* couleur bleu*)
+        // couleur blanche 
       }
+      return true;
+    }
+    //Il peut aussi etre interessant de definir une fonction pour chaque bouton :
+    tap_b1:function(em, ev){ 
+      //couleur noire
+      return true;
+    }
+    tap_b2:function(em,ev){
+      //couleur blanche
       return true;
     }
 })
@@ -1082,14 +1221,14 @@ version future.
 
 \chapter{Langage de Description d'Interface (IDL)}\label{chap:idl}
 
-Enyo fournit une API suffisamment grande pour qu'il devienne rébarbatif d'implémenter
-ceci à la main. L'implémentation d'un IDL s'est donc révelé être une bonne option pour pouvoir
-représenter facilement l'arbre de composant.
+Enyo fournit une API suffisamment grande (une centaine d'objet environ) pour qu'il devienne 
+rébarbatif d'implémenter ceci à la main. L'implémentation d'un IDL s'est donc révélé être 
+une bonne option pour pouvoir représenter facilement la hiéarchie de composants.
 
 OCaml étant un outil tout indiqué pour ce type de travail, je n'ai pas eu à faire de parallèle 
-avec d'autre langage.
+avec d'autres langages (mis à part quelques scripts Perl pour parser la hiérarchie).
 
-En premier lieu, il convient de présenter les structures choisis pour abriter les objets.
+En premier lieu, il convient de présenter les structures choisies pour abriter les objets.
 Puis, j'expliquerai brièvement la génération du code et les problèmes rencontrés.
 
 \section{Interface des objets}
@@ -1254,28 +1393,27 @@ Pour permettre une continuation du projet, il peut-être intéressant de reprend
 \begin{itemize}
 \item Réfléchir à une représentation différentes que les variants, quitte à rendre le
   module plus lourd, par une approche objet ou type simple.
-\item Pouvoir accéder aux instanciations Enyo par le l'équivalent ``kind'' de l'objet, en s'assurant
-  de son existence.
+\item Pouvoir accéder aux instanciations Enyo par le ``kind'' de l'objet, en s'assurant
+  de son existence. Par exemple, ainsi :
   \begin{OCaml}
     let bouton_obj = getObj button_kind (* 'a kind -> 'a obj *)
-    setContent bouton_obj ``Nouvelle valeur''
+    setContent bouton_obj "Nouvelle valeur"
   \end{OCaml}
-\item Tout d'abord, il serait bien de compléter la hiérarchie que le manque de temps ne m'a pas permis de terminer.
-  Ensuite, pouvoir fournir des possibilités d'extension à l'IDL en permettant des définitions internes 
-  de composants. Par exemple, être capable  de créer un nouvel objet ``ChampValidation'' possédant 
-  deux composants ``Input'' et ``Button'' ainsi qu'une fonction de validation.
+\item Il serait bien de compléter la hiérarchie en fournissant des solutions adéquates
+  aux cas particuliers. Ensuite, pouvoir fournir des possibilités d'extension à l'IDL en permettant 
+  des définitions internes de composants. Par exemple, être capable  de créer un nouvel objet ``ChampValidation'' 
+  possédant deux composants ``Input'' et ``Button'' ainsi qu'une fonction de validation.
 \item Il faudrait réfléchir à une représentation des noeuds du DOM. Est-ce que l'on souhaite passer 
   par ``js\_of\_ocaml'', fournir une chaine le représentant, ou encore définir quelques noeuds principaux
   et brider leur utilisation?
 \end{itemize}\medskip
 
 Sur le plan personnel, ce stage m'a été, je pense, très profitable ; j'ai pu consolider mes bases en OCaml
-ainsi que mon engouement pour ce langage. Je le dois en grande partie à l'équipe extrêmement capable et dynamique
-dont j'ai eu la chance d'être entouré pendant ces deux mois. 
-De plus, cette expérience enrichissante au sein d'un laboratoire m'a sérieusement fait réfléchir à 
-une éventuelle formation en recherche.
-Je ressors de ce stage, enrichi et porté par une vision affinée de l'informatique ainsi que d'une 
-conviction renforcée sur mes préoccupations d'études futures.
+ainsi que mon engouement pour ce langage. Je le dois en bonne partie à l'équipe capable et dynamique
+dont j'ai eu la chance d'être entouré pendant ces deux mois.
+De plus, cette expérience au sein d'un laboratoire m'a sérieusement fait réfléchir à 
+une éventuelle formation vers la recherche.
+Je me satisfait donc d'avoir pu effectuer ce stage dont j'en sors enrichi.
 
 \chapter{Annexes}
 
@@ -1308,6 +1446,7 @@ Les exemples d'applications se situent dans le dossier ``exemples'' à la racine
 On pourra y trouver quelques applications JavaScript ainsi que des jeux utilisant la bibliothèque inspiré des exemples contenu sur le cédérom 
 du manuel ``DAOC''\cite{DAOC}.
 
+\tableofcontents
 \nocite{*}
 \bibliographystyle{plain}
 \bibliography{biblio}
