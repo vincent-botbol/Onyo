@@ -10,7 +10,7 @@ let string_type_of_value = function
   | Component -> "any_id obj"
   | Dom_node -> "dom_node"
   | _ -> ""
-
+    
 let label_implem_js_object =
   "this"
 

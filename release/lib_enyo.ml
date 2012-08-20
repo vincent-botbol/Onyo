@@ -2066,12 +2066,9 @@ let instanciate (kind:([< any_id] as 'a) kind) : 'a obj =
 	  Not_found -> set js_obj "name" (string "_default_app_name");
 	    "_default_app_name" in
       kind_it name js_obj
-
-let unsafe_coerce : [< any_id] -> [< any_id] = Obj.magic
-
 let id (obj_js : ([<any_id] as 'a) obj) : 'a =
       let s = to_string (get obj_js "_onyo_id") in
-      unsafe_coerce (match s with
+      Obj.magic (match s with
 | "SLIDEABLE" -> `SLIDEABLE
 | "SELECT" -> `SELECT
 | "SCROLLTHUMB" -> `SCROLLTHUMB
