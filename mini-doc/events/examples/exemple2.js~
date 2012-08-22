@@ -1,3 +1,0 @@
-enyo.kind({name:"App", kind:"Control", components:[{kind:"LOL"}]});
-
-enyo.kind({name:"LOL", kind:"Button", content:"bla"});

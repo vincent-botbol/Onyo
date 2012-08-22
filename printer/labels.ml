@@ -141,7 +141,7 @@ let label_type_js_of_ocaml_object =
   "Js.Unsafe.any"
 
 let label_introspection =
-  "_onyo_id"
+  "_hidden_id"
 
 let label_default_app_name =
   "_default_app_name"

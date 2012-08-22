@@ -1,13 +1,14 @@
 COMP=js_of_ocaml -pretty
-OCAMLC=ocamlfind ocamlc -package lwt -pp "camlp4o  /home/vince/js_of_ocaml-1.2/lib/syntax/pa_js.cmo" -I /home/vince/js_of_ocaml-1.2/lib -g
+OCAMLC=ocamlfind ocamlc -package lwt -pp "camlp4o  $(PATHJSOFOCAML)pa_js.cmo" -I $(PATHJSOFOCAML) -g
 NAME=app
-OBJS=lib_enyo.cmo $(NAME).cmo 
+OBJS=$(NAME).cmo lib_enyo.cmo
 INC=-I ../../../release
+PATHJSOFOCAML=/usr/lib/ocaml/js_of_ocaml/
 
 all: $(NAME).js
 
 %.js:%.byte
-	$(COMP) -noruntime /home/vince/js_of_ocaml-1.2/runtime/runtime.js $<
+	$(COMP) -noruntime $(PATHJSOFOCAML)runtime.js $<
 
 %.byte: $(OBJS)
 	$(OCAMLC) -linkpkg -o $@ $(INC) js_of_ocaml.cma $^

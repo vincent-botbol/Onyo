@@ -2055,7 +2055,7 @@ let instanciate (kind:([< any_id] as 'a) kind) : 'a obj =
 	    (fun (fname,f) -> set js_obj fname (wrap_meth_callback f))
 	    (List.combine handlers_name_func handlers_func)
       );
-      set js_obj "_onyo_id" (string (kind.id));
+      set js_obj "_hidden_id" (string (kind.id));
       js_obj in
       let js_obj = (build_component_tree kind) in
       let name = try 
@@ -2067,7 +2067,7 @@ let instanciate (kind:([< any_id] as 'a) kind) : 'a obj =
 	    "_default_app_name" in
       kind_it name js_obj
 let id (obj_js : ([<any_id] as 'a) obj) : 'a =
-      let s = to_string (get obj_js "_onyo_id") in
+      let s = to_string (get obj_js "_hidden_id") in
       Obj.magic (match s with
 | "SLIDEABLE" -> `SLIDEABLE
 | "SELECT" -> `SELECT

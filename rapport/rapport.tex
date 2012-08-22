@@ -1,6 +1,18 @@
 \documentclass[11pt,a4paper]{report}
 
-%\parskip = \baselineskip
+\evensidemargin=0cm
+\oddsidemargin=0cm
+\topmargin=-1cm
+\textheight=23.5cm
+\leftmargin=0cm
+\textwidth=18cm
+\sloppy
+\flushbottom
+\parindent 1em
+\hoffset -0.5in
+\oddsidemargin  0pt
+\evensidemargin 0pt
+\marginparsep 10pt
 
 \usepackage[utf8]{inputenc}
 \usepackage[frenchb]{babel}
@@ -103,27 +115,27 @@ Aujourd'hui, environ un tiers de la population possède un smartphone ou une tab
 
 La variété de ces appareils est telle que la tâche est parfois agaçante pour les développpeurs 
 d'exporter leurs applications sur d'autres systèmes utilisant des langages différents.
-La nécessité d'une unification s'est donc imposé. Pour se faire, le choix des constructeurs quant à
+La nécessité d'une unification s'est donc imposée. Pour se faire, le choix des constructeurs quant à
 la technique s'est dirigé vers les nouvelles technologies web :
 HTML5 et JavaScript. Populaire et en constante évolution, ces deux solutions apportent un grand nombre
-de possibilités mais possèdent néanmoins leurs désavantages.
+de possibilités.
 
 Le but de ce stage est de permettre au programmeur de développer des applications portables de manière sûre
 en passant pour cela par le langage OCaml garant d'une solidité à travers la puissance de son typage statique
 tout en gardant le confort de programmation qu'on lui connait.
-Pour se faire, on s'est intéressé à la bibliothèque JavaScript ``Enyo'' (\ref{chap:enyo}) 
+Pour se faire, on s'est intéressé à la bibliothèque JavaScript ``Enyo'' (voir \ref{chap:enyo}) 
 en interfaçant celle-ci afin de satisfaire notre objectif.
 
-La traduction d'OCaml vers JavaScript a déjà été mise-en-oeuvre dans plusieurs travaux : OBrowser
+La traduction d'OCaml vers JavaScript a déjà été mise-en-\oe{}uvre dans plusieurs travaux : OBrowser
 et Js\_of\_ocaml. Fournissant des bases intéressantes pour ce projet, il a été pratique d'en faire usage
 pour s'abstraire du problème d'inter-opérabilité entre les deux langages.
 
-La divergence entre JavaScript et OCaml est importante. Cela peut beaucoup jouer lors d'un tel 
+La divergence entre JavaScript et OCaml est grande. Cela peut beaucoup jouer lors d'un tel 
 interfaçage. Il est alors important de bien étudier la bibliothèque afin de déterminer le niveau
 d'utilisation des traits intrusifs.
 En répondant cette question, il faut pouvoir déterminer le type de modèle et sa représentation
 s'adaptant le mieux.
-Les objets Enyo étant nombreux, il peut être important de se donner les moyens de les représenter 
+Les objets Enyo étant nombreux, il faut se donner un moyen de les représenter 
 de façon efficace. Se munir d'un IDL peut-il être un atout pour réaliser ceci?
 
 Premièrement, nous étudierons Enyo pour nous permettre d'obtenir les informations nécessaires 
@@ -134,6 +146,9 @@ qui en ressortent.
 
 Enfin, nous présenterons un IDL permettant de modéliser les objets Enyo.
 
+Quelques exemples d'applications Enyo implémentés en OCaml utilisant le module d'interfaçage
+seront également présentés.
+
 %%%%%%%%%%%%%%%%%%
 %   CHAPITRE 1   %
 %%%%%%%%%%%%%%%%%%
@@ -142,8 +157,8 @@ Enfin, nous présenterons un IDL permettant de modéliser les objets Enyo.
 Enyo\cite{enyo} est un framework Javascript orienté-objet. Il privilégie un style de développement basé
 sur une encapsulation arborescente de composants.\medskip
 
-Dans sa première version, Enyo fut employé pour le développement d'application des 
-tablettes HP TouchPad fonctionnant sous webOS. Après un succès mitigé,
+Dans sa première version, Enyo fut employé pour le développement d'application pour 
+tablettes et téléphones fonctionnant sous webOS. Après un succès mitigé,
 HP décida de transformer webOS en projet \emph{open source} devenant ainsi : Open WebOS.\medskip
 
 Enyo passe alors en version 2.0. Sa conception en Javascript profite de  
@@ -163,12 +178,12 @@ Il est important de distinguer trois phases dans le développement d'une applica
 Enyo.
 \begin{itemize}
 \item La première, dite de déclaration, consiste à définir les composants, leurs positions dans 
-la hiérarchie de l'application ainsi que le modèle de calcul.
+la hiérarchie de l'application ainsi que la logique de l'application.
 \item La seconde est celle de la génération. Permettant à la bibliothèque Enyo de 
-``compléter'' le squelette décrit par la phase de déclaration, l'objet destiné
-à être instancié.
+  fournir les méthodes et propriétés manquantes à l'objet décrit par la phase 
+  de déclaration, l'objet destiné à être instancié.
 \item Enfin, nous avons la phase d'instanciation où le résultat de la génération
-est à même d'être créé puis utlisable, par exemple, en l'affichant.
+est à même d'être créé puis utilisable, par exemple, en l'affichant.
 \end{itemize}\medskip
 
 On observe ainsi de fortes similitudes avec un langage de description d'interface.
@@ -268,7 +283,7 @@ deux balises : un <input type="text" ..> et un <button>.
 Notons que nous n'avons pas défini la propriété \emph{name} des sous-composants. 
 Rappelons que le nom d'un composant sert uniquement à l'accession de celui-ci par les 
 autres composants de la hiérarchie ou encore pour son instanciation. Cependant, lors de
-l'appel à \emph{enyo.kind}, seule la racine de l'arbre sera étendu à l'environnement.
+l'appel à \emph{enyo.kind}, seule la racine de l'arbre sera étendu à l'environnement JavaScript.
 
 Il faut aussi noter que si la propriété name n'est pas définie, Enyo s'en charge en lui donnant 
 un label géneré (``input0'' et ``button0'' ici). Il n'est évidemment pas recommandé 
@@ -316,9 +331,9 @@ grâce à sa table de hash ``\$''.
 Il existe quelques spécificités pour la manipulation d'événements :
 \begin{itemize}
 \item Si la fonction de traitement n'est pas trouvée, l'événement est remonté dans l'arbre de 
-  composants jusqu'à trouver une fonction dont le nom correspond.
+  composants jusqu'à la trouver au niveau de ses parents.
 \item Il n'est nécessaire de déclarer le bloc \emph{handlers} que lorsque la fonction de traitement
-  se situe dans le même objet que celui-ci. Par exemple, cette définition est parfaitement valable :
+  se situe au même niveau de déclaration que l'événement. Par exemple, cette définition est parfaitement valable :
   \begin{JavaScript}
     enyo.kind({kind:"Control", 
                components:[{kind:"Bouton", 
@@ -340,7 +355,7 @@ Il existe quelques spécificités pour la manipulation d'événements :
 %XXXXXXXXXXXXXXXXX
 
 \section{Propriétés published}\label{sec:published}
-Les propriétés placées dans l'objet "published" du composant sont en général utilisées pour
+Les propriétés placées dans l'objet interne ``published'' du composant sont en général utilisées pour
 la logique de l'application. Certains "published" sont déjà présents dans les objets Enyo. 
 Par exemple, la propriété "content" de l'objet "Control" est elle-même publiée.
 
@@ -369,9 +384,10 @@ déjà publiées hors de l'objet \emph{published} de la même façon dont nous p
 avec le champ \emph{content} jusqu'à présent. Cela aura uniquement pour effet de  masquer la première 
 initialisation que le constructeur Enyo aura effectué.
 
-Note : la propriété \emph{monObjet.published.maVariable} ne sert qu'à indiquer au 
-constructeur d'objet Enyo qu'il doit générer la variable et sa barrière d'abstraction. 
-Des effets de bords sur cette variable après instanciation n'auront aucun effet. 
+Note : la propriété \emph{monObjet.published.maVariable} sert seulement à indiquer à Enyo 
+qu'il doit générer la variable et sa barrière d'abstraction.
+Il ne faut donc pas confondre celle-ci avec \emph{monObjet.maVariable} qui contiendra
+la valeur manipulé par les ``getters et setters''.
 
 \section{Copie, partage et réutilisation de composants}
 
@@ -398,6 +414,10 @@ est émis mais les deux boutons s'afficheront correctement. Cependant, on consta
 Typiquement, si l'on souhaite réutiliser un composant déjà implémenté,
 il est recommandé de procéder ainsi :
 
+Dans cet exemple, on commence par décrire un nouvel objet bouton avec son fonctionnement
+personnalisé puis en l'étendant avec la fonction \emph{enyo.kind}, il est possible de
+le réutiliser dans une nouvelle description de composant.
+
 \begin{JavaScript}
 enyo.kind({kind:"Button", name:"MonBouton", 
            handlers:{ontap:"clique"}, 
@@ -415,16 +435,12 @@ enyo.kind({name:"App",
 });
 \end{JavaScript}
 
-Dans ce cas-ci, on commence par décrire un nouvel objet bouton avec son fonctionnement
-personnalisé puis en l'étend avec la fonction \emph{enyo.kind} et ainsi pouvoir le
-réutiliser dans une nouvelle description de composant.
-
 \section{Hiérarchie des objets}
 
-On peut considérer la plupart objets Enyo dans la hiérarchie comme des noeuds HTML,
+On peut considérer la plupart objets Enyo dans la hiérarchie comme des n\oe{}uds HTML,
 en effet, lorsque l'on construit son application, la forme arborescente de l'arbre se traduit
 particulièrement bien sous une forme HTML. Ainsi, un \emph{Button} Enyo est lui-même transformé
-en un noeud ``<button>'' à l'instanciation. Il est donc aisé de se représenter le rendu final 
+en un n\oe{}ud ``<button>'' à l'instanciation. Il est donc aisé de se représenter le rendu final 
 d'une application.
 
 Voici un aperçu de l'arbre des composants d'Enyo :\medskip
@@ -458,7 +474,7 @@ Voici un aperçu de l'arbre des composants d'Enyo :\medskip
 L'arbre complet peut-être trouvé en annexe (\ref{hier-complet}).
 
 La plupart des objets héritent de la classe \emph{Control}. En effet, c'est à partir de celle-ci
-que l'on obtient des fonctions d'affichage et la génération d'un noeud html.
+que l'on obtient des fonctions d'affichage et la génération d'un n\oe{}ud html.
 Les objets parents de \emph{Control}, tel que \emph{Component} ou \emph{Object} ne servent, en pratique,
 qu'à établir une logique dans le code (création de temporisateurs, calculs de valeurs, etc.).
 On peut donc tout à fait se passer de ceux-ci lors de l'utilisation en OCaml\footnote{La logique de
@@ -513,7 +529,8 @@ des objets de bases. L'objectif étant d'obtenir une interface graphique correct
 \subsection{Canvas}
 
 Cette extension gère la partie canvas d'HTML5 d'Enyo. Elle définit des objets pour simplifier 
-le code JavaScript et ainsi s'abstraire légèrement de la couche basse d'HTML5.
+le code JavaScript et ainsi s'abstraire légèrement de la couche basse d'HTML5. Il est ainsi
+possible de dessiner des formes simples dans le canvas.
 
 Cependant, cette bibliothèque a ses limites et l'intérêt décroit à mesure que l'application se complexifie.
 Il est parfois inévitable de recourir aux fonctions de bases de manipulation de canvas pour obtenir
@@ -521,9 +538,9 @@ le résultat escompté.
 
 \subsection{Layout}
 
-Permet de disposer les composants de l'application avec flexibilité.
-L'usage de cette bibliothèque n'est malheureusement pas très intuitive, elle nécessite 
-exemples et lecture de la documentation présente sur le site d'Enyo.
+La bibliothèque ``Layout'' permet d'établir une discipline de placement dans l'application.
+On peut grâce à cela, organiser le rendu visuel de l'application avec plus de flexibilité
+que ne permet l'API de base. Par exemple, lister des éléments verticalement plutôt qu'horizontalement.
 
 %%%%%%%%%%%%%%%%%%
 %   CHAPITRE 3   %
@@ -537,7 +554,8 @@ entre les deux langages. Cela présente une première difficulté étant donné 
 de points communs existants. Deux projets ont été développés sur le sujet : Le premier 
 ``OBrowser''\cite{pwt}, implémente une machine virtuelle interprétant le bytecode OCaml
 en JavaScript au runtime. Le second ``Js\_of\_ocaml'', compile le bytecode pour générer
-un fichier Javascript qui pourra être ajouté dans une page web.
+un fichier Javascript qui pourra être ajouté dans une page web. Ces deux solutions
+permettent l'exécution d'un programme OCaml (bytecode) dans un navigateur en passant par JavaScript. 
 
 Le problème principal des deux projets réside dans la représentation des valeurs
 d'un monde à l'autre. Pour chacun des cas, il a fallu trouver un moyen efficace de
@@ -575,7 +593,7 @@ type any
   => variable "monobj", renvoie l'objet "monobj" defini dans l'environnement JavaScript*)
 val variable : string -> 'a
 
-//Coercition d'une valeur vers le type haut
+(* Coercition d'une valeur vers le type generique de js_of_ocaml *)
 val inject : 'a -> any
 
 (*Fonctions d'accession et de modification de champ des objets JavaScript*)
@@ -601,7 +619,7 @@ L'usage de ces fonctions n'étant pas sûr, il va être indispensable de ``recou
 Lorsque l'on passe des arguments aux appels de méthodes, il est nécessaire des les transcrire
 en valeurs JavaScript et inversements pour récupérer les valeurs retournées.
 
-La traduction de ces valeurs s'opérent grâce aux fonctions de traductions étant elles typées.
+La traduction de ces valeurs s'opére grâce aux fonctions de traduction étant elles typées.
 \begin{OCaml}
   val bool : bool -> bool t
   val to_bool : bool t -> bool
@@ -612,7 +630,7 @@ La traduction de ces valeurs s'opérent grâce aux fonctions de traductions éta
   (*...*)
 \end{OCaml}
 
-Les traductions de ces valeurs s'effectuent par copie. La modification d'une chaine de
+Les traductions de ces valeurs s'effectuent par copie. La modification d'une chaîne de
 caractères dans le monde OCaml n'aura donc pas d'effet sur l'objet \emph{String} instancié.
 
 Il faut aussi s'assurer de la sécurité des appels des fonctions ou méthodes, par exemple,
@@ -635,7 +653,7 @@ un champ de type string dans un objet JavaScript, il faudra faire appel à la fo
 \subsection{Typage direct}
 
 Bien que \emph{Js\_of\_ocaml} nous permette d'approcher un typage correct de valeurs, nous ne souhaitons pas
-que l'utilisateur ait à manipuler sa bibliothèque.
+que l'utilisateur ait à connaître ni les spécificités ni les types de celui-ci.
 Il faut alors se munir d'un ensemble de valeurs dont on est susceptible de passer à JavaScript
 et/ou de les récupérer afin d'assurer la sécurité du typage.
 
@@ -666,6 +684,7 @@ dans sa définition.
 \begin{OCaml}
   type +'a kind
   type +'a obj
+  (* Ici, les types abstraits ne seront pas utilises. *)
 \end{OCaml}
 
 Notes : 
@@ -673,7 +692,8 @@ Notes :
 \item \emph{kind} représente la description de l'objet et \emph{obj} l'objet JavaScript correspondant
   à la génération puis à l'instanciation Enyo. Le sujet est plus amplement abordé dans les sections
   suivantes.
-\item La variance sera nécessaire pour l'usage combiné aux variants.
+\item Le signe ``plus'' indique l'utilisation covariante du type qui sera nécessaire pour l'usage
+  combiné aux variants.
 \end{itemize}
 
 L'utilisation de types fantôme s'explique ici par la représentation équivalente des données décrivant
@@ -703,8 +723,10 @@ peuvent s'écrire :
   val meth2: [< `INPUT | `BUTTON ] obj -> int
 \end{OCaml}
 
+%revenir ici sur la covariance du paramètre de type (par exemple, pour obj)
+
 \section{Description en OCaml des déclarations d'Enyo}
-\subsection{Modèlisation}
+\subsection{Modélisation}
 
 Nous avons décrit dans la partie consacrée à la présentation d'Enyo, les trois grandes phases, à savoir :
 La description, la génération et l'instanciation.
@@ -732,9 +754,9 @@ Note : le champ ID sera utilisé pour l'instrospection (voir \ref{introspec}).
 
 Ainsi, nous avons 3 différentes listes :
 \begin{itemize}
-\item Une liste de description de sous-composants \emph{components} similaire à
+\item Une liste de descriptions de sous-composants \emph{components} similaire à
   une implémentation en Enyo.
-\item Une liste de propriété prenant un couple composé du nom du champ ainsi 
+\item Une liste de propriétés prenant un couple composé du nom du champ ainsi 
   que de la valeur associée.
 \item La liste des fonctions de traitement d'événements que nous étudierons plus tard.
 \end{itemize}
@@ -746,7 +768,7 @@ d'établir la logique de l'interface graphique et de l'appel du modèle de calcu
 
 Ainsi défini, l'utilisateur doit choisir les attributs de l'objet (texte du bouton, valeur initiale
 d'un champ de saisie, etc.). Le nombre d'arguments peut croitre de manière assez importante et devenir
-vite génant pour l'utilisateur.
+vite gênant pour l'utilisateur.
 C'est pourquoi, en s'inspirant des modules d'interfaces graphique d'OCaml (Tk, lablGtk), il a été intéressant de
 procéder par arguments optionnels. L'utilisateur choisi à partir d'un ensemble d'arguments, ceux qu'il 
 lui conviennent et génère ainsi la description.
@@ -772,7 +794,7 @@ Le corps de la création de description est relativement simple.
 On spécifie le type du composant en ajoutant la propriété \emph{kind} et la valeur
 correspondante au composant en cours de création.
 Il suffit ensuite de tester pour chaque paramètre optionnel son existance et de l'ajouter 
-si il est définit. On retourne ensuite la structure munie des listes.
+si il est défini. On retourne ensuite la structure munie des listes.
 \begin{OCaml}
 let input
 	?(components=[])
@@ -844,8 +866,8 @@ de traitement gardent toujours la même forme.
 \end{JavaScript}
 
 La fonction attachée prend en paramètres l'émetteur de cet événement, c'est-à-dire, 
-le composant qui a genéré ou propagé celui-ci, et l'objet événement lui-même.
-Celui-ci retourne un booléen spécifiant si la propagation doit être effectué.
+le composant qui a généré ou propagé celui-ci, et l'objet événement lui-même.
+Celui-ci retourne un booléen spécifiant si la propagation doit être effectuée.
 (voir : \ref{sec:event} pour plus de détails)
 
 Pour adapter l'événement en OCaml, j'ai choisi ce type :
@@ -854,7 +876,7 @@ Pour adapter l'événement en OCaml, j'ai choisi ce type :
   type handler = Handler of string * (any_id obj -> any_id obj -> any_event obj -> bool)
 \end{OCaml}
 
-Note : nous utilisons également un type fantome pour les événements.
+Note : nous utilisons également un type fantôme pour les événements.
 
 La gestion de l'événement est donc représentée par un couple contenant le nom de l'événement et la 
 fonction de traitement associée avec en premier argument le \emph{this} de la méthode.
@@ -871,7 +893,7 @@ val wrap_meth_callback : ('a -> 'b -> 'c) -> ('a, 'b -> 'c) meth_callback
 Cette fonction "attache" à l'objet une méthode qui va se charger d'appeller la fonction OCaml
 en transmettant d'un monde à l'autre les arguments nécessaires.
 
-En informant la signature dans chaque constructeur, il devient aisé de constituer un typage correct.
+La signature du constructeur permet alors de constituer un typage correct.
 Nous pouvons ainsi résoudre le \emph{this} selon l'objet en cours de construction et l'événement attendu.
 L'émetteur ne peut cependant pas être résolu, nous y reviendrons plus loin.
 
@@ -884,7 +906,7 @@ Pour un champ de saisie, nous attendrons un argument de ce type :
     -> unit -> [>`BUTTON] kind
 \end{OCaml}
 
-A l'utilisation, nous pourrons alors utiliser les méthodes de ``button'' sans causer de conflit de type 
+A l'utilisation, nous pourrons utiliser les méthodes de ``button'' sans causer de conflit de type 
 puisqu'employé dans un contexte correct :
 
 \begin{OCaml}
@@ -900,13 +922,14 @@ val traitement_bouton :
 let mon_bouton = button ~content:"contenu" ~ontap:traitement_bouton ()
 \end{OCaml}
 
-Ici, l'utilisation du ``this'' dans la fonction de traitement sous-type la fonction
-qui est acceptable pour le type attendu par ``ontap''.
+Ici, l'utilisation des méthodes \emph{setContent} puis \emph{setDisabled} infère le
+type \emph{[< `BUTTON | `CHECKBOX | `INPUT ]} à la fonction de traitement qui est
+acceptable selon le type attendu par \emph{ontap}.
 
-J'ai défini les événements de la même manière que les objets. Il n'est, en revanche, pas nécessaire 
-de partager les méthodes appliquables sur les  événements puisqu'ils ne sont pas liés entre eux. Il 
-est cependant nécessaire d'affecter à chaque type d'événements des fonctions d'accesseurs pour 
-récupérer les informations contenus.
+La définition des événements s'effectue de la même manière que celle des objets. Il n'est, en
+revanche, pas nécessaire de partager les méthodes appliquables sur les  événements puisqu'ils ne sont pas 
+liés entre eux. Il est cependant nécessaire d'affecter à chaque type d'événements des fonctions d'accesseurs pour 
+récupérer les informations contenues.
 
 Par exemple, pour l'événement souris, rebaptisé ``gesture'' pour se conformer à Enyo, les accesseurs,
 stipulés dans la définition IDL W3C, sont définis comme suit :
@@ -1017,7 +1040,7 @@ l'objet racine l'implémente.
 La stratégie actuelle de traitement des événements pose un problème pour typer l'émetteur.
 Pour pallier à celà, on a fourni lors de la construction des objets un champ supplémentaire
 \footnote{Le champ kind étant effacé à l'instanciation Enyo, il n'est pas possible d'en faire usage} 
-\emph{\_onyo\_id} qui va permettre de distinguer le type de l'objet.
+\emph{\_hidden\_id} qui va permettre de distinguer le type de l'objet.
 
 Munis de cette propriété, nous sommes capable de typer le composant.
 C'est le rôle de la fonction \emph{as\_a}:
@@ -1029,7 +1052,7 @@ C'est le rôle de la fonction \emph{as\_a}:
 Cette fonction prend un sous-type d'``any\_id'' ainsi qu'un objet instancié non-typé et retourne 
 celui-ci typé. Si l'objet n'est pas de l'``id'' spécifié, une exception est levée.
 
-Avec ceci, nous pouvons typer l'emetteur :
+Avec ceci, nous pouvons typer l'émetteur :
 \begin{OCaml}
   let mon_bouton = ~content:"Bouton" ~tap:(fun _ _ _ -> false) ()
 
@@ -1057,10 +1080,10 @@ Avec ceci, nous pouvons typer l'emetteur :
 
 Enyo fournit une API suffisamment grande (une centaine d'objet environ) pour qu'il devienne 
 rébarbatif d'implémenter ceci à la main. L'implémentation d'un IDL s'est donc révélé être 
-une bonne option pour pouvoir représenter facilement la hiéarchie de composants.
+une bonne option pour pouvoir représenter facilement la hiéarchie de classe.
 
 OCaml étant un outil tout indiqué pour ce type de travail, je n'ai pas eu à faire de parallèle 
-avec d'autres langages (mis à part quelques scripts Perl pour parser la hiérarchie).
+avec d'autres langages.
 
 En premier lieu, il convient de présenter les structures choisies pour abriter les objets.
 Puis, j'expliquerai brièvement la génération du code et les problèmes rencontrés.
@@ -1085,25 +1108,21 @@ type values_rep =  String | Int | Float | Bool | Unit
 
 type method_rep = Method of string * values_rep list
 
-type attributes_rep = Attribute of string * values_rep * bool (* bool => Generate propChanged function? *)
+type attributes_rep = Attribute of string * values_rep * bool
 
 type event_rep = Event of string * attributes_rep list
 
 type handler_rep = Handler of string * event_rep
 
 type object_rep = Type of string * method_rep list * attributes_rep list * handler_rep list
-		  | Type_gen of object_rep * string * method_rep list * attributes_rep list * handler_rep list
-                  (* Le deuxieme element de la somme n'a plus de reel utilite, mais n'ayant pas eu le temps
-                  de retravailler le code, il est a ignorer *)
 \end{OCaml}
 
-J'ai donc choisi de représenter l'objet Enyo par :
+On représente alors l'objet Enyo par :
 \begin{itemize}
 \item Son nom Enyo,
 \item une liste de représentation de méthodes,
-\item une liste de représentation de propriétés\footnote{L'utilisation du booléen pour savoir si 
-une fonction de type <value>Changed doit être implémenté est temporairement abandonné, pour
-les raisons spécifiées dans la partie de gestion des propriétés \ref{gestprop}},
+\item une liste de représentation de propriétés\footnote{L'utilisation du booléen permet de savoir si 
+une fonction de type <value>Changed doit être générée. Ceci est, pour l'instant, inutilisé.},
 \item une liste des noms d'événements que ce type d'objet est capable de traiter.
 \end{itemize}
 
@@ -1131,51 +1150,47 @@ Type ("Control",
 )
 \end{OCaml}
 
-En étudiant l'API, j'ai pu transcrire les méthodes et propriétés en m'efforçant de typer au plus juste.
-En revanche, quelques libertés ont été prises:
-\begin{itemize}
-\item Je n'ai pas jugé utile l'ajout de méthodes trop polymorphes telle que : \emph{setProperty(name, value)}.
-\item Par manque de documentation de l'API sur certaines, il a été quelques fois nécessaire de compléter 
-  moi-même les signatures de méthodes en effectuant des tests en restant toutefois rigoureux.  
-\item J'ai omis d'inclure les méthodes protégées, pour la simple raison que nous ne traitons pas
-  l'extension objet, ici.
-\end{itemize}\medskip
-
-Je complète ainsi chaque objet et l'inclus dans un arbre d'``object\_rep'' recréant ainsi la hiérarchie
-Enyo nécessaire permettant à chaque composant d'hériter des méthodes et attributs.
-La hiérarchie désormais complète, la génération de code peut débuter.
+En parcourant l'API fournie sur le site d'Enyo, on peut retranscrire les différentes méthodes 
+et propriétés des objets.
+Je complète ainsi chaque objet et l'inclus dans un arbre de représentation des objets recréant 
+ainsi la hiérarchie de classe Enyo permettant à chaque composant d'hériter des méthodes et attributs.
+Il faut maintenant généré le code correspondant à chaque n\oe{}ud de cet arbre.
 
 \section{Générateur de code}
 
-L'objectif de cette génération de code est d'obtenir en sortie un module complet basé sur la représentation
-IDL avec le modèle choisi \ref{chap:model}.
+L'objectif de la génération est d'obtenir en sortie un module complet basé sur l'arbre  
+représentant la hiérarchie de classe Enyo avec le modèle définit par l'IDL.
 
-La difficulté de cette étape a été le parcours de l'arbre pour résoudre les dépendances:
-\begin{itemize}
-\item Un objet doit transmettre à ses fils toutes les propriétés et ``handlers'' d'événements 
-  qu'il possède afin que leurs constructeurs soient en mesure de les proposer à l'utilisateur
-\item En revanche, les méthodes auront besoin de la liste de tous les identifiants de sa descendance pour
-  pouvoir spécifier les méthodes et permettre aux enfants de les appeller
-\end{itemize}\smallskip
+Le programme se chargeant de ce travail parcours l'arbre en résolvant les dépendances
+entre les différents noeuds.
 
-Une simple récursion sur l'arbre permet l'obtention d'un résultat satisfaisant.
+Par exemple, si l'objet ``Control'' possède une propriété \emph{content}, il convient
+de transmettre celle-ci à tous ses fils.
+Nous pourrons alors générer dans les constructeurs et les signatures de méthodes
+les éléments à prendre en compte.
 
-Plus tard, j'ai constaté qu'un cas spécial ne permettait pas un parcours aussi banal :
-lorsque deux objets définissent des méthodes ou proprietés de même noms sur des branches différentes
-de l'arbre, il y a collision de noms et il est impossible de factoriser simplement les dépendances
-\footnote{J'omets le fait que deux méthodes de même nom peuvent être de types différents, 
-ce qu'il faudrait traiter si le cas était présent}.
+Prenons en exemple, une petite hiérarchie : une classe \emph{Control} et ses deux fils \emph{Button} et \emph{Input}. 
+\emph{Control} implémente uniquement la propriété \emph{content}. Il faut alors générer des constructeurs
+acceptant cette propriété en argument, ainsi que les accesseurs/modificateurs engendrés :
 
-Afin de résoudre ceci, je réalise des parcours préalables en remplissant des tables de hachage contenant
-en clé le nom de méthodes et de proprietés avec en valeur leurs listes des dépendances.
-J'applique ensuite la récursion, en consultant la table de hachage pour résoudre les incohérences.
+\begin{OCaml}
+sig
+  val control : ?content:string -> unit -> [> `CONTROL ] kind
 
-Note : On aurait également pu ``tagger'' les différentes incohérences au moment de la représentation de l'objet
-en spécifiant que cette méthode ou propriété est partagée avec un autre objet. Plusieurs solutions sont
-possibles...\medskip
+  val button : ?content:string -> unit -> [> `BUTTON ] kind
+  val input : ?content:string -> unit -> [> `INPUT ] kind
 
-L'arbre de résolutions de dépendances construit, il ne reste plus qu'à réaliser les impressions
-pour pouvoir générer le module OCaml prêt à l'emploi.
+  val getContent : [< `CONTROL | `BUTTON | `INPUT ] obj -> string
+  val setContent : [< `CONTROL | `BUTTON | `INPUT ] obj -> string -> unit
+end
+\end{OCaml}
+
+Les constructeurs prennent donc tous bien la propriété en argument optionnel et
+Les méthodes générées acceptent correctement les sous-types des classes concernées par cette propriété.
+
+Il suffit de généraliser cette méthode pour obtenir une déclaration correcte de la signature des modules.
+Reste à, trivialement, imprimer le corps des fonctions, correspondant à la description faite dans la partie ``interfaçage'',
+et les fonctions auxiliaires du module.
 
 %%%%%%%%%%%%%%%%%%
 %   CHAPITRE 5   %
@@ -1183,20 +1198,6 @@ pour pouvoir générer le module OCaml prêt à l'emploi.
 
 
 \chapter{Conclusion}
-
-%Le peu de similitude entre JavaScript et OCaml peut présenter une des difficultés majeure dans cet interfaçage.
-%Il est alors important de se demander à quel ordre l'utilisation de traits intrusifs est faite dans 
-%l'implémentation d'applications Enyo.
-%Tout en étudiant cette question, il faut pouvoir réflechir à quel type de représentation de modèle
-%ce style s'adapte-t-il le mieux.
-%Les objets Enyo étant nombreux, il peut-être important de se donner les moyens de les représenter 
-%de façon efficace. La définition d'un IDL peut-elle être un atout pour réaliser ceci?
-%
-%Premièrement, nous étudierons Enyo pour nous permettre d'obtenir les informations nécessaires à 
-%la réflexion d'une approche.
-%Ensuite, nous tenterons de fournir un modèle en détaillant les raisons de ce choix et les problèmes
-%qui en ressortent.
-%Enfin, nous présenterons un IDL permettant de modéliser les objets Enyo.
 
 A travers ce projet, nous avons pu établir un certain nombre de choses.
 Tout d'abord, nous avons pu établir que le style de programmation d'Enyo nous offrait
@@ -1213,8 +1214,8 @@ permettre de tenir à jour l'API Enyo de manière assez aisée en cas de besoin.
 Cependant, le rendu final subit quelques défauts : 
 \begin{itemize}
 \item L'utilisation de variants, bien que permettant 
-  une bonne modélisation, peut être perçue comme trop complexe pour une prise en main rapide. Cela fournit
-  également des messages d'erreurs trop aggressifs. 
+  une bonne modélisation, peut être perçue comme complexe et empêcher une prise en main rapide. Cela fournit
+  également des messages d'erreurs inélégants. 
   Cette dernière remarque s'applique aussi pour l'utilisation des paramètres optionnels lors de la
   construction des objets.
 \item L'accession aux différents composants instanciés lors de la définition du traitement 
@@ -1237,17 +1238,17 @@ Pour permettre une continuation du projet, il peut-être intéressant de reprend
   aux cas particuliers. Ensuite, pouvoir fournir des possibilités d'extension à l'IDL en permettant 
   des définitions internes de composants. Par exemple, être capable  de créer un nouvel objet ``ChampValidation'' 
   possédant deux composants ``Input'' et ``Button'' ainsi qu'une fonction de validation.
-\item Il faudrait réfléchir à une représentation des noeuds du DOM. Est-ce que l'on souhaite passer 
-  par ``js\_of\_ocaml'', fournir une chaine le représentant, ou encore définir quelques noeuds principaux
+\item Il faudrait réfléchir à une représentation des n\oe{}uds du DOM. Est-ce que l'on souhaite passer 
+  par ``js\_of\_ocaml'', fournir une chaine le représentant, ou encore définir quelques n\oe{}uds principaux
   et brider leur utilisation?
 \end{itemize}\medskip
 
 Sur le plan personnel, ce stage m'a été, je pense, très profitable ; j'ai pu consolider mes bases en OCaml
 ainsi que mon engouement pour ce langage. Je le dois en bonne partie à l'équipe capable et dynamique
-dont j'ai eu la chance d'être entouré pendant ces deux mois.
+dont j'ai eu la chance d'être entourée pendant ces deux mois.
 De plus, cette expérience au sein d'un laboratoire m'a sérieusement fait réfléchir à 
 une éventuelle formation vers la recherche.
-Je me satisfait donc d'avoir pu effectuer ce stage dont j'en sors enrichi.
+Je me satisfais donc d'avoir pu effectuer ce stage dont j'en sors enrichi.
 
 \chapter{Annexes}
 
@@ -1267,8 +1268,8 @@ déploiement ainsi que l'analyse du programme et la suppression des fichiers inu
 A partir de là, pour un déploiement sur tablette HP, par exemple, il est nécessaire d'obtenir les outils
 développeur de la tablette permettant de ``packagé'' l'application.
 Pour un déploiement sur téléphone (``android'', ``iOs'', etc.), il est nécessaire de télécharger
-``PhoneGap'' \href{http://www.phonegap.com/developer}{[lien]} qui propose ce genre de ``packaging''.
-Il est toutefois nécessaire de fournir un noeud \emph{meta} dans le document Html principal de l'application
+``PhoneGap'' \url{http://www.phonegap.com/developer} qui propose ce genre de ``packaging''.
+Il est toutefois nécessaire de fournir un n\oe{}ud \emph{meta} dans le document Html principal de l'application
 selon la plateforme.
 Les détails sont accessibles à cette adresse : \\
 \url{https://github.com/enyojs/enyo/wiki/Platform-Specific-Deployment}
