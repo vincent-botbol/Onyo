@@ -32,9 +32,11 @@ let objects_tree : object_rep tree =
 						   Node (OnyxInputDecorator._onyxInputDecorator, [])])]);
 				     Node (Image._image, []);
 				     Node (Input._input,
-					   [Node (Checkbox._checkbox, [Node (OnyxCheckbox._onyxCheckbox, [])]);
-					    Node (RichText._richText, [Node (OnyxRichText._onyxRichText, [])]);
-					    Node (TextArea._textArea, [Node (OnyxTextArea._onyxTextArea, [])])]);
+					   [
+					     Node (OnyxInput._onyxInput, []);
+					     Node (Checkbox._checkbox, [Node (OnyxCheckbox._onyxCheckbox, [])]);
+					     Node (RichText._richText, [Node (OnyxRichText._onyxRichText, [])]);
+					     Node (TextArea._textArea, [Node (OnyxTextArea._onyxTextArea, [])])]);
 				     Node (Node._node, []); Node (OnyxDrawer._onyxDrawer, []);
 				     Node (OnyxGrabber._onyxGrabber, []); Node (OnyxGroupbox._onyxGroupbox, []);
 				     Node (OnyxGroupboxHeader._onyxGroupboxHeader, []);

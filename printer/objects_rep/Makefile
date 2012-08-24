@@ -47,6 +47,7 @@ onyxMenuItem\
 onyxInputDecorator\
 image\
 input\
+onyxInput\
 checkbox\
 onyxCheckbox\
 richText\

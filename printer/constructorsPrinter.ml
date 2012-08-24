@@ -45,11 +45,11 @@ let generate_constructor_type obj_name attributes handlers =
   let obj_name = replace_char obj_name '.' '_' in
   let variant_name = variant_label_object obj_name in
   let obj_name = String.lowercase obj_name in
-  let obj_name = if isAnOCamlKeyword obj_name then "_"^obj_name else obj_name in
+  let obj_name = if isAnOCamlKeyword obj_name || obj_name = "select" then "_"^obj_name else obj_name in
   "val "^obj_name^":\n\t?components:any_id kind list"^
     (if attributes = [] then "" else 
-	"\n\t-> "^generate_optionnal_parameters_type obj_name attributes handlers)^
-    "\n\t-> unit -> [>"^variant_name^"] kind"
+	"\n\t-> "^generate_optionnal_parameters_type (replace_underscore obj_name) attributes handlers)^
+    "\n\t-> unit -> [>"^(replace_underscore variant_name)^"] kind"
 
 (***** IMPLEMENTATION *****)
 
@@ -128,7 +128,7 @@ let generate_optionnal_parameters obj_name attributes handlers =
 let generate_constructor_let obj_name attributes handlers =
   let obj_name = replace_dots obj_name in
   let obj_name = String.lowercase obj_name in
-  let obj_name = if isAnOCamlKeyword obj_name then "_"^obj_name else obj_name in
+  let obj_name = if isAnOCamlKeyword obj_name || obj_name = "select" then "_"^obj_name else obj_name in
   "let "^(String.lowercase obj_name)^"\n\t?(components=[])"^
     (if (attributes = []) then "" else "\n\t"^(generate_optionnal_parameters obj_name attributes handlers))^
     "\n\t() ="

@@ -123,8 +123,8 @@ de possibilités.
 Le but de ce stage est de permettre au programmeur de développer des applications portables de manière sûre
 en passant pour cela par le langage OCaml garant d'une solidité à travers la puissance de son typage statique
 tout en gardant le confort de programmation qu'on lui connait.
-Pour se faire, on s'est intéressé à la bibliothèque JavaScript ``Enyo'' (voir \ref{chap:enyo}) 
-en interfaçant celle-ci afin de satisfaire notre objectif.
+Pour se faire, on s'est intéressé à la bibliothèque JavaScript ``Enyo'' qui facilite la construction d'interface
+graphique des applications (voir \ref{chap:enyo}).
 
 La traduction d'OCaml vers JavaScript a déjà été mise-en-\oe{}uvre dans plusieurs travaux : OBrowser
 et Js\_of\_ocaml. Fournissant des bases intéressantes pour ce projet, il a été pratique d'en faire usage
@@ -272,7 +272,7 @@ Comme précédemment, pour l'afficher, on instancie la nouvelle classe généré
 et on lui applique une méthode d'affichage : 
 
 \begin{JavaScript}
-  var app = new MonCadre();
+  var app = new MonApp();
   app.renderInto(document.body);
 \end{JavaScript}
 
@@ -283,7 +283,8 @@ deux balises : un <input type="text" ..> et un <button>.
 Notons que nous n'avons pas défini la propriété \emph{name} des sous-composants. 
 Rappelons que le nom d'un composant sert uniquement à l'accession de celui-ci par les 
 autres composants de la hiérarchie ou encore pour son instanciation. Cependant, lors de
-l'appel à \emph{enyo.kind}, seule la racine de l'arbre sera étendu à l'environnement JavaScript.
+l'appel à \emph{enyo.kind}, seule la racine de l'arbre sera étendu à l'environnement global
+d'exécution JavaScript.
 
 Il faut aussi noter que si la propriété name n'est pas définie, Enyo s'en charge en lui donnant 
 un label géneré (``input0'' et ``button0'' ici). Il n'est évidemment pas recommandé 
@@ -387,7 +388,7 @@ initialisation que le constructeur Enyo aura effectué.
 Note : la propriété \emph{monObjet.published.maVariable} sert seulement à indiquer à Enyo 
 qu'il doit générer la variable et sa barrière d'abstraction.
 Il ne faut donc pas confondre celle-ci avec \emph{monObjet.maVariable} qui contiendra
-la valeur manipulé par les ``getters et setters''.
+la valeur manipulée par les ``getters et setters''.
 
 \section{Copie, partage et réutilisation de composants}
 
@@ -412,9 +413,9 @@ est émis mais les deux boutons s'afficheront correctement. Cependant, on consta
 émis sur l'un ou l'autre des boutons n'auront pour effet de changer que le premier des deux boutons.\\\medskip
 
 Typiquement, si l'on souhaite réutiliser un composant déjà implémenté,
-il est recommandé de procéder ainsi :
+il est recommandé de procéder comme dans l'exemple suivant.
 
-Dans cet exemple, on commence par décrire un nouvel objet bouton avec son fonctionnement
+Ici, on commence par décrire un nouvel objet bouton avec son fonctionnement
 personnalisé puis en l'étendant avec la fonction \emph{enyo.kind}, il est possible de
 le réutiliser dans une nouvelle description de composant.
 
@@ -445,6 +446,7 @@ d'une application.
 
 Voici un aperçu de l'arbre des composants d'Enyo :\medskip
 
+\begin{center}
 \begin{tikzpicture}
   [grow=right, level 1/.style={sibling distance=3em},
     level 2/.style={sibling distance=3em}, level distance=2.5cm]
@@ -470,6 +472,7 @@ Voici un aperçu de l'arbre des composants d'Enyo :\medskip
     }
   };
 \end{tikzpicture}
+\end{center}
 
 L'arbre complet peut-être trouvé en annexe (\ref{hier-complet}).
 
@@ -500,6 +503,7 @@ Par exemple, si l'on souhaite utiliser des objets d'``Onyx'' et de ``Layout'', i
 Il est bien sûr requis de fournir le dossier contenant ces extensions au même niveau que le dossier
 ``enyo''. Voici une arborescence classique d'une application Enyo :
 
+\begin{center}
 \begin{tikzpicture}
   [level 1/.style={sibling distance=3cm},
     level 2/.style={sibling distance=1.5cm}]
@@ -519,6 +523,7 @@ Il est bien sûr requis de fournir le dossier contenant ces extensions au même 
       child { node {App.css}}
     };
 \end{tikzpicture}
+\end{center}
 
 \subsection{Onyx}
 
@@ -553,7 +558,7 @@ Pour une adaptation en OCaml d'Enyo, il est nécessaire d'établir une communica
 entre les deux langages. Cela présente une première difficulté étant donné le peu
 de points communs existants. Deux projets ont été développés sur le sujet : Le premier 
 ``OBrowser''\cite{pwt}, implémente une machine virtuelle interprétant le bytecode OCaml
-en JavaScript au runtime. Le second ``Js\_of\_ocaml'', compile le bytecode pour générer
+en JavaScript à l'exécution. Le second ``Js\_of\_ocaml'', compile le bytecode pour générer
 un fichier Javascript qui pourra être ajouté dans une page web. Ces deux solutions
 permettent l'exécution d'un programme OCaml (bytecode) dans un navigateur en passant par JavaScript. 
 
@@ -643,14 +648,14 @@ un champ de type string dans un objet JavaScript, il faudra faire appel à la fo
 
   (* Correct *)
   set unObj "couleur" (string "vert");
-  (* Leve une erreur au runtime *)
+  (* Leve une erreur a l'execution *)
   set unObj "couleur" "rouge";
 
   get unObj "length"
 \end{OCaml}
 
 \section{Typage OCaml d'Enyo}
-\subsection{Typage direct}
+\subsection{Typage des valeurs simples}
 
 Bien que \emph{Js\_of\_ocaml} nous permette d'approcher un typage correct de valeurs, nous ne souhaitons pas
 que l'utilisateur ait à connaître ni les spécificités ni les types de celui-ci.
@@ -676,15 +681,18 @@ la valeur passée.
 Par exemple, si le champ contient un type \emph{String v}, nous savons qu'il faudra appliquer
 la fonction \emph{Js.string} de \emph{js\_of\_ocaml} pour correctement la transcrire.
 
-\subsection{Types fantômes et sous-typage}
+\subsection{Typage des composants}
 
-Rappel : Un type fantôme est un type paramétrique dont au moins un paramètre n'est pas utilisé
-dans sa définition.
+Pour typer efficacement les composants, on a envie d'ajouter une information précise sur le type
+de la description qui sera répercuté sur l'objet JavaScript au moment de l'instanciation. Pour se faire,
+l'utilisation de type fantôme\footnote{Un type fantôme est un type paramétrique dont au moins un paramètre 
+n'est pas utilisé dans sa définition.} est intéressante. Ce choix est ici appuyé par la représentation équivalente 
+des données décrivant les composants Enyo. Un bon moyen d'établir leur différenciation est donc de fournir
+cette information.
 
 \begin{OCaml}
   type +'a kind
   type +'a obj
-  (* Ici, les types abstraits ne seront pas utilises. *)
 \end{OCaml}
 
 Notes : 
@@ -696,34 +704,42 @@ Notes :
   combiné aux variants.
 \end{itemize}
 
-L'utilisation de types fantôme s'explique ici par la représentation équivalente des données décrivant
-les composants Enyo. Nous souhaitons cependant établir leur différenciation. 
-Les composants ne partageant pas tous les même méthodes, leur abstraction permet d'assurer 
-un typage correct.
-
 Combinés aux variants polymorphes, on peut profiter de leur sous-typage.
+Ceci devient utile pour définir des méthodes s'appliquant uniquement à un ensemble défini de de composants
+Cette abstraction permet ainsi d'assurer un typage correct.
 
-Pour la librairie, un ensemble d'identifiants a été défini\footnote{Nous n'en prendrons que 
-trois pour l'exemple}.
+Pour la librairie, un ensemble d'identifiants a été défini\footnote{Nous n'en prennons que 
+trois pour l'exemple} :
 
 \begin{OCaml}
   type any_id = [ `CONTROL | `INPUT | `BUTTON ]
 \end{OCaml}
 
-Avec un typage simple, si nous avions voulu définir une méthode s'appliquant à chaque objet, il aurait
-fallu la redéfinir pour chaque type et générer des noms de méthodes supplémentaires. 
-Or, le corps de la méthode aurait été le même. 
-Grâce au sous-typage, nous profitons d'un partage des noms de méthodes tout en s'assurant de la validité
-du typage en plus de synthétiser la définition des composants.
+A l'usage, les types abstrait des descriptions de composants (\emph{+'a kind}) seront sous-type d'any\_id.
+De plus, une fonction chargée de la traduction des descriptions de composants en objet JavaScript sera définie et 
+permettra la transmission de l'information de type :
 
-Ainsi, des méthodes \emph{getContent} s'appliquant à un ensemble spécifique de composants Enyo
-peuvent s'écrire :
 \begin{OCaml}
+  let un_bouton = button ()
+  (* val un_bouton : [> `BUTTON] kind *)
+  let un_input = input ()
+  (* val un_bouton : [> `INPUT] kind *)
+  (****************************)
+  val traduction : ([< any_id] as 'a) kind -> 'a obj
+  (****************************)
+  let objet_javascript = traduction un_bouton
+  (* val objet_javascript : [< `BUTTON] obj *)
+\end{OCaml}
+
+Les méthodes partagées par un ensemble spécifique de composants Enyo pourront ainsi prendre cette forme :
+\begin{OCaml}
+  (* Ces fonctions accepteront au moins un des types specifies *) 
   val meth1: [< `CONTROL | `INPUT | `BUTTON ] obj -> unit
   val meth2: [< `INPUT | `BUTTON ] obj -> int
 \end{OCaml}
 
-%revenir ici sur la covariance du paramètre de type (par exemple, pour obj)
+Avec un typage simple, ce partage de noms n'aurait pas été possible. Ceci aurait entraîné une
+répétition importante du nombre de méthodes possédant une définition pourtant équivalente.
 
 \section{Description en OCaml des déclarations d'Enyo}
 \subsection{Modélisation}
@@ -750,9 +766,14 @@ d'une structure les regroupant.
                   }
 \end{OCaml}
 
-Note : le champ ID sera utilisé pour l'instrospection (voir \ref{introspec}).
+Notes : 
+\begin{itemize}
+  \item Le champ ID sera utilisé pour l'instrospection (voir \ref{introspec}).
+  \item Le type abstrait n'étant pas utilisé dans la définition, le type est donc bien
+    fantôme.
+\end{itemize}\medskip
 
-Ainsi, nous avons 3 différentes listes :
+Nous avons trois différentes listes :
 \begin{itemize}
 \item Une liste de descriptions de sous-composants \emph{components} similaire à
   une implémentation en Enyo.
@@ -762,7 +783,7 @@ Ainsi, nous avons 3 différentes listes :
 \end{itemize}
 
 Contrairement à Enyo, la définition de nouvelles méthodes n'est pas intéressante pour le programmeur
-qui va plutôt souhaiter définir ses propres fonctions et son modèle de calcul en OCaml.
+qui va plutôt souhaiter définir ses propres fonctions et la logique de l'application en OCaml.
 Cependant, il est nécessaire de définir les fonctions de traitements d'événements qui permettront
 d'établir la logique de l'interface graphique et de l'appel du modèle de calcul de l'application.
 
@@ -856,7 +877,7 @@ de l'objet \emph{Control} :
 \subsection{\'Evénements}
 
 Les événements ont la particularité d'être définis au niveau de la description mais agiront sur les objets
-instanciés au runtime. Dans Enyo, la spécification des événements et de leur fonctions 
+instanciés à l'exécution. Dans Enyo, la spécification des événements et de leur fonctions 
 de traitement gardent toujours la même forme.
 
 \begin{JavaScript}
@@ -886,14 +907,15 @@ Nous utilisons pour réaliser cela, la fonction \emph{wrap\_meth\_callback} de \
 type (-'a, +'b) meth_callback
 (* Fonction prenant en premier argument l'objet representant le "this"
    et en arguments suivants les differents parametres que la
-   fonction doit prendre *)
+   fonction doit prendre et le type du resultat *)
 val wrap_meth_callback : ('a -> 'b -> 'c) -> ('a, 'b -> 'c) meth_callback
 \end{OCaml}
+%à approfondir 
 
 Cette fonction "attache" à l'objet une méthode qui va se charger d'appeller la fonction OCaml
 en transmettant d'un monde à l'autre les arguments nécessaires.
 
-La signature du constructeur permet alors de constituer un typage correct.
+La signature du constructeur de l'objet permet alors de constituer un typage correct.
 Nous pouvons ainsi résoudre le \emph{this} selon l'objet en cours de construction et l'événement attendu.
 L'émetteur ne peut cependant pas être résolu, nous y reviendrons plus loin.
 
@@ -1066,11 +1088,6 @@ Avec ceci, nous pouvons typer l'émetteur :
 
   let mon_control = ~components:[mon_bouton] ~ontap:traitement ()
 \end{OCaml}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%
 %   CHAPITRE 4   %
@@ -1245,7 +1262,7 @@ Pour permettre une continuation du projet, il peut-être intéressant de reprend
 
 Sur le plan personnel, ce stage m'a été, je pense, très profitable ; j'ai pu consolider mes bases en OCaml
 ainsi que mon engouement pour ce langage. Je le dois en bonne partie à l'équipe capable et dynamique
-dont j'ai eu la chance d'être entourée pendant ces deux mois.
+dont j'ai eu la chance d'être entouré pendant ces deux mois.
 De plus, cette expérience au sein d'un laboratoire m'a sérieusement fait réfléchir à 
 une éventuelle formation vers la recherche.
 Je me satisfais donc d'avoir pu effectuer ce stage dont j'en sors enrichi.

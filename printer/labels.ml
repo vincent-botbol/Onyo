@@ -201,3 +201,9 @@ let isAnOCamlKeyword name = match name with
   | "while"
   | "with" -> true 
   | _ -> false
+
+let replace_underscore str =
+  if str.[0] = '_' then
+    String.sub str 1 ((String.length str) - 1)
+  else 
+    str

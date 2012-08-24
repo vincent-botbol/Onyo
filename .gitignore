@@ -1,3 +1,8 @@
 *.cmo
 *.cmi
 *.cma
+*.out
+*.blg
+*.log
+*.toc
+*.bbl
