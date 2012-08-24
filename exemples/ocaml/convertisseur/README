@@ -1,0 +1,4 @@
+Bug dans la bibliothèque sur les collisions de nom de getValue / setValue.
+Il faut corriger  manuellement la bibliothèque pour pouvoir compiler.
+
+Un correctif sera bientôt apporté. 
