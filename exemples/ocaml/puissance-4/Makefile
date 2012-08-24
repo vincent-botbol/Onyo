@@ -1,22 +1,20 @@
 COMP=js_of_ocaml -pretty
-OCAMLC=ocamlfind ocamlc -package lwt -pp "camlp4o $(PATH_JSOFOCAML)/pa_js.cmo" -I $(PATH_JSOFOCAML) -g
-NAME=App
-OBJS=lib_enyo.cmo $(NAME).cmo
-PATH_JSOFOCAML=/usr/lib/ocaml/js_of_ocaml
+OCAMLC=ocamlfind ocamlc -package lwt -pp "camlp4o  $(PATHJSOFOCAML)pa_js.cmo" -I $(PATHJSOFOCAML) -g
+NAME=app
+OBJS=$(NAME).cmo 
+
+PATHJSOFOCAML=/usr/lib/ocaml/js_of_ocaml/
 
 all: $(NAME).js
 
-App.js:App.byte
-	$(COMP) -noruntime $(PATH_JSOFOCAML)/runtime.js $<
+%.js:%.byte
+	$(COMP) -noruntime $(PATHJSOFOCAML)runtime.js $<
 
-App.byte: $(OBJS)
-	$(OCAMLC) -linkpkg -o $@ js_of_ocaml.cma $^
+%.byte: $(OBJS)
+	$(OCAMLC) -linkpkg -o $@ js_of_ocaml.cma ../../../release/lib_enyo.cmo $^
 
-lib_enyo.cmo: lib_enyo.ml
-	$(OCAMLC) $(DEBUG) -c $<
-
-App.cmo: puissance4_onyo.ml
-	$(OCAMLC) $(DEBUG) -c $< -o $@
+%.cmo: %.ml
+	$(OCAMLC) $(DEBUG) -I ../../../release -c $<
 
 %.cmi: %.mli
 	$(OCAMLC) -c $<

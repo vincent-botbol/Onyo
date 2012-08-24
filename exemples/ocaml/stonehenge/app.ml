@@ -1,5 +1,4 @@
-open Lib_enyo
-open Enyo
+(*
 
 (* Conversion de température *)
 let from_fahr_to_celsius x  = (x-.32.)/.1.8;;
@@ -84,3 +83,103 @@ let app = control ~ontap:convert ~components:[toolBar] ()
 let app_instance = instanciate app
 
 let _ = renderIntoBody app_instance
+module type AFFICHAGE = sig 
+  type jeu 
+  type coup
+  val accueil: unit -> unit
+  val fin: unit -> unit
+  val gagne: unit -> unit
+  val perd: unit -> unit
+  val nul: unit -> unit
+  val init: unit -> unit
+  val affiche : bool -> coup -> jeu -> jeu -> unit
+  val choix : bool ->  jeu -> coup
+  val q_jouer : unit -> bool   
+  val q_commencer : unit -> bool
+  val q_continuer : unit -> bool
+end ;;
+
+*)
+
+open Lib_enyo
+open Enyo
+open Stoneh
+
+module Stone_Enyo = struct
+  open Stone_rep
+  type pierre = Stone_rep.pierre
+  type menhir = Stone_rep.menhir
+  type case = Stone_rep.case
+  type jeu = Stone_rep.jeu
+  type coup = Stone_rep.coup
+
+  let accueil () =
+    (*Graphics.open_graph
+      (" " ^ (string_of_int (largeur + 10)) ^ "x" ^ 
+       (string_of_int (hauteur + 10)) ^ "+50+50") ;
+    Graphics.moveto (hauteur / 2) (largeur / 2) ;
+    Graphics.set_color cBlue ;
+    Graphics.draw_string "Stone henge" ;
+    Graphics.set_color cBlack ;
+    Graphics.moveto 2 2 ;
+    Graphics.draw_string "Mixte Projets Maitrise & DESS GLA" ;
+    ignore (wait_click ()) ;
+    Graphics.clear_graph*) ()
+
+  (* fin : unit -> unit *)
+  (* on ferme le tout !  *)
+  let fin () = ()
+    
+  (* gagne : unit -> unit  *)
+  (* un message indiquant que la machine a gagne  *)
+  let gagne () = 
+    ()
+
+  (* perd : unit -> unit  *)
+  (* un message indiquant que la machine a perdu *)
+  let perd () = 
+    ()
+
+  (* nul : unit -> unit  *)
+  (* un message indiquant que personne ne peut gagner  *)
+  let nul () = 
+    ()
+
+  (* init : unit -> unit *)
+  (* dessine le plateau de jeu  *)
+  let init () = let jeu = jeu_depart () in ()
+	
+  (*affiche le nouvel état*)
+  let affiche joueur coup ancien_jeu nouveau_jeu = 
+    ()
+
+  let q_jouer () = 
+    false
+
+  (* q_commencer : unit -> bool *)
+  (* demande si l'utilisateur desire jouer en premier ou non  *)
+  let q_commencer () = 
+    false
+
+  (* q_continuer : unit -> bool *)
+  (* demande si l'utilisateur desire rejouer un autre partie *)
+  let q_continuer () = 
+    false
+
+  let choix joueur jeu = 
+    (1,(P(-1)))
+
+end
+
+
+open Alphabeta 
+
+module Stone_squeletteG = 
+  FSquelette (Stone_rep) (Stone_Enyo) (Stone_eval)
+    (FAlphabeta (Stone_rep) (Stone_eval)) ;;
+
+
+module Stone_mainG = FMain(Stone_squeletteG);;
+
+Stone_mainG.main () ;; 
+
