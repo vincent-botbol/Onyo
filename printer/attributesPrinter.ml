@@ -79,7 +79,7 @@ let generate_attribute_changed_method_type attr obj_name =
 (* generate_attribute_implem : attribute_rep -> string *)
 let generate_attribute_implem =
   function Attribute(name, type_rep, changed_method) as x ->
-    let methods_to_generate = attribute_method_list x in    
+    let methods_to_generate = attribute_method_list x in
     String.concat "\n" (List.map (generate_method_implem) methods_to_generate)
       
 (* TEST *)      

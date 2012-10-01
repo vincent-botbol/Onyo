@@ -10,6 +10,18 @@ let string_type_of_value = function
   | Component -> "any_id obj"
   | Dom_node -> "dom_node"
   | _ -> ""
+
+(* to check *)
+(* value_rep -> string *)
+let hash_string_of_value = function 
+  | String -> "string"
+  | Int -> "int"
+  | Float -> "float"
+  | Bool -> "bool"
+  | Unit -> "unit"
+  | Component -> "obj"
+  | Dom_node -> "dom_node"
+  | _ -> assert false
     
 let label_implem_js_object =
   "this"

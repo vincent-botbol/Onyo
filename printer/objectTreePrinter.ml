@@ -15,6 +15,11 @@ type elements_to_print = {mutable constructors_type:string list;
 			  methods_type:string list;
 			  methods_implem:string list}
 
+(* Problème dans les hash 
+   méthodes string / int / bool de même noms
+   Solution : hasher par le nom
+   si collision => rajouter le type devant
+*)
 
 let expand_objects_tree tree =
   let rec expand_rec meth_list attr_list handlers_list = 
@@ -73,6 +78,47 @@ let build_methods_hash tree =
   build_rec tree;
   methods_hash
 
+let get_occurences hash = 
+  let occ_hash = Hashtbl.create 100 in
+  Hashtbl.iter 
+    (fun key value ->
+      match key with
+      | Attribute(name, _, _) as key ->
+	  try
+	    let (key',nb) = Hashtbl.find occ_hash name in
+	    Hashtbl.replace occ_hash name (key::key', nb+1)
+	  with
+	    Not_found -> Hashtbl.add occ_hash name ([key] , 1)
+    )
+    hash;
+  Hashtbl.iter
+    (fun key value ->
+      match value with
+	(l, i) when i > 1 ->
+	  List.iter 
+	    (function Attribute(name, attr_type, b) as key -> 
+	      try
+		let oldvalue = Hashtbl.find hash key in
+		Hashtbl.add hash (Attribute(name^"_"^(hash_string_of_value attr_type), attr_type, b)) oldvalue;
+		Hashtbl.remove hash key
+	      with
+		Not_found -> assert false
+	    )
+	    l
+      | _ -> ()
+    )
+    occ_hash;
+  ()
+    
+let show_occurences occ_hash =
+  Hashtbl.iter
+    (fun key value ->
+      match value with
+	(_, x) when x > 1 -> Printf.printf "%s\n" key
+      | _ -> ()
+    )
+    occ_hash
+     
 let generate_methods_type_from_hash meth_hash attr_hash =
   (Hashtbl.fold (fun meth list_dep acc -> 
     (generate_method_type meth list_dep)::acc)
@@ -80,7 +126,6 @@ let generate_methods_type_from_hash meth_hash attr_hash =
   @
     (Hashtbl.fold (fun attr list_dep acc ->
       (generate_attribute_accessor_type attr list_dep)::acc) attr_hash [])
-
 
 let generate_methods_implems_from_hash meth_hash attr_hash =
   (Hashtbl.fold (fun meth list_dep acc -> 
@@ -90,10 +135,22 @@ let generate_methods_implems_from_hash meth_hash attr_hash =
     (Hashtbl.fold (fun attr list_dep acc ->
       (generate_attribute_implem attr)::acc) attr_hash [])
 
+(* 
+   todo :Chercher les occurences dans l'arbre du résultat, après la génération des méthodes
+*)
+
+(* strat 1 : 
+   Faire une structure intermédiaire histoire de pallier à ça
+   strat 2 :
+   Modifier la génération des méthodes
+*)
+
+
 let build_dep = function Node(root, forest) as tree ->
   let expanded_tree = expand_objects_tree tree in
-  let meth_hash = build_methods_hash expanded_tree
-  and attr_hash = build_properties_hash expanded_tree in
+  let meth_hash = build_methods_hash expanded_tree (* ici *) 
+  and attr_hash = build_properties_hash expanded_tree in (* là *)
+  get_occurences attr_hash;
   let rec build_rec (Node(root, forest)) elems_to_print =
     (match root with
       Type (name, obj_methods, obj_attributes, obj_handlers) ->
@@ -119,50 +176,3 @@ let rec get_all_ids = function Node(root, forest) ->
     List.fold_left (fun acc x -> x@acc) 
       [(variant_label_object name)]
       (List.map get_all_ids forest)
-      
-(* Todo : let get_all_ids = function Node(root,_) -> root.dependances*)
-
-(*    
-type elements_to_print = {constructors_type:string list;
-			  constructors_implem:string list;
-			  methods_type:string list;
-			  methods_implem:string list}
-
-type object_to_print = {name:string; dependances:string list;
-			constructor_type:string; constructor_implem:string;
-			method_list_types:string list; method_list_implem:string list}
-
-(* Construit l'arbre de record de dépendance d'un arbre de représentation *)
-(* objet_rep tree -> dependance tree *)
-let build_dep = function tree ->
-  let rec build_dep_rec full_attrs full_handlers = function (Node(root, forest)) ->
-    match root with
-      Type (name, obj_methods, obj_attributes, obj_handlers)
-    | Type_gen (_, name, obj_methods, obj_attributes, obj_handlers) ->
-      let full_attrs = obj_attributes@full_attrs
-      and full_handlers = obj_handlers@full_handlers in
-      let depforest = List.map (build_dep_rec full_attrs full_handlers) forest in
-      let dependances = 
-	let variant = variant_label_object name in
-	List.fold_left
-	  (fun acc x -> acc@x) [variant] 
-	  (List.map (fun (Node(x,_)) -> x.dependances) depforest) in
-      let meths_sig = 
-	(List.map (fun x -> generate_method_type x dependances) obj_methods)
-	@(List.map (fun x -> generate_attribute_accessor_type x dependances) obj_attributes)
-      and meths_implem = 
-	(List.map (generate_method_implem) obj_methods)
-	@(List.map (generate_attribute_implem) obj_attributes)
-      and cons_sig = generate_constructor_type name full_attrs full_handlers
-      and cons_implem = generate_constructor_implem name full_attrs full_handlers in
-      Node({name=name;
-	    dependances=dependances;
-	    constructor_type=cons_sig;
-	    constructor_implem=cons_implem;
-	    method_list_types=meths_sig;
-	    method_list_implem=meths_implem},depforest) 
-  in
-  build_dep_rec [] [] tree
-    
-let get_all_ids = function Node(root,_) -> root.dependances
-*)

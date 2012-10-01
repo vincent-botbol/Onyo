@@ -82,9 +82,9 @@ let partie_en_cours = ref true
 
 let dernier_coup_est_valide = ref false
 
-let src_token_vide = "img/vide.png"
-let src_token_j1 = "img/token1.png"
-let src_token_j2 = "img/token2.png"
+let src_token_vide = "img/vide.jpg"
+let src_token_j1 = "img/token1.jpg"
+let src_token_j2 = "img/token2.jpg"
 
 let base_component = image ~style:"margin:10px -20px -15px 20px" ~src:src_token_vide
 let comp_feed_line = image ~tag:"br" ()

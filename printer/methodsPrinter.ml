@@ -54,7 +54,9 @@ let generate_method_corpse method_rep =
 	  "inject "^(String.concat "; inject " (list_without_last injection_variables)) in (* inject entier1; inject entier2 *)
       let return_value_type = List.hd (List.rev types) in
       let isUnit = match return_value_type with Unit -> true | _ -> false in
-      "\tlet "^(if isUnit then "_" else label_method_value)^" = meth_call "^label_implem_js_object^" \""^name^"\" [|"^inner_array_param_call^"|] in\n\t\t"^
+      "\tlet "^(if isUnit then "_" else label_method_value)^" = meth_call "^label_implem_js_object^" \""^
+      (*ici*)name
+      ^"\" [|"^inner_array_param_call^"|] in\n\t\t"^
 	(match return_value_type with 
 	| value_type -> conversion_function value_type)
 	

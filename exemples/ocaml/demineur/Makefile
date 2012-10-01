@@ -1,8 +1,8 @@
 COMP=js_of_ocaml -pretty
-OCAMLC=ocamlfind ocamlc -package js_of_ocaml -package lwt -pp "camlp4o $(PATHJSOFOCAML)pa_js.cmo" -package lwt.react -I $(PATHJSOFOCAML) -g  -linkpkg
+OCAMLC=ocamlfind ocamlc -package js_of_ocaml -package lwt -pp "camlp4o $(PATHJSOFOCAML)pa_js.cmo" -I $(PATHJSOFOCAML) -linkpkg
 NAME=app
-OBJS=$(NAME).cmo 
-DEP=alphabeta.cmo stoneh.cmo
+OBJS=$(NAME).cmo
+DEP=demineur.cmo
 PATHJSOFOCAML=/usr/lib/ocaml/js_of_ocaml/
 PATHLWT=/usr/lib/ocaml/lwt/
 
@@ -13,6 +13,9 @@ all: $(DEP) $(NAME).js
 
 %.byte: $(DEP) $(OBJS)
 	$(OCAMLC) -o $@ js_of_ocaml.cma ../../../release/lib_enyo.cmo $^
+
+demineur.cmo: demineur.ml
+	ocamlc -c $<
 
 %.cmo: %.ml
 	$(OCAMLC) $(DEBUG) -I ../../../release -c $<
