@@ -139,7 +139,7 @@ let generate_variables_setup obj_name =
     "and "^constructor_handler_list_label^"= ref [] in"
 
 let generate_result obj_name =
-  "{id=\""^(String.uppercase obj_name)^"\"; components=components;"^
+  "{id=\""^(String.uppercase obj_name)^"\"; oid=gen_oid (); components=components;"^
     constructor_init_list_label^"=(!"^constructor_init_list_label^");"^
     (*constructor_propertyChanged_list_label^"=(!"^constructor_propertyChanged_list_label^");"^*)
     constructor_handler_list_label^"=(!"^constructor_handler_list_label^")}"

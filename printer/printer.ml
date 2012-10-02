@@ -42,6 +42,8 @@ let main file =
 
     (* Struct *)
     output_string file "end = struct\n";
+    output_string file (generate_generate_oid_function ());
+    output_string file "\n";
     output_string file "open Js\nopen Unsafe\n";
     (* module struct types *)
     output_string file (generate_module_struct_types all_ids all_events);
@@ -60,6 +62,8 @@ let main file =
     output_string file (generate_as_a_function ());
     output_string file "\n";
     output_string file (generate_label_generator all_ids);
+    output_string file "\n";
+    output_string file (generate_instance_function ());
     output_string file "\n";
 
     (*debug*)

@@ -80,7 +80,7 @@ let rec revele_case plateau ((height,width) as dim) (i,j) =
   if a_gagne plateau dim then
     raise Gagne
       
-let plante_enleve_drapeau plateau (i,j) =
+let poser_drapeau plateau (i,j) =
   match plateau.(i).(j) with
   | Cache(x) -> plateau.(i).(j) <- Drapeau(x)
   | Drapeau(x) -> plateau.(i).(j) <- Cache(x)

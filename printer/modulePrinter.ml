@@ -20,7 +20,7 @@ let generate_module_struct_types list_obj_name list_event_name =
   ^"type "^label_type_js_value^" = Int of int | String of string | Char of char | Float of float | Dom_node of dom_node | Bool of bool | Array of "^label_type_js_value^" list | Component of "^label_type_any_id^" "^label_type_js_object^" \n"
   ^"and "^label_type_handler^" = Handler of string * ("^label_type_any_id^" "^label_type_js_object^" -> "^label_type_any_id^" "^label_type_js_object^" -> "^label_type_any_event^" "^label_type_js_object^" -> bool)\n"
   (*^"and "^label_type_changed^" = Changed of string * ("^label_type_any_id^" "^label_type_js_object^" -> "^label_type_js_value^" -> unit)\n"*)
-  ^"and +'a "^label_type_kind^" = {id:string; components: "^label_type_any_id^" "^label_type_kind^" list;"
+  ^"and +'a "^label_type_kind^" = {id:string; oid:string; components: "^label_type_any_id^" "^label_type_kind^" list;"
   (*^constructor_propertyChanged_list_label^":"^label_type_changed^" list; "*)
   ^constructor_handler_list_label^":"^label_type_handler^" list; "^constructor_init_list_label^" : (string * "^label_type_js_value^") list }\n"
   ^"and +'a "^label_type_js_object^" = "^label_type_js_of_ocaml_object^"\n"
@@ -32,6 +32,7 @@ let generate_sig_functions () =
   ^"exception Bad_kind\n"
   ^"val as_a : ([< "^label_type_any_id^"] as 'a) -> [< "^label_type_any_id^"] "^label_type_js_object^" -> 'a "
   ^label_type_js_object^"\n" 
+  ^"val instance : 'a kind -> 'a "^label_type_js_object^""
 
 let generate_kind_it_function () =
   "let kind_it name obj_js =
@@ -39,7 +40,11 @@ let generate_kind_it_function () =
       let _ = fun_call (variable \"enyo.kind\") [| inject obj_js |] in
       new_obj (variable name) [||]
     in
+    set (variable \"window\") \"_FIXME\" enyo_js_object ;
     enyo_js_object\n"
+
+let generate_generate_oid_function () =
+  "let gen_oid = let toto = ref 0 in fun () -> incr toto ; Printf.sprintf \"_OID_%04X\" !toto \n"
 
 (* debug *)
 let generate_renderIntoBody_function ()=
@@ -89,6 +94,7 @@ let generate_instanciate_function () =
 	    (List.combine handlers_name_func handlers_func)
       );
       set js_obj \""^label_introspection^"\" (string (kind.id));
+      set js_obj \"name\" (string (kind.oid));
       js_obj in
       let js_obj = (build_component_tree kind) in
       let name = try 
@@ -130,3 +136,6 @@ let generate_label_generator list_obj_name =
 			     "let new_label_"^name^" = new_label \""^name^"\""
 			   ) 
 			   list_obj_name))^"\n"
+
+let generate_instance_function () =
+  "let instance kind = Js.Unsafe.get (Js.Unsafe.get (Js.Unsafe.variable \"_FIXME\") \"$\") kind.oid \n"

@@ -11,7 +11,7 @@ val instanciate : ([< any_id] as 'a) kind -> 'a obj
 val id : ([< any_id] as 'a) obj -> 'a
 exception Bad_kind
 val as_a : ([< any_id] as 'a) -> [< any_id] obj -> 'a obj
-
+val instance : 'a kind -> 'a obj
 val slideable:
 	?components:any_id kind list
 	-> ?axis:string
@@ -1789,8 +1789,8 @@ val setExpandable : [< `NODE ] obj -> bool -> unit
 val getOnlyIconExpands : [< `NODE ] obj -> unit -> bool
 val setOnlyIconExpands : [< `NODE ] obj -> bool -> unit
 
-val getActive_bool : [< `ONYX_TOGGLEBUTTON | `ONYX_CHECKBOX | `CHECKBOX | `ONYX_ICONBUTTON | `ONYX_INPUTDECORATOR | `ONYX_MENUITEM | `ONYX_BUTTON | `BUTTON | `TOOLDECORATOR | `GROUPITEM ] obj -> unit -> bool
-val setActive_bool : [< `ONYX_TOGGLEBUTTON | `ONYX_CHECKBOX | `CHECKBOX | `ONYX_ICONBUTTON | `ONYX_INPUTDECORATOR | `ONYX_MENUITEM | `ONYX_BUTTON | `BUTTON | `TOOLDECORATOR | `GROUPITEM ] obj -> bool -> unit
+val getActive_bool : [< `ONYX_ICONBUTTON | `ONYX_INPUTDECORATOR | `ONYX_MENUITEM | `ONYX_BUTTON | `BUTTON | `TOOLDECORATOR | `GROUPITEM ] obj -> unit -> bool
+val setActive_bool : [< `ONYX_ICONBUTTON | `ONYX_INPUTDECORATOR | `ONYX_MENUITEM | `ONYX_BUTTON | `BUTTON | `TOOLDECORATOR | `GROUPITEM ] obj -> bool -> unit
 
 val getId : [< `SLIDEABLE | `SELECT | `SCROLLTHUMB | `TRANSLATESCROLLSTRATEGY | `TOUCHSCROLLSTRATEGY | `SCROLLSTRATEGY | `PULLDOWNLIST | `LIST | `SCROLLER | `REPEATER | `ONYX_TOOLTIP | `ONYX_FLYWEIGHTPICKER | `ONYX_PICKER | `ONYX_MENU | `ONYX_POPUP | `POPUP | `PANELS | `OWNERPROXY | `OPTION | `ONYX_PICKERDECORATOR | `ONYX_MENUDECORATOR | `ONYX_TOOLTIPDECORATOR | `ONYX_TOOLBAR | `ONYX_TOGGLEBUTTON | `ONYX_SPINNER | `ONYX_SCRIM | `ONYX_SLIDER | `ONYX_PROGRESSBUTTON | `ONYX_PROGRESSBAR | `ONYX_MORETOOLBAR | `ONYX_ITEM | `ONYX_ICONBUTTON | `ONYX_ICON | `ONYX_GROUPBOXHEADER | `ONYX_GROUPBOX | `ONYX_GRABBER | `ONYX_DRAWER | `NODE | `ONYX_TEXTAREA | `TEXTAREA | `ONYX_RICHTEXT | `RICHTEXT | `ONYX_CHECKBOX | `CHECKBOX | `ONYX_INPUT | `INPUT | `IMAGE | `ONYX_INPUTDECORATOR | `ONYX_MENUITEM | `ONYX_BUTTON | `BUTTON | `TOOLDECORATOR | `GROUPITEM | `ONYX_RADIOGROUP | `GROUP | `FLYWEIGHTREPEATER | `FITTABLEROWS | `FITTABLECOLUMNS | `CANVAS | `CONTROL | `CANVAS_TEXT | `CANVAS_RECTANGLE | `CANVAS_CIRCLE | `CANVAS_SHAPE | `CANVAS_IMAGE | `CANVAS_CONTROL | `UICOMPONENT | `SIGNALS | `SELECTION | `SCROLLMATH | `DRAGAVATAR | `ANIMATOR | `WEBSERVICE | `_AJAXCOMPONENT | `COMPONENT ] obj -> unit -> string
 val setId : [< `SLIDEABLE | `SELECT | `SCROLLTHUMB | `TRANSLATESCROLLSTRATEGY | `TOUCHSCROLLSTRATEGY | `SCROLLSTRATEGY | `PULLDOWNLIST | `LIST | `SCROLLER | `REPEATER | `ONYX_TOOLTIP | `ONYX_FLYWEIGHTPICKER | `ONYX_PICKER | `ONYX_MENU | `ONYX_POPUP | `POPUP | `PANELS | `OWNERPROXY | `OPTION | `ONYX_PICKERDECORATOR | `ONYX_MENUDECORATOR | `ONYX_TOOLTIPDECORATOR | `ONYX_TOOLBAR | `ONYX_TOGGLEBUTTON | `ONYX_SPINNER | `ONYX_SCRIM | `ONYX_SLIDER | `ONYX_PROGRESSBUTTON | `ONYX_PROGRESSBAR | `ONYX_MORETOOLBAR | `ONYX_ITEM | `ONYX_ICONBUTTON | `ONYX_ICON | `ONYX_GROUPBOXHEADER | `ONYX_GROUPBOX | `ONYX_GRABBER | `ONYX_DRAWER | `NODE | `ONYX_TEXTAREA | `TEXTAREA | `ONYX_RICHTEXT | `RICHTEXT | `ONYX_CHECKBOX | `CHECKBOX | `ONYX_INPUT | `INPUT | `IMAGE | `ONYX_INPUTDECORATOR | `ONYX_MENUITEM | `ONYX_BUTTON | `BUTTON | `TOOLDECORATOR | `GROUPITEM | `ONYX_RADIOGROUP | `GROUP | `FLYWEIGHTREPEATER | `FITTABLEROWS | `FITTABLECOLUMNS | `CANVAS | `CONTROL | `CANVAS_TEXT | `CANVAS_RECTANGLE | `CANVAS_CIRCLE | `CANVAS_SHAPE | `CANVAS_IMAGE | `CANVAS_CONTROL | `UICOMPONENT | `SIGNALS | `SELECTION | `SCROLLMATH | `DRAGAVATAR | `ANIMATOR | `WEBSERVICE | `_AJAXCOMPONENT | `COMPONENT ] obj -> string -> unit
@@ -1801,8 +1801,17 @@ val setLayoutKind_string : [< `SLIDEABLE | `SELECT | `SCROLLTHUMB | `TRANSLATESC
 val getWrap : [< `PANELS ] obj -> unit -> bool
 val setWrap : [< `PANELS ] obj -> bool -> unit
 
+val getActive_bool : [< `ONYX_TOGGLEBUTTON | `ONYX_CHECKBOX | `CHECKBOX ] obj -> unit -> bool
+val setActive_bool : [< `ONYX_TOGGLEBUTTON | `ONYX_CHECKBOX | `CHECKBOX ] obj -> bool -> unit
+
+val getShowing_bool : [< `DRAGAVATAR ] obj -> unit -> bool
+val setShowing_bool : [< `DRAGAVATAR ] obj -> bool -> unit
+
 val getMultiSelect : [< `PULLDOWNLIST | `LIST ] obj -> unit -> bool
 val setMultiSelect : [< `PULLDOWNLIST | `LIST ] obj -> bool -> unit
+
+val getDisabled_bool : [< `ONYX_TOGGLEBUTTON ] obj -> unit -> bool
+val setDisabled_bool : [< `ONYX_TOGGLEBUTTON ] obj -> bool -> unit
 
 val getOffsetY : [< `DRAGAVATAR ] obj -> unit -> int
 val setOffsetY : [< `DRAGAVATAR ] obj -> int -> unit
@@ -1912,6 +1921,9 @@ val setAllowHtml : [< `SLIDEABLE | `SELECT | `SCROLLTHUMB | `TRANSLATESCROLLSTRA
 val getNoEvents : [< `IMAGE ] obj -> unit -> bool
 val setNoEvents : [< `IMAGE ] obj -> bool -> unit
 
+val getCallbackName_string : [< `WEBSERVICE ] obj -> unit -> string
+val setCallbackName_string : [< `WEBSERVICE ] obj -> string -> unit
+
 val getToggleSelected : [< `PULLDOWNLIST | `LIST ] obj -> unit -> bool
 val setToggleSelected : [< `PULLDOWNLIST | `LIST ] obj -> bool -> unit
 
@@ -1924,8 +1936,8 @@ val setContainer : [< `SLIDEABLE | `SELECT | `SCROLLTHUMB | `TRANSLATESCROLLSTRA
 val getOverMoving : [< `SLIDEABLE ] obj -> unit -> bool
 val setOverMoving : [< `SLIDEABLE ] obj -> bool -> unit
 
-val getCallbackName_string : [< `JSONPREQUEST | `WEBSERVICE ] obj -> unit -> string
-val setCallbackName_string : [< `JSONPREQUEST | `WEBSERVICE ] obj -> string -> unit
+val getCallbackName_string : [< `JSONPREQUEST ] obj -> unit -> string
+val setCallbackName_string : [< `JSONPREQUEST ] obj -> string -> unit
 
 val getNarrowFit : [< `PANELS ] obj -> unit -> bool
 val setNarrowFit : [< `PANELS ] obj -> bool -> unit
@@ -1942,8 +1954,8 @@ val setExpanded : [< `NODE ] obj -> bool -> unit
 val getAccelerated : [< `SLIDEABLE ] obj -> unit -> string
 val setAccelerated : [< `SLIDEABLE ] obj -> string -> unit
 
-val getDisabled_bool : [< `ONYX_TOGGLEBUTTON | `ONYX_TEXTAREA | `TEXTAREA | `ONYX_RICHTEXT | `RICHTEXT | `ONYX_CHECKBOX | `CHECKBOX | `ONYX_INPUT | `INPUT | `ONYX_MENUITEM | `ONYX_BUTTON | `BUTTON ] obj -> unit -> bool
-val setDisabled_bool : [< `ONYX_TOGGLEBUTTON | `ONYX_TEXTAREA | `TEXTAREA | `ONYX_RICHTEXT | `RICHTEXT | `ONYX_CHECKBOX | `CHECKBOX | `ONYX_INPUT | `INPUT | `ONYX_MENUITEM | `ONYX_BUTTON | `BUTTON ] obj -> bool -> unit
+val getDisabled_bool : [< `ONYX_TEXTAREA | `TEXTAREA | `ONYX_RICHTEXT | `RICHTEXT | `ONYX_CHECKBOX | `CHECKBOX | `ONYX_INPUT | `INPUT | `ONYX_MENUITEM | `ONYX_BUTTON | `BUTTON ] obj -> unit -> bool
+val setDisabled_bool : [< `ONYX_TEXTAREA | `TEXTAREA | `ONYX_RICHTEXT | `RICHTEXT | `ONYX_CHECKBOX | `CHECKBOX | `ONYX_INPUT | `INPUT | `ONYX_MENUITEM | `ONYX_BUTTON | `BUTTON ] obj -> bool -> unit
 
 val getUnit : [< `SLIDEABLE ] obj -> unit -> string
 val setUnit : [< `SLIDEABLE ] obj -> string -> unit
@@ -1978,8 +1990,8 @@ val setScrim : [< `TRANSLATESCROLLSTRATEGY | `TOUCHSCROLLSTRATEGY ] obj -> bool 
 val getLayoutClass : [< `FITTABLELAYOUT | `BASELAYOUT | `TOPBOTTOMARRANGER | `LEFTRIGHTARRANGER | `COLLAPSINGARRANGER | `CAROUSELARRANGER | `CARDSLIDEINARRANGER | `CARDARRANGER | `ARRANGER | `LAYOUT ] obj -> unit -> string
 val setLayoutClass : [< `FITTABLELAYOUT | `BASELAYOUT | `TOPBOTTOMARRANGER | `LEFTRIGHTARRANGER | `COLLAPSINGARRANGER | `CAROUSELARRANGER | `CARDSLIDEINARRANGER | `CARDARRANGER | `ARRANGER | `LAYOUT ] obj -> string -> unit
 
-val getShowing_bool : [< `DRAGAVATAR | `SLIDEABLE | `SELECT | `SCROLLTHUMB | `TRANSLATESCROLLSTRATEGY | `TOUCHSCROLLSTRATEGY | `SCROLLSTRATEGY | `PULLDOWNLIST | `LIST | `SCROLLER | `REPEATER | `ONYX_TOOLTIP | `ONYX_FLYWEIGHTPICKER | `ONYX_PICKER | `ONYX_MENU | `ONYX_POPUP | `POPUP | `PANELS | `OWNERPROXY | `OPTION | `ONYX_PICKERDECORATOR | `ONYX_MENUDECORATOR | `ONYX_TOOLTIPDECORATOR | `ONYX_TOOLBAR | `ONYX_TOGGLEBUTTON | `ONYX_SPINNER | `ONYX_SCRIM | `ONYX_SLIDER | `ONYX_PROGRESSBUTTON | `ONYX_PROGRESSBAR | `ONYX_MORETOOLBAR | `ONYX_ITEM | `ONYX_ICONBUTTON | `ONYX_ICON | `ONYX_GROUPBOXHEADER | `ONYX_GROUPBOX | `ONYX_GRABBER | `ONYX_DRAWER | `NODE | `ONYX_TEXTAREA | `TEXTAREA | `ONYX_RICHTEXT | `RICHTEXT | `ONYX_CHECKBOX | `CHECKBOX | `ONYX_INPUT | `INPUT | `IMAGE | `ONYX_INPUTDECORATOR | `ONYX_MENUITEM | `ONYX_BUTTON | `BUTTON | `TOOLDECORATOR | `GROUPITEM | `ONYX_RADIOGROUP | `GROUP | `FLYWEIGHTREPEATER | `FITTABLEROWS | `FITTABLECOLUMNS | `CANVAS | `CONTROL ] obj -> unit -> bool
-val setShowing_bool : [< `DRAGAVATAR |`SLIDEABLE | `SELECT | `SCROLLTHUMB | `TRANSLATESCROLLSTRATEGY | `TOUCHSCROLLSTRATEGY | `SCROLLSTRATEGY | `PULLDOWNLIST | `LIST | `SCROLLER | `REPEATER | `ONYX_TOOLTIP | `ONYX_FLYWEIGHTPICKER | `ONYX_PICKER | `ONYX_MENU | `ONYX_POPUP | `POPUP | `PANELS | `OWNERPROXY | `OPTION | `ONYX_PICKERDECORATOR | `ONYX_MENUDECORATOR | `ONYX_TOOLTIPDECORATOR | `ONYX_TOOLBAR | `ONYX_TOGGLEBUTTON | `ONYX_SPINNER | `ONYX_SCRIM | `ONYX_SLIDER | `ONYX_PROGRESSBUTTON | `ONYX_PROGRESSBAR | `ONYX_MORETOOLBAR | `ONYX_ITEM | `ONYX_ICONBUTTON | `ONYX_ICON | `ONYX_GROUPBOXHEADER | `ONYX_GROUPBOX | `ONYX_GRABBER | `ONYX_DRAWER | `NODE | `ONYX_TEXTAREA | `TEXTAREA | `ONYX_RICHTEXT | `RICHTEXT | `ONYX_CHECKBOX | `CHECKBOX | `ONYX_INPUT | `INPUT | `IMAGE | `ONYX_INPUTDECORATOR | `ONYX_MENUITEM | `ONYX_BUTTON | `BUTTON | `TOOLDECORATOR | `GROUPITEM | `ONYX_RADIOGROUP | `GROUP | `FLYWEIGHTREPEATER | `FITTABLEROWS | `FITTABLECOLUMNS | `CANVAS | `CONTROL ] obj -> bool -> unit
+val getShowing_bool : [< `SLIDEABLE | `SELECT | `SCROLLTHUMB | `TRANSLATESCROLLSTRATEGY | `TOUCHSCROLLSTRATEGY | `SCROLLSTRATEGY | `PULLDOWNLIST | `LIST | `SCROLLER | `REPEATER | `ONYX_TOOLTIP | `ONYX_FLYWEIGHTPICKER | `ONYX_PICKER | `ONYX_MENU | `ONYX_POPUP | `POPUP | `PANELS | `OWNERPROXY | `OPTION | `ONYX_PICKERDECORATOR | `ONYX_MENUDECORATOR | `ONYX_TOOLTIPDECORATOR | `ONYX_TOOLBAR | `ONYX_TOGGLEBUTTON | `ONYX_SPINNER | `ONYX_SCRIM | `ONYX_SLIDER | `ONYX_PROGRESSBUTTON | `ONYX_PROGRESSBAR | `ONYX_MORETOOLBAR | `ONYX_ITEM | `ONYX_ICONBUTTON | `ONYX_ICON | `ONYX_GROUPBOXHEADER | `ONYX_GROUPBOX | `ONYX_GRABBER | `ONYX_DRAWER | `NODE | `ONYX_TEXTAREA | `TEXTAREA | `ONYX_RICHTEXT | `RICHTEXT | `ONYX_CHECKBOX | `CHECKBOX | `ONYX_INPUT | `INPUT | `IMAGE | `ONYX_INPUTDECORATOR | `ONYX_MENUITEM | `ONYX_BUTTON | `BUTTON | `TOOLDECORATOR | `GROUPITEM | `ONYX_RADIOGROUP | `GROUP | `FLYWEIGHTREPEATER | `FITTABLEROWS | `FITTABLECOLUMNS | `CANVAS | `CONTROL ] obj -> unit -> bool
+val setShowing_bool : [< `SLIDEABLE | `SELECT | `SCROLLTHUMB | `TRANSLATESCROLLSTRATEGY | `TOUCHSCROLLSTRATEGY | `SCROLLSTRATEGY | `PULLDOWNLIST | `LIST | `SCROLLER | `REPEATER | `ONYX_TOOLTIP | `ONYX_FLYWEIGHTPICKER | `ONYX_PICKER | `ONYX_MENU | `ONYX_POPUP | `POPUP | `PANELS | `OWNERPROXY | `OPTION | `ONYX_PICKERDECORATOR | `ONYX_MENUDECORATOR | `ONYX_TOOLTIPDECORATOR | `ONYX_TOOLBAR | `ONYX_TOGGLEBUTTON | `ONYX_SPINNER | `ONYX_SCRIM | `ONYX_SLIDER | `ONYX_PROGRESSBUTTON | `ONYX_PROGRESSBAR | `ONYX_MORETOOLBAR | `ONYX_ITEM | `ONYX_ICONBUTTON | `ONYX_ICON | `ONYX_GROUPBOXHEADER | `ONYX_GROUPBOX | `ONYX_GRABBER | `ONYX_DRAWER | `NODE | `ONYX_TEXTAREA | `TEXTAREA | `ONYX_RICHTEXT | `RICHTEXT | `ONYX_CHECKBOX | `CHECKBOX | `ONYX_INPUT | `INPUT | `IMAGE | `ONYX_INPUTDECORATOR | `ONYX_MENUITEM | `ONYX_BUTTON | `BUTTON | `TOOLDECORATOR | `GROUPITEM | `ONYX_RADIOGROUP | `GROUP | `FLYWEIGHTREPEATER | `FITTABLEROWS | `FITTABLECOLUMNS | `CANVAS | `CONTROL ] obj -> bool -> unit
 
 val getNoStretch : [< `FITTABLEROWS | `FITTABLECOLUMNS ] obj -> unit -> bool
 val setNoStretch : [< `FITTABLEROWS | `FITTABLECOLUMNS ] obj -> bool -> unit
@@ -2019,6 +2031,8 @@ val gesture_metaKey : [`GESTURE] obj-> bool
 
 val renderIntoBody : any_id obj -> unit
 end = struct
+let gen_oid = let toto = ref 0 in fun () -> incr toto ; Printf.sprintf "_OID_%04X" !toto 
+
 open Js
 open Unsafe
 type any_id = [`SLIDEABLE | `SELECT | `SCROLLTHUMB | `TRANSLATESCROLLSTRATEGY | `TOUCHSCROLLSTRATEGY | `SCROLLSTRATEGY | `PULLDOWNLIST | `LIST | `SCROLLER | `REPEATER | `ONYX_TOOLTIP | `ONYX_FLYWEIGHTPICKER | `ONYX_PICKER | `ONYX_MENU | `ONYX_POPUP | `POPUP | `PANELS | `OWNERPROXY | `OPTION | `ONYX_PICKERDECORATOR | `ONYX_MENUDECORATOR | `ONYX_TOOLTIPDECORATOR | `ONYX_TOOLBAR | `ONYX_TOGGLEBUTTON | `ONYX_SPINNER | `ONYX_SCRIM | `ONYX_SLIDER | `ONYX_PROGRESSBUTTON | `ONYX_PROGRESSBAR | `ONYX_MORETOOLBAR | `ONYX_ITEM | `ONYX_ICONBUTTON | `ONYX_ICON | `ONYX_GROUPBOXHEADER | `ONYX_GROUPBOX | `ONYX_GRABBER | `ONYX_DRAWER | `NODE | `ONYX_TEXTAREA | `TEXTAREA | `ONYX_RICHTEXT | `RICHTEXT | `ONYX_CHECKBOX | `CHECKBOX | `ONYX_INPUT | `INPUT | `IMAGE | `ONYX_INPUTDECORATOR | `ONYX_MENUITEM | `ONYX_BUTTON | `BUTTON | `TOOLDECORATOR | `GROUPITEM | `ONYX_RADIOGROUP | `GROUP | `FLYWEIGHTREPEATER | `FITTABLEROWS | `FITTABLECOLUMNS | `CANVAS | `CONTROL | `CANVAS_TEXT | `CANVAS_RECTANGLE | `CANVAS_CIRCLE | `CANVAS_SHAPE | `CANVAS_IMAGE | `CANVAS_CONTROL | `UICOMPONENT | `SIGNALS | `SELECTION | `SCROLLMATH | `DRAGAVATAR | `ANIMATOR | `WEBSERVICE | `_AJAXCOMPONENT | `COMPONENT | `JSONPREQUEST | `AJAX | `ASYNC | `OBJECT | `FITTABLELAYOUT | `BASELAYOUT | `TOPBOTTOMARRANGER | `LEFTRIGHTARRANGER | `COLLAPSINGARRANGER | `CAROUSELARRANGER | `CARDSLIDEINARRANGER | `CARDARRANGER | `ARRANGER | `LAYOUT | `_UNUSED]
@@ -2026,7 +2040,7 @@ type any_event = [`GESTURE]
 type dom_node = Dom_html.bodyElement Js.t
 type js_value = Int of int | String of string | Char of char | Float of float | Dom_node of dom_node | Bool of bool | Array of js_value list | Component of any_id obj 
 and handler = Handler of string * (any_id obj -> any_id obj -> any_event obj -> bool)
-and +'a kind = {id:string; components: any_id kind list;handler_list:handler list; prop_list : (string * js_value) list }
+and +'a kind = {id:string; oid:string; components: any_id kind list;handler_list:handler list; prop_list : (string * js_value) list }
 and +'a obj = Js.Unsafe.any
 exception Bad_kind
 
@@ -2035,6 +2049,7 @@ let kind_it name obj_js =
       let _ = fun_call (variable "enyo.kind") [| inject obj_js |] in
       new_obj (variable name) [||]
     in
+    set (variable "window") "_FIXME" enyo_js_object ;
     enyo_js_object
 
 let rec coerce_prop = function
@@ -2070,6 +2085,7 @@ let instanciate (kind:([< any_id] as 'a) kind) : 'a obj =
 	    (List.combine handlers_name_func handlers_func)
       );
       set js_obj "_hidden_id" (string (kind.id));
+      set js_obj "name" (string (kind.oid));
       js_obj in
       let js_obj = (build_component_tree kind) in
       let name = try 
@@ -2275,6 +2291,8 @@ let new_label_arranger = new_label "arranger"
 let new_label_layout = new_label "layout"
 let new_label__unused = new_label "_unused"
 
+let instance kind = Js.Unsafe.get (Js.Unsafe.get (Js.Unsafe.variable "_FIXME") "$") kind.oid 
+
 let renderIntoBody obj_js =
      Dom_html.window##onload <- Dom_html.handler
       (fun _ -> let _ = meth_call obj_js "renderInto" [| inject (variable "document.body") |] in Js._false)
@@ -2337,7 +2355,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="SLIDEABLE"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="SLIDEABLE"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let _select
 	?(components=[])
@@ -2382,7 +2400,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="SELECT"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="SELECT"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let scrollthumb
 	?(components=[])
@@ -2425,7 +2443,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="SCROLLTHUMB"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="SCROLLTHUMB"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let translatescrollstrategy
 	?(components=[])
@@ -2480,7 +2498,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="TRANSLATESCROLLSTRATEGY"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="TRANSLATESCROLLSTRATEGY"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let touchscrollstrategy
 	?(components=[])
@@ -2535,7 +2553,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="TOUCHSCROLLSTRATEGY"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="TOUCHSCROLLSTRATEGY"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let scrollstrategy
 	?(components=[])
@@ -2578,7 +2596,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="SCROLLSTRATEGY"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="SCROLLSTRATEGY"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let pulldownlist
 	?(components=[])
@@ -2633,7 +2651,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="PULLDOWNLIST"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="PULLDOWNLIST"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let list
 	?(components=[])
@@ -2688,7 +2706,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="LIST"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="LIST"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let scroller
 	?(components=[])
@@ -2731,7 +2749,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="SCROLLER"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="SCROLLER"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let repeater
 	?(components=[])
@@ -2774,7 +2792,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="REPEATER"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="REPEATER"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_tooltip
 	?(components=[])
@@ -2825,7 +2843,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.TOOLTIP"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.TOOLTIP"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_flyweightpicker
 	?(components=[])
@@ -2876,7 +2894,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.FLYWEIGHTPICKER"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.FLYWEIGHTPICKER"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_picker
 	?(components=[])
@@ -2927,7 +2945,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.PICKER"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.PICKER"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_menu
 	?(components=[])
@@ -2978,7 +2996,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.MENU"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.MENU"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_popup
 	?(components=[])
@@ -3029,7 +3047,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.POPUP"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.POPUP"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let popup
 	?(components=[])
@@ -3080,7 +3098,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="POPUP"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="POPUP"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let panels
 	?(components=[])
@@ -3135,7 +3153,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="PANELS"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="PANELS"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let ownerproxy
 	?(components=[])
@@ -3178,7 +3196,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="OWNERPROXY"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="OWNERPROXY"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let option
 	?(components=[])
@@ -3223,7 +3241,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="OPTION"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="OPTION"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_pickerdecorator
 	?(components=[])
@@ -3266,7 +3284,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.PICKERDECORATOR"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.PICKERDECORATOR"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_menudecorator
 	?(components=[])
@@ -3309,7 +3327,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.MENUDECORATOR"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.MENUDECORATOR"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_tooltipdecorator
 	?(components=[])
@@ -3352,7 +3370,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.TOOLTIPDECORATOR"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.TOOLTIPDECORATOR"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_toolbar
 	?(components=[])
@@ -3395,7 +3413,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.TOOLBAR"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.TOOLBAR"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_togglebutton
 	?(components=[])
@@ -3448,7 +3466,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.TOGGLEBUTTON"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.TOGGLEBUTTON"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_spinner
 	?(components=[])
@@ -3491,7 +3509,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.SPINNER"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.SPINNER"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_scrim
 	?(components=[])
@@ -3534,7 +3552,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.SCRIM"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.SCRIM"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_slider
 	?(components=[])
@@ -3577,7 +3595,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.SLIDER"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.SLIDER"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_progressbutton
 	?(components=[])
@@ -3620,7 +3638,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.PROGRESSBUTTON"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.PROGRESSBUTTON"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_progressbar
 	?(components=[])
@@ -3663,7 +3681,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.PROGRESSBAR"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.PROGRESSBAR"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_moretoolbar
 	?(components=[])
@@ -3706,7 +3724,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.MORETOOLBAR"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.MORETOOLBAR"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_item
 	?(components=[])
@@ -3751,7 +3769,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.ITEM"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.ITEM"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_iconbutton
 	?(components=[])
@@ -3796,7 +3814,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.ICONBUTTON"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.ICONBUTTON"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_icon
 	?(components=[])
@@ -3839,7 +3857,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.ICON"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.ICON"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_groupboxheader
 	?(components=[])
@@ -3882,7 +3900,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.GROUPBOXHEADER"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.GROUPBOXHEADER"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_groupbox
 	?(components=[])
@@ -3925,7 +3943,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.GROUPBOX"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.GROUPBOX"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_grabber
 	?(components=[])
@@ -3968,7 +3986,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.GRABBER"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.GRABBER"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_drawer
 	?(components=[])
@@ -4011,7 +4029,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.DRAWER"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.DRAWER"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let node
 	?(components=[])
@@ -4062,7 +4080,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="NODE"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="NODE"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_textarea
 	?(components=[])
@@ -4113,7 +4131,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.TEXTAREA"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.TEXTAREA"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let textarea
 	?(components=[])
@@ -4164,7 +4182,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="TEXTAREA"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="TEXTAREA"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_richtext
 	?(components=[])
@@ -4215,7 +4233,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.RICHTEXT"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.RICHTEXT"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let richtext
 	?(components=[])
@@ -4266,7 +4284,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="RICHTEXT"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="RICHTEXT"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_checkbox
 	?(components=[])
@@ -4321,7 +4339,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.CHECKBOX"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.CHECKBOX"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let checkbox
 	?(components=[])
@@ -4376,7 +4394,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="CHECKBOX"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="CHECKBOX"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_input
 	?(components=[])
@@ -4427,7 +4445,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.INPUT"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.INPUT"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let input
 	?(components=[])
@@ -4478,7 +4496,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="INPUT"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="INPUT"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let image
 	?(components=[])
@@ -4523,7 +4541,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="IMAGE"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="IMAGE"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_inputdecorator
 	?(components=[])
@@ -4568,7 +4586,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.INPUTDECORATOR"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.INPUTDECORATOR"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_menuitem
 	?(components=[])
@@ -4615,7 +4633,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.MENUITEM"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.MENUITEM"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_button
 	?(components=[])
@@ -4662,7 +4680,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.BUTTON"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.BUTTON"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let button
 	?(components=[])
@@ -4709,7 +4727,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="BUTTON"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="BUTTON"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let tooldecorator
 	?(components=[])
@@ -4754,7 +4772,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="TOOLDECORATOR"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="TOOLDECORATOR"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let groupitem
 	?(components=[])
@@ -4799,7 +4817,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="GROUPITEM"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="GROUPITEM"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let onyx_radiogroup
 	?(components=[])
@@ -4846,7 +4864,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="ONYX.RADIOGROUP"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ONYX.RADIOGROUP"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let group
 	?(components=[])
@@ -4893,7 +4911,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="GROUP"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="GROUP"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let flyweightrepeater
 	?(components=[])
@@ -4936,7 +4954,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="FLYWEIGHTREPEATER"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="FLYWEIGHTREPEATER"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let fittablerows
 	?(components=[])
@@ -4983,7 +5001,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="FITTABLEROWS"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="FITTABLEROWS"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let fittablecolumns
 	?(components=[])
@@ -5030,7 +5048,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="FITTABLECOLUMNS"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="FITTABLECOLUMNS"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let canvas
 	?(components=[])
@@ -5073,7 +5091,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="CANVAS"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="CANVAS"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let control
 	?(components=[])
@@ -5116,7 +5134,7 @@ and handler_list= ref [] in
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
 (match ontap with Some v -> handler_list := Handler ("ontap",v)::!handler_list | None -> ());
-{id="CONTROL"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="CONTROL"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let canvas_text
 	?(components=[])
@@ -5137,7 +5155,7 @@ and handler_list= ref [] in
 (match name with Some v -> prop_list := ("name",String v)::!prop_list | None -> ());
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
-{id="CANVAS.TEXT"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="CANVAS.TEXT"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let canvas_rectangle
 	?(components=[])
@@ -5158,7 +5176,7 @@ and handler_list= ref [] in
 (match name with Some v -> prop_list := ("name",String v)::!prop_list | None -> ());
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
-{id="CANVAS.RECTANGLE"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="CANVAS.RECTANGLE"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let canvas_circle
 	?(components=[])
@@ -5179,7 +5197,7 @@ and handler_list= ref [] in
 (match name with Some v -> prop_list := ("name",String v)::!prop_list | None -> ());
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
-{id="CANVAS.CIRCLE"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="CANVAS.CIRCLE"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let canvas_shape
 	?(components=[])
@@ -5200,7 +5218,7 @@ and handler_list= ref [] in
 (match name with Some v -> prop_list := ("name",String v)::!prop_list | None -> ());
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
-{id="CANVAS.SHAPE"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="CANVAS.SHAPE"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let canvas_image
 	?(components=[])
@@ -5221,7 +5239,7 @@ and handler_list= ref [] in
 (match name with Some v -> prop_list := ("name",String v)::!prop_list | None -> ());
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
-{id="CANVAS.IMAGE"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="CANVAS.IMAGE"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let canvas_control
 	?(components=[])
@@ -5242,7 +5260,7 @@ and handler_list= ref [] in
 (match name with Some v -> prop_list := ("name",String v)::!prop_list | None -> ());
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
-{id="CANVAS.CONTROL"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="CANVAS.CONTROL"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let uicomponent
 	?(components=[])
@@ -5263,7 +5281,7 @@ and handler_list= ref [] in
 (match name with Some v -> prop_list := ("name",String v)::!prop_list | None -> ());
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
-{id="UICOMPONENT"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="UICOMPONENT"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let signals
 	?(components=[])
@@ -5276,7 +5294,7 @@ and handler_list= ref [] in
 (match name with Some v -> prop_list := ("name",String v)::!prop_list | None -> ());
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
-{id="SIGNALS"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="SIGNALS"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let selection
 	?(components=[])
@@ -5289,7 +5307,7 @@ and handler_list= ref [] in
 (match name with Some v -> prop_list := ("name",String v)::!prop_list | None -> ());
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
-{id="SELECTION"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="SELECTION"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let scrollmath
 	?(components=[])
@@ -5302,7 +5320,7 @@ and handler_list= ref [] in
 (match name with Some v -> prop_list := ("name",String v)::!prop_list | None -> ());
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
-{id="SCROLLMATH"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="SCROLLMATH"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let dragavatar
 	?(components=[])
@@ -5321,7 +5339,7 @@ and handler_list= ref [] in
 (match name with Some v -> prop_list := ("name",String v)::!prop_list | None -> ());
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
-{id="DRAGAVATAR"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="DRAGAVATAR"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let animator
 	?(components=[])
@@ -5334,7 +5352,7 @@ and handler_list= ref [] in
 (match name with Some v -> prop_list := ("name",String v)::!prop_list | None -> ());
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
-{id="ANIMATOR"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ANIMATOR"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let webservice
 	?(components=[])
@@ -5351,7 +5369,7 @@ and handler_list= ref [] in
 (match name with Some v -> prop_list := ("name",String v)::!prop_list | None -> ());
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
-{id="WEBSERVICE"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="WEBSERVICE"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let _ajaxcomponent
 	?(components=[])
@@ -5364,7 +5382,7 @@ and handler_list= ref [] in
 (match name with Some v -> prop_list := ("name",String v)::!prop_list | None -> ());
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
-{id="_AJAXCOMPONENT"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="_AJAXCOMPONENT"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let component
 	?(components=[])
@@ -5377,7 +5395,7 @@ and handler_list= ref [] in
 (match name with Some v -> prop_list := ("name",String v)::!prop_list | None -> ());
 (match id with Some v -> prop_list := ("id",String v)::!prop_list | None -> ());
 (match owner with Some v -> prop_list := ("owner",Component v)::!prop_list | None -> ());
-{id="COMPONENT"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="COMPONENT"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let jsonprequest
 	?(components=[])
@@ -5390,7 +5408,7 @@ and handler_list= ref [] in
 (match url with Some v -> prop_list := ("url",String v)::!prop_list | None -> ());
 (match callbackName with Some v -> prop_list := ("callbackName",String v)::!prop_list | None -> ());
 (match cacheBust with Some v -> prop_list := ("cacheBust",Bool v)::!prop_list | None -> ());
-{id="JSONPREQUEST"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="JSONPREQUEST"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let ajax
 	?(components=[])
@@ -5398,7 +5416,7 @@ let ajax
 let prop_list= ref [("kind", String "Ajax")]
 and handler_list= ref [] in
 
-{id="AJAX"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="AJAX"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let async
 	?(components=[])
@@ -5406,7 +5424,7 @@ let async
 let prop_list= ref [("kind", String "Async")]
 and handler_list= ref [] in
 
-{id="ASYNC"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ASYNC"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let _object
 	?(components=[])
@@ -5414,7 +5432,7 @@ let _object
 let prop_list= ref [("kind", String "Object")]
 and handler_list= ref [] in
 
-{id="OBJECT"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="OBJECT"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let fittablelayout
 	?(components=[])
@@ -5423,7 +5441,7 @@ let fittablelayout
 let prop_list= ref [("kind", String "FittableLayout")]
 and handler_list= ref [] in
 (match layoutClass with Some v -> prop_list := ("layoutClass",String v)::!prop_list | None -> ());
-{id="FITTABLELAYOUT"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="FITTABLELAYOUT"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let baselayout
 	?(components=[])
@@ -5432,7 +5450,7 @@ let baselayout
 let prop_list= ref [("kind", String "BaseLayout")]
 and handler_list= ref [] in
 (match layoutClass with Some v -> prop_list := ("layoutClass",String v)::!prop_list | None -> ());
-{id="BASELAYOUT"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="BASELAYOUT"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let topbottomarranger
 	?(components=[])
@@ -5443,7 +5461,7 @@ let prop_list= ref [("kind", String "TopBottomArranger")]
 and handler_list= ref [] in
 (match margin with Some v -> prop_list := ("margin",Int v)::!prop_list | None -> ());
 (match layoutClass with Some v -> prop_list := ("layoutClass",String v)::!prop_list | None -> ());
-{id="TOPBOTTOMARRANGER"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="TOPBOTTOMARRANGER"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let leftrightarranger
 	?(components=[])
@@ -5454,7 +5472,7 @@ let prop_list= ref [("kind", String "LeftRightArranger")]
 and handler_list= ref [] in
 (match margin with Some v -> prop_list := ("margin",Int v)::!prop_list | None -> ());
 (match layoutClass with Some v -> prop_list := ("layoutClass",String v)::!prop_list | None -> ());
-{id="LEFTRIGHTARRANGER"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="LEFTRIGHTARRANGER"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let collapsingarranger
 	?(components=[])
@@ -5463,7 +5481,7 @@ let collapsingarranger
 let prop_list= ref [("kind", String "CollapsingArranger")]
 and handler_list= ref [] in
 (match layoutClass with Some v -> prop_list := ("layoutClass",String v)::!prop_list | None -> ());
-{id="COLLAPSINGARRANGER"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="COLLAPSINGARRANGER"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let carouselarranger
 	?(components=[])
@@ -5472,7 +5490,7 @@ let carouselarranger
 let prop_list= ref [("kind", String "CarouselArranger")]
 and handler_list= ref [] in
 (match layoutClass with Some v -> prop_list := ("layoutClass",String v)::!prop_list | None -> ());
-{id="CAROUSELARRANGER"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="CAROUSELARRANGER"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let cardslideinarranger
 	?(components=[])
@@ -5481,7 +5499,7 @@ let cardslideinarranger
 let prop_list= ref [("kind", String "CardSlideInArranger")]
 and handler_list= ref [] in
 (match layoutClass with Some v -> prop_list := ("layoutClass",String v)::!prop_list | None -> ());
-{id="CARDSLIDEINARRANGER"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="CARDSLIDEINARRANGER"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let cardarranger
 	?(components=[])
@@ -5490,7 +5508,7 @@ let cardarranger
 let prop_list= ref [("kind", String "CardArranger")]
 and handler_list= ref [] in
 (match layoutClass with Some v -> prop_list := ("layoutClass",String v)::!prop_list | None -> ());
-{id="CARDARRANGER"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="CARDARRANGER"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let arranger
 	?(components=[])
@@ -5499,7 +5517,7 @@ let arranger
 let prop_list= ref [("kind", String "Arranger")]
 and handler_list= ref [] in
 (match layoutClass with Some v -> prop_list := ("layoutClass",String v)::!prop_list | None -> ());
-{id="ARRANGER"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="ARRANGER"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let layout
 	?(components=[])
@@ -5508,7 +5526,7 @@ let layout
 let prop_list= ref [("kind", String "Layout")]
 and handler_list= ref [] in
 (match layoutClass with Some v -> prop_list := ("layoutClass",String v)::!prop_list | None -> ());
-{id="LAYOUT"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="LAYOUT"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 let _unused
 	?(components=[])
@@ -5516,7 +5534,7 @@ let _unused
 let prop_list= ref [("kind", String "_unused")]
 and handler_list= ref [] in
 
-{id="_UNUSED"; components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
+{id="_UNUSED"; oid=gen_oid (); components=components;prop_list=(!prop_list);handler_list=(!handler_list)}
 
 
 let refresh this () =
@@ -5749,10 +5767,10 @@ let setOnlyIconExpands this predicat1 =
 		()
 
 let getActive_bool this () =
-	let value = meth_call this "getActive" [||] in
+	let value = meth_call this "getActive_bool" [||] in
 		to_bool value
 let setActive_bool this predicat1 =
-	let _ = meth_call this "setActive" [|inject (bool predicat1)|] in
+	let _ = meth_call this "setActive_bool" [|inject (bool predicat1)|] in
 		()
 
 let getId this () =
@@ -5763,10 +5781,10 @@ let setId this chaine1 =
 		()
 
 let getLayoutKind_string this () =
-	let value = meth_call this "getLayoutKind" [||] in
+	let value = meth_call this "getLayoutKind_string" [||] in
 		to_string value
 let setLayoutKind_string this chaine1 =
-	let _ = meth_call this "setLayoutKind" [|inject (string chaine1)|] in
+	let _ = meth_call this "setLayoutKind_string" [|inject (string chaine1)|] in
 		()
 
 let getWrap this () =
@@ -5776,11 +5794,18 @@ let setWrap this predicat1 =
 	let _ = meth_call this "setWrap" [|inject (bool predicat1)|] in
 		()
 
+let getActive_bool this () =
+	let value = meth_call this "getActive_bool" [||] in
+		to_bool value
+let setActive_bool this predicat1 =
+	let _ = meth_call this "setActive_bool" [|inject (bool predicat1)|] in
+		()
+
 let getShowing_bool this () =
-	let value = meth_call this "getShowing" [||] in
+	let value = meth_call this "getShowing_bool" [||] in
 		to_bool value
 let setShowing_bool this predicat1 =
-	let _ = meth_call this "setShowing" [|inject (bool predicat1)|] in
+	let _ = meth_call this "setShowing_bool" [|inject (bool predicat1)|] in
 		()
 
 let getMultiSelect this () =
@@ -5791,10 +5816,10 @@ let setMultiSelect this predicat1 =
 		()
 
 let getDisabled_bool this () =
-	let value = meth_call this "getDisabled" [||] in
+	let value = meth_call this "getDisabled_bool" [||] in
 		to_bool value
 let setDisabled_bool this predicat1 =
-	let _ = meth_call this "setDisabled" [|inject (bool predicat1)|] in
+	let _ = meth_call this "setDisabled_bool" [|inject (bool predicat1)|] in
 		()
 
 let getOffsetY this () =
@@ -5826,10 +5851,10 @@ let setModal this predicat1 =
 		()
 
 let getValue_string this () =
-	let value = meth_call this "getValue" [||] in
+	let value = meth_call this "getValue_string" [||] in
 		to_string value
 let setValue_string this chaine1 =
-	let _ = meth_call this "setValue" [|inject (string chaine1)|] in
+	let _ = meth_call this "setValue_string" [|inject (string chaine1)|] in
 		()
 
 let getName this () =
@@ -5882,10 +5907,10 @@ let setMax this entier1 =
 		()
 
 let getActive_obj this () =
-	let value = meth_call this "getActive" [||] in
+	let value = meth_call this "getActive_obj" [||] in
 		value
 let setActive_obj this obj_js1 =
-	let _ = meth_call this "setActive" [|inject obj_js1|] in
+	let _ = meth_call this "setActive_obj" [|inject obj_js1|] in
 		()
 
 let getStyle this () =
@@ -6008,10 +6033,10 @@ let setFit this predicat1 =
 		()
 
 let getValue_bool this () =
-	let value = meth_call this "getValue" [||] in
+	let value = meth_call this "getValue_bool" [||] in
 		to_bool value
 let setValue_bool this predicat1 =
-	let _ = meth_call this "setValue" [|inject (bool predicat1)|] in
+	let _ = meth_call this "setValue_bool" [|inject (bool predicat1)|] in
 		()
 
 let getOffContent this () =
@@ -6050,10 +6075,10 @@ let setNoEvents this predicat1 =
 		()
 
 let getCallbackName_string this () =
-	let value = meth_call this "getCallbackName" [||] in
+	let value = meth_call this "getCallbackName_string" [||] in
 		to_string value
 let setCallbackName_string this chaine1 =
-	let _ = meth_call this "setCallbackName" [|inject (string chaine1)|] in
+	let _ = meth_call this "setCallbackName_string" [|inject (string chaine1)|] in
 		()
 
 let getToggleSelected this () =
@@ -6082,6 +6107,13 @@ let getOverMoving this () =
 		to_bool value
 let setOverMoving this predicat1 =
 	let _ = meth_call this "setOverMoving" [|inject (bool predicat1)|] in
+		()
+
+let getCallbackName_string this () =
+	let value = meth_call this "getCallbackName_string" [||] in
+		to_string value
+let setCallbackName_string this chaine1 =
+	let _ = meth_call this "setCallbackName_string" [|inject (string chaine1)|] in
 		()
 
 let getNarrowFit this () =
@@ -6117,6 +6149,13 @@ let getAccelerated this () =
 		to_string value
 let setAccelerated this chaine1 =
 	let _ = meth_call this "setAccelerated" [|inject (string chaine1)|] in
+		()
+
+let getDisabled_bool this () =
+	let value = meth_call this "getDisabled_bool" [||] in
+		to_bool value
+let setDisabled_bool this predicat1 =
+	let _ = meth_call this "setDisabled_bool" [|inject (bool predicat1)|] in
 		()
 
 let getUnit this () =
@@ -6155,10 +6194,10 @@ let setSrc this chaine1 =
 		()
 
 let getValue_int this () =
-	let value = meth_call this "getValue" [||] in
+	let value = meth_call this "getValue_int" [||] in
 		value
 let setValue_int this entier1 =
-	let _ = meth_call this "setValue" [|inject entier1|] in
+	let _ = meth_call this "setValue_int" [|inject entier1|] in
 		()
 
 let getMin this () =
@@ -6194,6 +6233,13 @@ let getLayoutClass this () =
 		to_string value
 let setLayoutClass this chaine1 =
 	let _ = meth_call this "setLayoutClass" [|inject (string chaine1)|] in
+		()
+
+let getShowing_bool this () =
+	let value = meth_call this "getShowing_bool" [||] in
+		to_bool value
+let setShowing_bool this predicat1 =
+	let _ = meth_call this "setShowing_bool" [|inject (bool predicat1)|] in
 		()
 
 let getNoStretch this () =
@@ -6239,17 +6285,17 @@ let setCanGenerate this predicat1 =
 		()
 
 let getValue_string this () =
-	let value = meth_call this "getValue" [||] in
+	let value = meth_call this "getValue_string" [||] in
 		to_string value
 let setValue_string this chaine1 =
-	let _ = meth_call this "setValue" [|inject (string chaine1)|] in
+	let _ = meth_call this "setValue_string" [|inject (string chaine1)|] in
 		()
 
 let getLayoutKind_string this () =
-	let value = meth_call this "getLayoutKind" [||] in
+	let value = meth_call this "getLayoutKind_string" [||] in
 		to_string value
 let setLayoutKind_string this chaine1 =
-	let _ = meth_call this "setLayoutKind" [|inject (string chaine1)|] in
+	let _ = meth_call this "setLayoutKind_string" [|inject (string chaine1)|] in
 		()
 
 

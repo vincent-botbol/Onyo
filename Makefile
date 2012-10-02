@@ -1,6 +1,6 @@
 RELEASE_FOLDER=release
 PATHEXE=printer
-PATHJSOFOCAML=/usr/lib/ocaml/js_of_ocaml/
+PATHJSOFOCAML=$(shell ocamlfind query js_of_ocaml)/
 all:
 	$(MAKE) -C $(PATHEXE) all
 	mkdir -p $(RELEASE_FOLDER)

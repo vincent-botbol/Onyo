@@ -5,6 +5,7 @@ let height = config_par_defaut.nblignes and width = config_par_defaut.nbcols
 let plateau_par_defaut () = (Array.make_matrix height width (Cache(Empty)))
 let plateau = ref (plateau_par_defaut ())
 let a_joue = ref false
+let peut_joue = ref true
 
 (* Vue *)
 open Lib_enyo.Enyo
@@ -19,16 +20,18 @@ let recommencer = onyx_button
   ~ontap:(fun _ _ _ -> curr_instr:=RAZ; false) 
   ~content:"Remise à zéro" ()
 
-let output = control ~content:"" ()
+let label_par_defaut = "Démineur"
+let infos = control ~content:label_par_defaut ()
 
-let menu_bar = onyx_toolbar ~components:[recommencer; output] ()
+let menu_bar = onyx_toolbar ~components:[recommencer; infos] ()
 
 let creer_button i j = 
   onyx_button ~content:"-" ~style:"width:5px; color:red" 
-    ~ontap:(fun this _ ev -> 
-      (match (gesture_ctrlKey ev,!curr_mode) with
-	true, _ | _, Flag -> curr_instr := Drapeau (i,j)
-      | _ -> curr_instr := Creuser (i,j));
+    ~ontap:(fun this _ ev ->
+      if !peut_joue then
+	(match (gesture_ctrlKey ev,!curr_mode) with
+	  true, _ | _, Flag -> curr_instr := Drapeau (i,j)
+	| _ -> curr_instr := Creuser (i,j));
       false
     )
     ()
@@ -64,14 +67,18 @@ let afficher_plateau app =
       | Demineur.Drapeau (_) -> setContent bouton "F"
     done
   done
+
+let remise_a_zero app =
+  a_joue:=false; plateau := plateau_par_defaut (); peut_joue := true;
+  setContent (instance infos) label_par_defaut
     
 let handler_app this _ _ =
   (  
     try 
       match !curr_instr with
 	None -> ()
-      | RAZ -> a_joue:=false; plateau := plateau_par_defaut ()
-      | Drapeau (i,j) -> plante_enleve_drapeau !plateau (i,j)
+      | RAZ -> remise_a_zero this
+      | Drapeau (i,j) -> poser_drapeau !plateau (i,j)
       | Creuser (i,j) -> 
 	if !a_joue then
 	  revele_case !plateau (height,width) (i,j)
@@ -79,10 +86,10 @@ let handler_app this _ _ =
 	  (plateau := creer_jeu ~config:config_par_defaut (i,j);
 	   a_joue := true);
     with
-    | Gagne -> setContent (as_a `CONTROL (List.nth (getComponents this ()) 2)) "Bravo, vous avez gagné !" 
-    | Perdu -> setContent (as_a `CONTROL (List.nth (getComponents this ()) 2)) "Désolé, vous avez perdu..."
+    | Gagne -> setContent (instance infos) "Bravo, vous avez gagné !"; peut_joue := false
+    | Perdu -> setContent (instance infos) "Désolé, vous avez perdu..."; peut_joue := false
   );
-  afficher_plateau this;
+  afficher_plateau this; (* rafraichit *)
   true
 
 let app = control
